@@ -1,0 +1,335 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Rebuild Trigger: CMS Update v1.1 */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* SEO Strategist Portfolio Design System
+   Authority-focused, performance-optimized theme
+   Dark mode default with light mode toggle
+*/
+
+@layer base {
+  :root {
+    /* Light mode - Clean, professional */
+    --background: 0 0% 99%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 142 76% 36%;
+
+    --radius: 0.5rem;
+
+    /* Custom semantic tokens */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --surface: 0 0% 98%;
+    --surface-foreground: 222 47% 11%;
+
+    --highlight: 142 76% 94%;
+    --highlight-foreground: 142 76% 26%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 240 6% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 142 76% 36%;
+  }
+
+  .dark {
+    /* Dark mode - Authority, trust, modern */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 142 70% 45%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 142 70% 45%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 142 70% 45%;
+
+    /* Custom semantic tokens - dark */
+    --success: 142 70% 45%;
+    --success-foreground: 222 47% 6%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 6%;
+
+    --surface: 222 47% 10%;
+    --surface-foreground: 210 40% 98%;
+
+    --highlight: 142 70% 15%;
+    --highlight-foreground: 142 70% 65%;
+
+    /* Sidebar - dark */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 142 70% 45%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 142 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection colors */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer components {
+  /* Container utility */
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  .section-sm {
+    @apply py-12 md:py-16;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1;
+  }
+
+  /* Link underline animation */
+  .link-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Infinite scroll animation for partners */
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll-left {
+    animation: scroll-left 30s linear infinite;
+  }
+
+  .animate-scroll-left:hover {
+    animation-play-state: paused;
+  }
+}
+
+@layer components {
+  /* WordPress Content Customization */
+  
+  /* Images */
+  .prose-custom img {
+    @apply rounded-xl my-8 h-auto w-full object-cover shadow-sm border border-border/50;
+  }
+
+  .aligncenter {
+    @apply mx-auto block;
+  }
+
+  /* Table of Contents (ez-toc) */
+  #ez-toc-container {
+    @apply border border-border/60 rounded-xl p-6 my-10 bg-card/50 backdrop-blur-sm shadow-sm;
+  }
+  
+  .ez-toc-title-container {
+    @apply flex items-center justify-between mb-4 border-b border-border/40 pb-2;
+  }
+  
+  .ez-toc-title {
+    @apply text-lg font-bold tracking-tight text-foreground;
+  }
+  
+  .ez-toc-list {
+    @apply list-none pl-0 space-y-2 mt-4 text-sm;
+  }
+  
+  .ez-toc-list a {
+    @apply text-muted-foreground hover:text-primary transition-colors no-underline font-medium block py-1;
+  }
+  
+  .ez-toc-list-level-3, 
+  .ez-toc-list-level-4, 
+  .ez-toc-list-level-5 {
+    @apply pl-4 mt-1 border-l-2 border-border/40 ml-1;
+  }
+  
+  .ez-toc-toggle {
+    @apply hidden; /* Hide toggle button for cleanliness */
+  }
+
+  /* Elementor Headings */
+  .pxl-heading--inner .pxl-item--title {
+    @apply text-2xl font-bold my-8 tracking-tight text-foreground;
+  }
+
+  /* Elementor/EAEL Accordion (FAQs) */
+  /* Force expansion since we lack the JS for interactivity */
+  .eael-adv-accordion {
+    @apply my-12 space-y-4;
+  }
+  
+  .eael-accordion-list {
+    @apply border border-border rounded-xl overflow-hidden bg-card shadow-sm transition-all hover:shadow-md;
+  }
+  
+  .eael-accordion-header {
+    @apply p-5 w-full flex items-center justify-between bg-muted/20 font-semibold text-lg text-foreground border-b border-border/50;
+    pointer-events: none; /* Make it feel static */
+  }
+  
+  .eael-accordion-content {
+    @apply p-5 text-muted-foreground leading-relaxed block !important;
+  }
+  
+  .eael-content-editor {
+    @apply text-muted-foreground;
+  }
+  
+  /* Hide icons for static accordion */
+  .fa-accordion-icon, 
+  .fa-toggle,
+  .eael-advanced-accordion-icon-closed,
+  .eael-advanced-accordion-icon-opened {
+    @apply hidden;
+  }
+
+  /* General Typography Overrides for .prose-custom */
+  .prose-custom h2 {
+    @apply text-3xl md:text-4xl font-bold mt-16 mb-8 text-foreground tracking-tight scroll-m-20 border-b border-border/40 pb-4;
+  }
+  
+  .prose-custom h3 {
+    @apply text-2xl md:text-3xl font-bold mt-12 mb-6 text-foreground tracking-tight scroll-m-20;
+  }
+  
+  .prose-custom h4 {
+    @apply text-xl font-semibold mt-8 mb-4 text-foreground tracking-tight;
+  }
+  
+  .prose-custom p {
+    @apply text-muted-foreground leading-7 mb-6 text-base md:text-lg;
+  }
+  
+  .prose-custom ul {
+    @apply list-disc list-outside ml-6 mb-8 text-muted-foreground space-y-2 marker:text-primary;
+  }
+  
+  .prose-custom li {
+    @apply pl-2;
+  }
+
+  .prose-custom strong, 
+  .prose-custom b {
+    @apply font-semibold text-foreground;
+  }
+  
+  .prose-custom a {
+    @apply text-primary font-medium underline underline-offset-4 decoration-primary/30 hover:decoration-primary transition-all;
+  }
+  
+  .prose-custom blockquote {
+    @apply border-l-4 border-primary pl-6 italic text-muted-foreground bg-muted/20 py-4 pr-4 rounded-r-lg my-8;
+  }
+}
