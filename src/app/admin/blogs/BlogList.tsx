@@ -131,7 +131,13 @@ export default function BlogList({ blogs, linkStats }: BlogListProps) {
                                                 </Badge>
                                             </td>
                                             <td className="px-4 py-3 hidden sm:table-cell text-muted-foreground text-xs">
-                                                {new Date(post.createdAt).toLocaleDateString()}
+                                                {new Date(post.createdAt).toLocaleDateString("en-US", {
+                                                    month: "short",
+                                                    day: "numeric",
+                                                    year: "numeric",
+                                                    hour: "numeric",
+                                                    minute: "2-digit"
+                                                })}
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center justify-end gap-1">

@@ -10,7 +10,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare } from "lucide-react";
+import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare, CalendarIcon, Clock } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import type { BlogDoc } from "@/lib/blogs";
 import type { SummernoteRef } from "./SummernoteEditor";
 
@@ -54,7 +58,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         canonicalUrl: initialData?.canonicalUrl ?? "",
         robotsMeta: initialData?.robotsMeta ?? "index, follow",
         ogImage: initialData?.ogImage ?? "",
-        scheduledFor: initialData?.scheduledFor ? new Date(initialData.scheduledFor).toISOString().slice(0, 16) : "",
+        scheduledFor: initialData?.scheduledFor ? new Date(initialData.scheduledFor).toISOString() : "",
         faqs: initialData?.faqs ?? [],
     });
 
@@ -545,14 +549,68 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs font-semibold">Schedule Date</Label>
-                                    <Input
-                                        type="datetime-local"
-                                        value={form.scheduledFor}
-                                        onChange={set("scheduledFor")}
-                                        className="text-sm"
-                                    />
-                                    <p className="text-xs text-muted-foreground">Post will be hidden until this date. Keep draft status if you don't want it published automatically.</p>
+                                    <Label className="text-xs font-semibold">Schedule Date & Time</Label>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-full justify-start text-left font-normal h-9 px-3",
+                                                    !form.scheduledFor && "text-muted-foreground"
+                                                )}
+                                            >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {form.scheduledFor ? format(new Date(form.scheduledFor), "PPP p") : <span>Pick a date and time</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <CalendarComponent
+                                                mode="single"
+                                                selected={form.scheduledFor ? new Date(form.scheduledFor) : undefined}
+                                                onSelect={(date) => {
+                                                    if (date) {
+                                                        const current = form.scheduledFor ? new Date(form.scheduledFor) : new Date();
+                                                        date.setHours(current.getHours());
+                                                        date.setMinutes(current.getMinutes());
+                                                        setHasUnsavedChanges(true);
+                                                        setForm(f => ({...f, scheduledFor: date.toISOString()}));
+                                                    }
+                                                }}
+                                                initialFocus
+                                            />
+                                            <div className="p-3 border-t border-border flex items-center gap-2 bg-muted/20">
+                                                <Clock className="h-4 w-4 text-muted-foreground" />
+                                                <Input 
+                                                    type="time" 
+                                                    className="h-8 text-sm flex-1"
+                                                    value={form.scheduledFor ? format(new Date(form.scheduledFor), "HH:mm") : ""}
+                                                    onChange={(e) => {
+                                                        const val = e.target.value;
+                                                        if (!val) return;
+                                                        const [hours, minutes] = val.split(':');
+                                                        if (hours && minutes) {
+                                                            const date = form.scheduledFor ? new Date(form.scheduledFor) : new Date();
+                                                            date.setHours(parseInt(hours));
+                                                            date.setMinutes(parseInt(minutes));
+                                                            setHasUnsavedChanges(true);
+                                                            setForm(f => ({...f, scheduledFor: date.toISOString()}));
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                            {form.scheduledFor && (
+                                                <div className="p-2 border-t border-border bg-muted/10">
+                                                    <Button variant="ghost" size="sm" className="w-full text-xs text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => {
+                                                        setHasUnsavedChanges(true);
+                                                        setForm(f => ({...f, scheduledFor: ""}));
+                                                    }}>
+                                                        Clear Schedule
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </PopoverContent>
+                                    </Popover>
+                                    <p className="text-xs text-muted-foreground mt-1">Post will be hidden until this date. Keep draft status if you don't want it published automatically.</p>
                                 </div>
                             </CardContent>
                         </Card>

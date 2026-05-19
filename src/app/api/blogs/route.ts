@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
     try {
@@ -25,6 +26,9 @@ export async function POST(request: Request) {
         await connectDB();
         const data = await request.json();
         const blog = await Blog.create(data);
+        
+        revalidatePath("/blog");
+        
         return NextResponse.json(blog, { status: 201 });
     } catch (error: unknown) {
         console.error("API Blog POST Error:", (error as Error)?.message || error);

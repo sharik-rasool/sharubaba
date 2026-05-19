@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
     _request: Request,
@@ -36,6 +37,10 @@ export async function PUT(
             runValidators: true,
         }).lean();
         if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
+        
+        revalidatePath("/blog");
+        revalidatePath(`/blog/${blog.slug}`);
+        
         return NextResponse.json(blog);
     } catch (error: unknown) {
         if ((error as { code?: number }).code === 11000) {
@@ -59,6 +64,10 @@ export async function DELETE(
         await connectDB();
         const blog = await Blog.findByIdAndDelete(id);
         if (!blog) return NextResponse.json({ error: "Not found" }, { status: 404 });
+        
+        revalidatePath("/blog");
+        revalidatePath(`/blog/${blog.slug}`);
+        
         return NextResponse.json({ success: true });
     } catch {
         return NextResponse.json({ error: "Failed to delete blog" }, { status: 500 });

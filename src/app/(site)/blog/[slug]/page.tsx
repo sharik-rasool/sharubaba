@@ -218,6 +218,8 @@ export default async function BlogPostPage({ params }: Props) {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit"
                             })}
                         </span>
                         {post.readingTime > 0 && (

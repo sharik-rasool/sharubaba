@@ -332,4 +332,54 @@
   .prose-custom blockquote {
     @apply border-l-4 border-primary pl-6 italic text-muted-foreground bg-muted/20 py-4 pr-4 rounded-r-lg my-8;
   }
+  
+  .prose-custom {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Responsive Tables */
+  .prose-custom table {
+    @apply text-left border-collapse my-8 border border-border rounded-lg;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-spacing: 0;
+  }
+  
+  .prose-custom th, .prose-custom td {
+    @apply p-4 border-b border-border;
+    min-width: 120px !important;
+    word-break: break-word;
+  }
+  
+  .prose-custom th {
+    @apply font-bold bg-muted/30 text-foreground;
+  }
+  
+  .prose-custom tr:last-child td {
+    @apply border-b-0;
+  }
+  
+  /* Force dark mode visibility by overriding hardcoded inline styles injected by the rich text editor */
+  .dark .prose-custom span, 
+  .dark .prose-custom font,
+  .dark .prose-custom p,
+  .dark .prose-custom div,
+  .dark .prose-custom h1,
+  .dark .prose-custom h2,
+  .dark .prose-custom h3,
+  .dark .prose-custom h4,
+  .dark .prose-custom h5,
+  .dark .prose-custom h6,
+  .dark .prose-custom li,
+  .dark .prose-custom table,
+  .dark .prose-custom td,
+  .dark .prose-custom th {
+    color: inherit !important;
+    background-color: transparent !important;
+  }
 }
+
