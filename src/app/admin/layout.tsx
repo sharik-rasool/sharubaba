@@ -16,17 +16,17 @@ export default async function AdminLayout({
     // No session = login page (middleware already handles redirects)
     if (!session) {
         return (
-            <div className="min-h-screen bg-muted/30">
+            <div className="min-h-screen bg-muted/30" suppressHydrationWarning>
                 {children}
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-muted/30">
+        <div className="min-h-screen bg-muted/30" suppressHydrationWarning>
             <AdminSidebar email={session.user?.email ?? ""} />
             <div className="lg:pl-64">
-                <main className="p-6 lg:p-8">{children}</main>
+                <main className="p-4 sm:p-6 lg:p-8">{children}</main>
             </div>
         </div>
     );

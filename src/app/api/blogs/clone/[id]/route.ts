@@ -30,10 +30,10 @@ export async function POST(
 
         const clonedBlog = await Blog.create(cloneData);
         return NextResponse.json(clonedBlog, { status: 201 });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("CLONE ERROR:", error);
         return NextResponse.json(
-            { error: error.message || "Failed to clone blog" },
+            { error: error instanceof Error ? error.message : "Failed to clone blog" },
             { status: 500 }
         );
     }

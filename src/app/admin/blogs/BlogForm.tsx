@@ -234,12 +234,12 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                 </div>
             )}
 
-            <div className="flex items-center justify-between border-b pb-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
                 <div className="flex items-center gap-4">
                     <h1 className="text-2xl font-bold">{isEditing ? "Edit Post" : "New Post"}</h1>
                     {hasUnsavedChanges && <Badge variant="secondary" className="text-xs">Unsaved changes</Badge>}
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 self-start md:self-auto">
                     <Button
                         variant="outline"
                         size="sm"
@@ -263,7 +263,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             </div>
 
             <Tabs defaultValue="content" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 max-w-[400px]">
+                <TabsList className="flex w-full justify-start overflow-x-auto sm:grid sm:grid-cols-3 max-w-full sm:max-w-[400px] h-auto p-1 hide-scrollbar">
                     <TabsTrigger value="content">Content</TabsTrigger>
                     <TabsTrigger value="seo">SEO & Meta</TabsTrigger>
                     <TabsTrigger value="advanced">Advanced</TabsTrigger>

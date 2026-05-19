@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
-import emailjs from '@emailjs/browser';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
+import { ObfuscatedContact } from "@/components/ObfuscatedContact";
 
 export function ContactPageContent() {
     const { toast } = useToast();
@@ -20,6 +20,7 @@ export function ContactPageContent() {
         email: "",
         company: "",
         website: "",
+        website_url_backup: "",
         message: "",
     });
 
@@ -35,18 +36,15 @@ export function ContactPageContent() {
         setIsSubmitting(true);
 
         try {
-            await emailjs.send(
-                'service_vyo6d5t', // Service ID
-                'template_oxwiq1r', // Template ID
-                {
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    company: formData.company,
-                    website: formData.website,
-                    message: formData.message,
-                },
-                '55VneOagkBBvVQDN0' // Public Key
-            );
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to send message");
+            }
 
             setIsSubmitting(false);
             setIsSubmitted(true);
@@ -59,6 +57,7 @@ export function ContactPageContent() {
                 email: "",
                 company: "",
                 website: "",
+                website_url_backup: "",
                 message: "",
             });
         } catch (error) {
@@ -113,12 +112,7 @@ export function ContactPageContent() {
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-sm md:text-base">Email</p>
-                                                    <a
-                                                        href="mailto:hi@sharikrasool.com"
-                                                        className="text-xs md:text-sm text-primary hover:underline"
-                                                    >
-                                                        hi@sharikrasool.com
-                                                    </a>
+                                                    <ObfuscatedContact type="email" className="text-xs md:text-sm text-primary hover:underline" />
                                                 </div>
                                             </div>
                                             <div className="flex items-start gap-3">
@@ -127,12 +121,7 @@ export function ContactPageContent() {
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-sm md:text-base">Phone</p>
-                                                    <a
-                                                        href="tel:+917006500941"
-                                                        className="text-xs md:text-sm text-primary hover:underline"
-                                                    >
-                                                        +91 7006500941
-                                                    </a>
+                                                    <ObfuscatedContact type="phone" className="text-xs md:text-sm text-primary hover:underline" />
                                                 </div>
                                             </div>
                                         </address>
@@ -238,6 +227,20 @@ export function ContactPageContent() {
                                                         className="text-sm md:text-base"
                                                     />
                                                 </div>
+                                            </div>
+
+                                            {/* Honeypot field - invisible to real users */}
+                                            <div style={{ display: 'none' }} aria-hidden="true">
+                                                <Label htmlFor="website_url_backup">Website URL Backup</Label>
+                                                <Input
+                                                    id="website_url_backup"
+                                                    name="website_url_backup"
+                                                    type="text"
+                                                    value={formData.website_url_backup}
+                                                    onChange={handleChange}
+                                                    tabIndex={-1}
+                                                    autoComplete="off"
+                                                />
                                             </div>
 
                                             <div className="space-y-2">

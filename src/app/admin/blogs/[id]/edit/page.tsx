@@ -36,14 +36,14 @@ export default async function EditBlogPage(props: Props) {
                 <BlogForm initialData={blog} />
             </div>
         );
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Edit page error:", error);
         return (
             <div className="p-8 border-2 border-destructive bg-destructive/10 rounded-xl">
                 <h1 className="text-xl font-bold text-destructive">Failed to load blog post</h1>
                 <p className="mt-2 text-sm text-muted-foreground">This error occurred while trying to fetch the blog post for editing.</p>
                 <div className="mt-4 p-4 bg-background rounded border font-mono text-xs overflow-auto">
-                    {error.message || String(error)}
+                    {error instanceof Error ? error.message : String(error)}
                 </div>
                 <Button asChild className="mt-6" variant="outline">
                     <Link href="/admin/blogs">Return to Dashboard</Link>

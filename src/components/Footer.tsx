@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import { ObfuscatedContact } from "./ObfuscatedContact";
 
 const footerLinks = {
   main: [
@@ -43,15 +44,11 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
-                <a href="tel:+917006500941" className="hover:text-foreground transition-colors">
-                  +91 7006500941
-                </a>
+                <ObfuscatedContact type="phone" className="hover:text-foreground transition-colors" />
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
-                <a href="mailto:hi@sharikrasool.com" className="hover:text-foreground transition-colors">
-                  hi@sharikrasool.com
-                </a>
+                <ObfuscatedContact type="email" className="hover:text-foreground transition-colors" />
               </div>
             </address>
           </div>
