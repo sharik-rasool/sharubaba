@@ -333,7 +333,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                                 <div 
                                                     key={b.slug} 
                                                     className="p-2 border rounded-md text-sm cursor-pointer hover:bg-muted transition-colors group"
-                                                    onClick={() => insertLink(b.title, `https://sharikrasool.com/blog/${b.slug}`)}
+                                                    onClick={() => insertLink(b.title, `https://www.sharikrasool.com/blog/${b.slug}`)}
                                                 >
                                                     <p className="font-medium text-xs leading-tight line-clamp-2 group-hover:text-primary">{b.title}</p>
                                                     <p className="text-[10px] text-muted-foreground truncate mt-1">/blog/{b.slug}</p>
@@ -489,7 +489,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                             </div>
                                             <div>
                                                 <div className="text-sm text-[#202124] leading-tight">Sharik Rasool</div>
-                                                <div className="text-xs text-[#4d5156] leading-tight">https://sharikrasool.com › blog › {form.slug}</div>
+                                                <div className="text-xs text-[#4d5156] leading-tight">https://www.sharikrasool.com › blog › {form.slug}</div>
                                             </div>
                                         </div>
                                         <h3 className="text-xl text-[#1a0dab] mb-1 leading-snug cursor-pointer hover:underline truncate">

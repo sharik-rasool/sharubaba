@@ -22,7 +22,7 @@ export interface WordPressPost {
 
 
 
-const WP_URL = 'https://sharikrasool.com/wp-json/wp/v2';
+const WP_URL = 'https://www.sharikrasool.com/wp-json/wp/v2';
 
 // Helper to fetch data
 async function fetchAPI(endpoint: string) {

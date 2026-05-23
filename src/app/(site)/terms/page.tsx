@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Terms & Conditions",
     description: "Terms and conditions for using Sharik Rasool's website and services.",
-    alternates: { canonical: "https://sharikrasool.com/terms" },
+    alternates: { canonical: "https://www.sharikrasool.com/terms" },
     robots: {
         index: false,
     },

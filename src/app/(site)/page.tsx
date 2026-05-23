@@ -10,12 +10,12 @@ export const metadata: Metadata = {
     title: "Sharik Rasool | SEO Strategist & Link Builder",
     description:
         "Expert SEO strategist and link builder with 6+ years of experience helping SaaS and tech companies grow organically. 500+ high-quality backlinks built.",
-    alternates: { canonical: "https://sharikrasool.com" },
+    alternates: { canonical: "https://www.sharikrasool.com" },
     openGraph: {
         title: "Sharik Rasool | SEO Strategist & Link Builder",
         description:
             "Expert SEO strategist and link builder. I help SaaS and tech companies increase domain authority, organic traffic, and search rankings.",
-        url: "https://sharikrasool.com",
+        url: "https://www.sharikrasool.com",
         type: "website",
     },
     twitter: {
@@ -30,7 +30,7 @@ const homeSchema = {
     "@type": "WebPage",
     "name": "Sharik Rasool - SEO Strategist & Link Builder",
     "description": "Expert SEO strategist and link builder with 6+ years of experience helping SaaS and tech companies grow organically.",
-    "url": "https://sharikrasool.com",
+    "url": "https://www.sharikrasool.com",
     "mainEntity": {
         "@type": "Person",
         "name": "Sharik Rasool",

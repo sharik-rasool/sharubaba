@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const seoTitle = post.seoTitle || post.title;
     const seoDescription = post.seoDescription || post.excerpt;
-    const baseUrl = "https://sharikrasool.com";
+    const baseUrl = "https://www.sharikrasool.com";
 
     return {
         title: `${seoTitle} | Sharik Rasool`,
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: Props) {
     const { toc, html: parsedHtml, headingCount } = parseHtmlForToc(post.content);
     const showToc = headingCount >= 3;
 
-    const baseUrl = "https://sharikrasool.com";
+    const baseUrl = "https://www.sharikrasool.com";
     const postUrl = `${baseUrl}/blog/${post.slug}`;
 
     const schemas: Record<string, unknown>[] = [];

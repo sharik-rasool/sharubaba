@@ -19,11 +19,11 @@ export const metadata: Metadata = {
     title: "SEO Blog | Sharik Rasool — Link Building & SEO Strategies",
     description:
         "Actionable SEO and link building strategies from Sharik Rasool. Tips for SaaS companies, domain authority growth, and organic traffic.",
-    alternates: { canonical: "https://sharikrasool.com/blog" },
+    alternates: { canonical: "https://www.sharikrasool.com/blog" },
     openGraph: {
         title: "SEO Blog | Sharik Rasool",
         description: "Actionable SEO and link building strategies that actually work.",
-        url: "https://sharikrasool.com/blog",
+        url: "https://www.sharikrasool.com/blog",
         type: "website",
     },
     twitter: {

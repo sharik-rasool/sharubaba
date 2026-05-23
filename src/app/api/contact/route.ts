@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     // 1. Origin Check
     const origin = request.headers.get('origin');
-    const allowedOrigins = ['https://sharikrasool.com', 'https://www.sharikrasool.com', 'http://localhost:3000', 'http://localhost:3001'];
+    const allowedOrigins = ['https://www.sharikrasool.com', 'https://www.sharikrasool.com', 'http://localhost:3000', 'http://localhost:3001'];
     
     if (origin && !allowedOrigins.some(o => origin.startsWith(o))) {
       console.warn(`[CONTACT FORM] [${new Date(timestamp).toISOString()}] [IP: ${ip}] Origin rejected: ${origin}`);

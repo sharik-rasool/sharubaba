@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Privacy Policy",
     description: "Privacy policy for Sharik Rasool's website and services.",
-    alternates: { canonical: "https://sharikrasool.com/privacy-policy" },
+    alternates: { canonical: "https://www.sharikrasool.com/privacy-policy" },
     robots: {
         index: false,
     },
