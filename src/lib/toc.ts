@@ -5,7 +5,7 @@ export interface TocItem {
     children: TocItem[];
 }
 
-function slugify(text: string) {
+export function slugify(text: string) {
     return text
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
@@ -21,14 +21,27 @@ export function parseHtmlForToc(html: string): { toc: TocItem[], html: string, h
 
     // Process Headings
     let modifiedHtml = html.replace(/<(h[23])(.*?)>(.*?)<\/\1>/gi, (match, tag, attrs, content) => {
+        // Strip HTML tags and &nbsp; from content to check for visible text
+        const text = content.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, '').trim();
+        
+        // Skip headings that have no visible text (empty, image-only, whitespace-only)
+        if (!text) {
+            return match;
+        }
+
         headingCount++;
         
-        // Strip HTML tags from content to get plain text for the slug and TOC
-        const text = content.replace(/<[^>]*>?/gm, '').trim();
-        let id = slugify(text);
+        // Extract existing ID if present to preserve it, otherwise slugify the text
+        let id = "";
+        const idMatch = attrs.match(/id="([^"]*)"/i);
+        if (idMatch && idMatch[1]) {
+            id = slugify(idMatch[1]);
+        } else {
+            id = slugify(text);
+        }
         if (!id) id = 'section';
         
-        // Handle duplicate IDs
+        // Handle duplicate IDs within the document
         const originalId = id;
         let counter = 1;
         while (usedIds.has(id)) {
@@ -50,7 +63,10 @@ export function parseHtmlForToc(html: string): { toc: TocItem[], html: string, h
             }
         }
 
-        return `<${tag}${attrs} id="${id}">${content}</${tag}>`;
+        // Clean out any pre-existing id attribute from attrs
+        const cleanAttrs = attrs.replace(/\sid="[^"]*"/gi, "").trim();
+
+        return `<${tag}${cleanAttrs ? ' ' + cleanAttrs : ''} id="${id}">${content}</${tag}>`;
     });
 
     // Process Images for Performance (Lazy Loading & Async Decoding)

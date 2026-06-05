@@ -258,6 +258,14 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             setError("");
         }
 
+        // Sanitize and generate unique heading IDs before final verification and saving
+        const { sanitizeContent, generateHeadingIds, repairMalformedHeadings } = await import("@/lib/blog-cleaner");
+        let processedContent = sanitizeContent(contentToSave);
+        processedContent = repairMalformedHeadings(processedContent);
+        processedContent = generateHeadingIds(processedContent);
+        contentToSave = processedContent;
+        setForm((f) => ({ ...f, content: contentToSave }));
+
         // Final client-side content health verification
         const audit = scanContentHealth(contentToSave);
         if (audit.status === "critical") {
@@ -412,79 +420,194 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
                         {/* Sidebar */}
                         <div className="space-y-6">
-                            {/* Content Health Card */}
+                            {/* Pre-publish SEO Health Panel */}
                             <Card>
                                 <CardHeader className="pb-3 px-4">
                                     <CardTitle className="text-sm font-semibold flex items-center gap-2">
                                         <Activity className="h-4 w-4 text-primary" />
-                                        Content Health Audit
+                                        Pre-Publish SEO Audit
                                     </CardTitle>
-                                    <CardDescription className="text-xs">Footprint and safety diagnostics</CardDescription>
+                                    <CardDescription className="text-xs">Real-time SEO health score and compliance checks</CardDescription>
                                 </CardHeader>
-                                <CardContent className="px-4 pb-4 space-y-3">
+                                <CardContent className="px-4 pb-4">
                                     {(() => {
-                                        const audit = scanContentHealth(form.content);
+                                        const audit = scanContentHealth(form.content, {
+                                            title: form.title,
+                                            slug: form.slug,
+                                            seoDescription: form.seoDescription,
+                                            canonicalUrl: form.canonicalUrl,
+                                            coverImage: form.coverImage,
+                                            ogImage: form.ogImage,
+                                            createdAt: initialData?.createdAt,
+                                            updatedAt: new Date().toISOString(),
+                                            tags: form.tags.split(",").map(t => t.trim()).filter(Boolean)
+                                        });
                                         const isSafe = audit.status === "safe";
                                         const isWarning = audit.status === "warning";
                                         const isCritical = audit.status === "critical";
+                                        const score = audit.seoHealthScore ?? 100;
 
                                         return (
-                                            <div className="space-y-3">
-                                                <div className="flex items-center justify-between text-xs border-b pb-2 border-border">
-                                                    <span className="text-muted-foreground">SEO Status:</span>
+                                            <div className="space-y-4">
+                                                {/* Score Circular/Indicator style */}
+                                                <div className="flex flex-col items-center justify-center p-3 rounded-lg border border-border bg-muted/30">
+                                                    <span className="text-xs text-muted-foreground font-medium mb-1">SEO Health Score</span>
+                                                    <div className={cn(
+                                                        "text-3xl font-extrabold tracking-tight",
+                                                        score >= 90 ? "text-green-600 dark:text-green-400" :
+                                                        score >= 70 ? "text-yellow-600 dark:text-yellow-400" :
+                                                        "text-destructive"
+                                                    )}>
+                                                        {score}/100
+                                                    </div>
                                                     <Badge
-                                                        className="text-[10px] uppercase font-bold"
+                                                        className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 mt-2"
                                                         variant={isSafe ? "default" : (isWarning ? "secondary" : "destructive")}
                                                     >
-                                                        {audit.status}
+                                                        {audit.status === "safe" ? "SEO Compliant" : `${audit.status} issues`}
                                                     </Badge>
                                                 </div>
 
-                                                <div className="space-y-1.5">
-                                                    <div className="flex justify-between text-xs font-medium">
-                                                        <span>Size:</span>
+                                                {/* Metric Details Grid */}
+                                                <div className="space-y-2 text-xs">
+                                                    <div className="flex justify-between border-b border-border/40 pb-1.5">
+                                                        <span className="text-muted-foreground">HTML Size:</span>
                                                         <span className={cn(
+                                                            "font-medium",
                                                             audit.contentSize > 1.5 * 1024 * 1024 ? "text-destructive font-bold" : 
-                                                            (audit.contentSize > 500 * 1024 ? "text-yellow-600 dark:text-yellow-400 font-semibold" : "text-green-600 dark:text-green-400")
+                                                            audit.contentSize > 500 * 1024 ? "text-yellow-600 dark:text-yellow-400 font-semibold" : "text-green-600 dark:text-green-400"
                                                         )}>
                                                             {(audit.contentSize / 1024).toFixed(1)} KB
                                                         </span>
                                                     </div>
-                                                    <div className="flex justify-between text-xs">
-                                                        <span className="text-muted-foreground">Images:</span>
-                                                        <span className="font-medium">{audit.imageCount} total</span>
+
+                                                    <div className="flex justify-between border-b border-border/40 pb-1.5">
+                                                        <span className="text-muted-foreground">Est. Render Size:</span>
+                                                        <span className="font-medium">{(audit.renderedContentSize / 1024).toFixed(1)} KB</span>
                                                     </div>
-                                                    <div className="flex justify-between text-xs">
-                                                        <span className="text-muted-foreground">Base64 Images:</span>
-                                                        <span className={cn(
-                                                            "font-semibold",
-                                                            audit.base64Count > 0 ? "text-destructive font-bold" : "text-green-600 dark:text-green-400"
-                                                        )}>
-                                                            {audit.base64Count} found
-                                                        </span>
+
+                                                    <div className="flex flex-col border-b border-border/40 pb-1.5">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-muted-foreground">Metadata Verification:</span>
+                                                            <span className="font-medium">
+                                                                {audit.missingCanonical || audit.missingMetaDesc ? "⚠️ Warning" : "✅ Valid"}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-[10px] text-muted-foreground mt-1 pl-2 border-l border-border space-y-0.5">
+                                                            {audit.missingCanonical ? (
+                                                                <div className="text-destructive font-medium">• Canonical mismatch / missing</div>
+                                                            ) : (
+                                                                <div className="text-green-600 dark:text-green-400">• Rendered Canonical Valid</div>
+                                                            )}
+                                                            {audit.missingMetaDesc ? (
+                                                                <div className="text-destructive font-medium">• Meta Description missing</div>
+                                                            ) : (
+                                                                <div className="text-green-600 dark:text-green-400">• Meta Description Valid</div>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="flex justify-between text-xs">
-                                                        <span className="text-muted-foreground">Est. Render Page Size:</span>
-                                                        <span className="font-medium">
-                                                            {((audit.contentSize * (audit.base64Count > 0 ? 2 : 1) + 20 * 1024) / 1024).toFixed(1)} KB
-                                                        </span>
+
+                                                    <div className="flex flex-col border-b border-border/40 pb-1.5">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-muted-foreground">Rendered Schema check:</span>
+                                                            <span className="font-medium">
+                                                                {audit.missingSchemaProps.length > 0 ? "⚠️ Missing properties" : "✅ Valid"}
+                                                            </span>
+                                                        </div>
+                                                        {audit.missingSchemaProps.length > 0 && (
+                                                            <div className="text-[10px] text-destructive font-medium mt-1 pl-2 border-l border-border space-y-0.5">
+                                                                • Missing: {audit.missingSchemaProps.join(", ")}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex flex-col border-b border-border/40 pb-1.5">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-muted-foreground">Headings Integrity:</span>
+                                                            <span className="font-medium">{audit.headingsCount} total</span>
+                                                        </div>
+                                                        {(audit.emptyHeadingsCount > 0 || audit.imageHeadingsCount > 0 || audit.missingIdsCount > 0 || audit.malformedHeadingsCount > 0) && (
+                                                            <div className="text-[10px] text-muted-foreground mt-1 pl-2 border-l border-border space-y-0.5">
+                                                                {audit.malformedHeadingsCount > 0 && (
+                                                                    <div className="text-destructive font-medium">• {audit.malformedHeadingsCount} malformed headings (auto-repaired on save)</div>
+                                                                )}
+                                                                {audit.emptyHeadingsCount > 0 && (
+                                                                    <div className="text-destructive font-medium">• {audit.emptyHeadingsCount} empty headings</div>
+                                                                )}
+                                                                {audit.imageHeadingsCount > 0 && (
+                                                                    <div className="text-destructive font-medium">• {audit.imageHeadingsCount} image-only headings</div>
+                                                                )}
+                                                                {audit.missingIdsCount > 0 && (
+                                                                    <div className="text-yellow-600 dark:text-yellow-400">• {audit.missingIdsCount} missing IDs</div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex flex-col border-b border-border/40 pb-1.5">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-muted-foreground">Image Alts & Embeds:</span>
+                                                            <span className="font-medium">{audit.imageCount} images</span>
+                                                        </div>
+                                                        <div className="text-[10px] text-muted-foreground mt-1 pl-2 border-l border-border space-y-0.5">
+                                                            {audit.base64Count > 0 && (
+                                                                <div className="text-destructive font-bold">• {audit.base64Count} Base64 (Blocked)</div>
+                                                            )}
+                                                            {audit.missingAltCount > 0 && (
+                                                                <div className="text-destructive font-medium">• {audit.missingAltCount} missing alt tags</div>
+                                                            )}
+                                                            {audit.shortAltsCount > 0 && (
+                                                                <div className="text-yellow-600 dark:text-yellow-400">• {audit.shortAltsCount} short alt tags</div>
+                                                            )}
+                                                            {audit.genericAltsCount > 0 && (
+                                                                <div className="text-yellow-600 dark:text-yellow-400">• {audit.genericAltsCount} generic alt tags</div>
+                                                            )}
+                                                            {audit.duplicateAlts.length > 0 && (
+                                                                <div className="text-yellow-600 dark:text-yellow-400">• {audit.duplicateAlts.length} duplicate alt texts</div>
+                                                            )}
+                                                            {audit.heavyEmbedsCount > 0 && (
+                                                                <div className="text-indigo-600 dark:text-indigo-400">• {audit.heavyEmbedsCount} heavy embeds / iframes</div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-col">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-muted-foreground">Links & Age Audit:</span>
+                                                            <span className="font-medium">{audit.internalLinksCount} internal</span>
+                                                        </div>
+                                                        <div className="text-[10px] text-muted-foreground mt-1 pl-2 border-l border-border space-y-0.5">
+                                                            {audit.brokenLinksCount > 0 && (
+                                                                <div className="text-destructive font-medium">• {audit.brokenLinksCount} broken or placeholder link(s)</div>
+                                                            )}
+                                                            {audit.ageInDays > 0 && (
+                                                                <div className={cn(
+                                                                    "font-medium",
+                                                                    audit.ageInDays > 180 ? "text-yellow-600 dark:text-yellow-400" : "text-green-600 dark:text-green-400"
+                                                                )}>
+                                                                    • Page updated {audit.ageInDays} days ago {audit.ageInDays > 180 && "(exceeds 6 months)"}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
-
                                                 {audit.messages.length > 0 && (
-                                                    <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-                                                        {audit.messages.map((msg, i) => (
-                                                            <div key={i} className="flex gap-1.5 items-start text-[11px] leading-tight">
-                                                                {isCritical ? (
-                                                                    <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
-                                                                ) : (
-                                                                    <AlertTriangle className="h-3.5 w-3.5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
-                                                                )}
-                                                                <span className={isCritical ? "text-destructive" : "text-muted-foreground"}>
-                                                                    {msg}
-                                                                </span>
-                                                            </div>
-                                                        ))}
+                                                    <div className="mt-3 pt-3 border-t border-border space-y-2">
+                                                        <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">SEO Recommendations</span>
+                                                        <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
+                                                            {audit.messages.map((msg, i) => (
+                                                                <div key={i} className="flex gap-1.5 items-start text-[11px] leading-tight">
+                                                                    {msg.toLowerCase().includes("blocked") || msg.toLowerCase().includes("extremely large") || msg.toLowerCase().includes("base64") ? (
+                                                                        <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
+                                                                    ) : (
+                                                                        <AlertTriangle className="h-3.5 w-3.5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
+                                                                    )}
+                                                                    <span className={msg.toLowerCase().includes("blocked") || msg.toLowerCase().includes("base64") ? "text-destructive font-medium" : "text-muted-foreground"}>
+                                                                        {msg}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>

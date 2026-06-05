@@ -125,9 +125,12 @@ const SummernoteEditor = forwardRef<SummernoteRef, SummernoteEditorProps>(({ ini
                         const clipboardData = e.originalEvent?.clipboardData || e.clipboardData;
                         if (!clipboardData) return;
 
+                        // Check if there are files (like images) being pasted
                         const items = clipboardData.items;
+                        let hasImage = false;
                         for (let i = 0; i < items.length; i++) {
                             if (items[i].type.indexOf("image") === 0) {
+                                hasImage = true;
                                 const file = items[i].getAsFile();
                                 if (file) {
                                     e.preventDefault();
@@ -143,6 +146,17 @@ const SummernoteEditor = forwardRef<SummernoteRef, SummernoteEditorProps>(({ ini
                                         alert("Pasted image upload failed. Please try again.");
                                     }
                                 }
+                            }
+                        }
+
+                        // Pasteurize HTML payload if pasted from external editors (Word/Google Docs)
+                        if (!hasImage) {
+                            const htmlPayload = clipboardData.getData("text/html");
+                            if (htmlPayload) {
+                                e.preventDefault();
+                                const { cleanHtmlForPaste } = await import("@/lib/blog-cleaner");
+                                const cleanedHtml = cleanHtmlForPaste(htmlPayload);
+                                $(editorNode).summernote("pasteHTML", cleanedHtml);
                             }
                         }
                     },
