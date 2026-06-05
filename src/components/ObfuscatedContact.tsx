@@ -8,7 +8,7 @@ interface ObfuscatedContactProps {
 }
 
 // Store obfuscated (reversed) values to prevent basic scraping
-const REVERSED_EMAIL = "moc.loosarhs@ih".split("").reverse().join("");
+const REVERSED_EMAIL = "moc.loosarkirahs@ih".split("").reverse().join("");
 const REVERSED_PHONE = "1490056007 19+".split("").reverse().join(""); // +91 7006500941
 
 export function ObfuscatedContact({ type, className }: ObfuscatedContactProps) {

@@ -35,7 +35,7 @@ export function Footer() {
               <span className="text-primary">SR</span> Sharik Rasool
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              SEO Strategist & Link Builder with 6+ years of experience helping SaaS and tech companies grow organically.
+              SEO Strategist & Link Builder with 7+ years of experience helping SaaS and tech companies grow organically.
             </p>
             <address className="not-italic space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">

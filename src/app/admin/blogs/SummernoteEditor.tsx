@@ -120,6 +120,32 @@ const SummernoteEditor = forwardRef<SummernoteRef, SummernoteEditorProps>(({ ini
                             alert("Image upload failed. Please try again.");
                         }
                     },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    onPaste: async (e: any) => {
+                        const clipboardData = e.originalEvent?.clipboardData || e.clipboardData;
+                        if (!clipboardData) return;
+
+                        const items = clipboardData.items;
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].type.indexOf("image") === 0) {
+                                const file = items[i].getAsFile();
+                                if (file) {
+                                    e.preventDefault();
+                                    const formData = new FormData();
+                                    formData.append("file", file);
+                                    try {
+                                        const res = await fetch("/api/upload", { method: "POST", body: formData });
+                                        const data = await res.json();
+                                        if (data.url) {
+                                            $(editorNode).summernote("insertImage", data.url, file.name);
+                                        }
+                                    } catch {
+                                        alert("Pasted image upload failed. Please try again.");
+                                    }
+                                }
+                            }
+                        }
+                    },
                 },
             });
 
@@ -163,6 +189,19 @@ const SummernoteEditor = forwardRef<SummernoteRef, SummernoteEditorProps>(({ ini
                 }
                 
                 .note-editable { background: hsl(var(--background)) !important; color: hsl(var(--foreground)) !important; font-size: 16px; line-height: 1.8; min-height: 400px; padding: 24px !important; }
+                .note-editable p,
+                .note-editable h1,
+                .note-editable h2,
+                .note-editable h3,
+                .note-editable h4,
+                .note-editable h5,
+                .note-editable h6,
+                .note-editable li {
+                    color: hsl(var(--foreground)) !important;
+                }
+                .note-editable span {
+                    color: inherit;
+                }
                 
                 /* Mobile Responsiveness */
                 @media (max-width: 768px) {

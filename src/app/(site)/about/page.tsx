@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, GraduationCap, Briefcase, MapPin, Mail, PenTool } from "lucide-react";
+import { ArrowRight, GraduationCap, Briefcase, MapPin, Mail, PenTool, Calendar, Users, Target, Building, Link2, Shield, TrendingUp, Flag, Handshake, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
@@ -18,19 +18,19 @@ import jainUniversityLogo from "@/assets/logos/jain-university.jpeg";
 export const metadata: Metadata = {
     title: "About Sharik Rasool | SEO Expert & Link Builder",
     description:
-        "Learn about Sharik Rasool's 6+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+        "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
     alternates: { canonical: "https://www.sharikrasool.com/about" },
     openGraph: {
         title: "About Sharik Rasool | SEO Expert & Link Builder",
         description:
-            "6+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+            "7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
         url: "https://www.sharikrasool.com/about",
         type: "profile",
     },
     twitter: {
         card: "summary_large_image",
         title: "About Sharik Rasool | SEO Expert & Link Builder",
-        description: "6+ years of experience in SEO strategy and link building for SaaS companies.",
+        description: "7+ years of experience in SEO strategy and link building for SaaS companies.",
     },
 };
 
@@ -99,7 +99,7 @@ const aboutSchema = {
         "@type": "Person",
         "name": "Sharik Rasool",
         "jobTitle": "SEO Strategist & Link Builder",
-        "description": "Expert SEO strategist with 6+ years of experience in link building and organic growth",
+        "description": "Expert SEO strategist with 7+ years of experience in link building and organic growth",
         "alumniOf": {
             "@type": "EducationalOrganization",
             "name": "MBA in Digital Marketing",
@@ -123,76 +123,161 @@ export default function AboutPage() {
             />
             <section className="section">
                 <div className="container-wide">
-                    <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center mb-12 lg:mb-16">
+                    <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center mb-12 lg:mb-16">
                         {/* Image */}
-                        <FadeIn className="order-2 lg:order-1 lg:col-span-2">
-                            <div className="relative max-w-[280px] sm:max-w-xs mx-auto lg:max-w-none">
-                                <Image
-                                    src={sharikPortrait}
-                                    alt="Sharik Rasool - SEO Strategist"
-                                    className="w-full aspect-[3/4] object-cover object-top rounded-2xl shadow-xl"
-                                    placeholder="blur"
-                                />
-                                <div className="absolute -bottom-4 -left-4 w-full h-full bg-primary/20 rounded-2xl -z-10" />
+                        <FadeIn className="order-2 lg:order-1 lg:col-span-2 relative">
+                            <div className="relative max-w-[340px] lg:max-w-none mx-auto w-full aspect-[5/6]">
+                                {/* Main Image Frame */}
+                                <div className="relative w-full h-full rounded-[32px] overflow-hidden shadow-2xl border-4 border-background group bg-muted">
+                                    <Image
+                                        src={sharikPortrait}
+                                        alt="Sharik Rasool - SEO Expert & Link Builder"
+                                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-102"
+                                        priority
+                                    />
+                                    {/* Bottom fade overlay */}
+                                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none z-10" />
+                                </div>
+
                             </div>
                         </FadeIn>
 
                         {/* Content */}
-                        <FadeIn delay={0.1} className="order-1 lg:order-2 lg:col-span-3">
-                            <div className="text-center lg:text-left">
-                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
-                                    About <span className="text-primary">Sharik Rasool</span>
-                                </h1>
-                                <p className="text-lg md:text-xl text-muted-foreground mb-6">
-                                    SEO Strategist & Link Builder with a passion for driving organic growth
-                                </p>
+                        <FadeIn delay={0.1} className="order-1 lg:order-2 lg:col-span-3 text-center lg:text-left flex flex-col items-center lg:items-start">
+                            
+                            {/* Top Badge */}
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className="text-primary font-extrabold uppercase tracking-widest text-xs">About Me</span>
+                                <div className="w-12 h-[2px] bg-primary" />
+                            </div>
 
-                                {/* Trust Stack */}
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                                        <span className="text-foreground font-medium">6+ Years Experience</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                                        <span className="text-foreground font-medium">50+ Clients</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                                        <span className="text-foreground font-medium">White-hat Practices</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                                        <span className="text-foreground font-medium">Agency + In-house</span>
-                                    </div>
+                            {/* Main Heading */}
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 leading-[1.12]">
+                                Helping SaaS Companies <br className="hidden sm:inline" />
+                                Turn Authority Into <br />
+                                <span className="text-primary">
+                                    Organic Growth.
+                                </span>
+                            </h1>
+
+                            {/* Bio Paragraph */}
+                            <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-xl">
+                                SEO Strategist and Link Builder passionate about helping SaaS and tech companies acquire authoritative backlinks, rank higher, and drive sustainable organic growth.
+                            </p>
+
+                            {/* Metrics Grid */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 w-full mb-8 border-t border-b border-border/40 py-6 text-left">
+                                {/* Metric 1: Experience */}
+                                <div className="flex flex-col">
+                                    <Calendar className="h-5 w-5 text-primary" />
+                                    <span className="text-xl sm:text-2xl font-extrabold text-foreground mt-2.5 mb-1">7+</span>
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider leading-tight">Years of Experience</span>
                                 </div>
 
-                                {/* CTAs */}
-                                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6">
-                                    <a href="https://calendly.com/sharikkashmiri" target="_blank" rel="noopener noreferrer">
-                                        <Button size="lg" className="gap-2 w-full sm:w-auto">
-                                            Book a Free Consultation
-                                            <ArrowRight className="h-4 w-4" />
-                                        </Button>
-                                    </a>
-                                    <Link href="/projects">
-                                        <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                                            View Case Studies
-                                        </Button>
-                                    </Link>
+                                {/* Metric 2: Backlinks */}
+                                <div className="flex flex-col">
+                                    <Link2 className="h-5 w-5 text-primary" />
+                                    <span className="text-xl sm:text-2xl font-extrabold text-foreground mt-2.5 mb-1">500+</span>
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider leading-tight">Backlinks Built</span>
                                 </div>
 
-                                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <MapPin className="h-4 w-4 text-primary" />
-                                        <span>Srinagar, J&K, India</span>
+                                {/* Metric 3: Clients */}
+                                <div className="flex flex-col">
+                                    <Users className="h-5 w-5 text-primary" />
+                                    <span className="text-xl sm:text-2xl font-extrabold text-foreground mt-2.5 mb-1">50+</span>
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider leading-tight">SaaS & Tech Clients</span>
+                                </div>
+
+                                {/* Metric 4: White-hat */}
+                                <div className="flex flex-col">
+                                    <Target className="h-5 w-5 text-primary" />
+                                    <span className="text-xl sm:text-2xl font-extrabold text-foreground mt-2.5 mb-1">100%</span>
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider leading-tight">White-Hat Link Building</span>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-8">
+                                <a href="https://calendly.com/sharikkashmiri" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                    <Button size="lg" className="h-12 px-6 rounded-xl text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 border-0 shadow-lg shadow-primary/15 hover:scale-102 active:scale-98 transition-all duration-300 gap-2 w-full sm:w-auto">
+                                        Book a free consultation
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Button>
+                                </a>
+                                <Link href="/projects" className="w-full sm:w-auto">
+                                    <Button variant="outline" size="lg" className="h-12 px-6 rounded-xl text-sm font-bold border-border/80 hover:bg-primary/10 hover:text-primary hover:border-primary/30 hover:scale-102 active:scale-98 transition-all duration-300 w-full sm:w-auto">
+                                        View Case Studies
+                                    </Button>
+                                </Link>
+                            </div>
+                        </FadeIn>
+                    </div>
+
+                    {/* My Journey Section */}
+                    <div className="mt-20 lg:mt-24 border-t border-border/40 pt-16 lg:pt-20 mb-16 lg:mb-20">
+                        <FadeIn>
+                            <div className="text-center mb-12">
+                                <span className="text-primary font-extrabold uppercase tracking-widest text-xs">My Journey</span>
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground mt-2">
+                                    The Path That Got Me Here
+                                </h2>
+                            </div>
+
+                            <div className="relative max-w-5xl mx-auto px-4">
+                                {/* Dotted Line (Desktop only) */}
+                                <div className="absolute left-[10%] right-[10%] top-[24px] h-[2px] border-t-2 border-dashed border-primary/30 dark:border-primary/20 -z-10 hidden md:block" />
+
+                                {/* Timeline Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative z-10">
+                                    
+                                    {/* Item 1: 2019 */}
+                                    <div className="flex flex-col items-center text-center">
+                                        <div className="w-12 h-12 rounded-full bg-background dark:bg-background text-primary border border-primary/20 flex items-center justify-center shadow-md shrink-0 relative z-10">
+                                            <Flag className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-primary font-extrabold text-base sm:text-lg mt-4 mb-1">2019</span>
+                                        <h3 className="text-base font-bold text-foreground mb-2">Started My Journey</h3>
+                                        <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
+                                            Began as an SEO enthusiast and worked on local projects to understand the basics.
+                                        </p>
                                     </div>
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Mail className="h-4 w-4 text-primary" />
-                                        <a href="mailto:hi@sharikrasool.com" className="hover:text-foreground">
-                                            hi@sharikrasool.com
-                                        </a>
+
+                                    {/* Item 2: 2021 */}
+                                    <div className="flex flex-col items-center text-center">
+                                        <div className="w-12 h-12 rounded-full bg-background dark:bg-background text-primary border border-primary/20 flex items-center justify-center shadow-md shrink-0 relative z-10">
+                                            <Link2 className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-primary font-extrabold text-base sm:text-lg mt-4 mb-1">2021</span>
+                                        <h3 className="text-base font-bold text-foreground mb-2">Specialized in Link Building</h3>
+                                        <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
+                                            Focused on building high-quality links that move the needle and drive real results.
+                                        </p>
                                     </div>
+
+                                    {/* Item 3: 2023 */}
+                                    <div className="flex flex-col items-center text-center">
+                                        <div className="w-12 h-12 rounded-full bg-background dark:bg-background text-primary border border-primary/20 flex items-center justify-center shadow-md shrink-0 relative z-10">
+                                            <Handshake className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-primary font-extrabold text-base sm:text-lg mt-4 mb-1">2023</span>
+                                        <h3 className="text-base font-bold text-foreground mb-2">Partnership Manager</h3>
+                                        <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
+                                            Managed partnerships and outreach at scale for SaaS brands globally.
+                                        </p>
+                                    </div>
+
+                                    {/* Item 4: Today */}
+                                    <div className="flex flex-col items-center text-center">
+                                        <div className="w-12 h-12 rounded-full bg-background dark:bg-background text-primary border border-primary/20 flex items-center justify-center shadow-md shrink-0 relative z-10">
+                                            <Rocket className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-primary font-extrabold text-base sm:text-lg mt-4 mb-1">Today</span>
+                                        <h3 className="text-base font-bold text-foreground mb-2">Helping Brands Scale</h3>
+                                        <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
+                                            Now I help SaaS companies grow organic traffic, authority, and revenue through strategic link building.
+                                        </p>
+                                    </div>
+
                                 </div>
                             </div>
                         </FadeIn>
@@ -219,7 +304,7 @@ export default function AboutPage() {
                                             <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Hello! I'm Sharik</h2>
                                             <div className="space-y-3 md:space-y-4 text-sm md:text-base text-muted-foreground">
                                                 <p>
-                                                    With over 6 years of hands-on experience in SEO and link building, I've helped dozens of SaaS
+                                                    With over 7 years of hands-on experience in SEO and link building, I've helped dozens of SaaS
                                                     and tech companies achieve remarkable organic growth. My journey in digital marketing started
                                                     with a curiosity about how search engines work, and it's evolved into a deep expertise in
                                                     building sustainable organic traffic strategies.

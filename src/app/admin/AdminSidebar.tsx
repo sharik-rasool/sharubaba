@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { LayoutDashboard, FileText, LogOut, PenSquare, Menu, X } from "lucide-react";
+import { LayoutDashboard, FileText, LogOut, PenSquare, Menu, X, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { useState } from "react";
 const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { href: "/admin/blogs", label: "Blog Posts", icon: FileText, exact: false },
+    { href: "/admin/blogs/diagnostics", label: "Health Diagnostics", icon: Activity, exact: false },
 ];
 
 export default function AdminSidebar({ email }: { email: string }) {

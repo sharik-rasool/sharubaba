@@ -10,13 +10,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare, CalendarIcon, Clock } from "lucide-react";
+import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare, CalendarIcon, Clock, Activity, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { BlogDoc } from "@/lib/blogs";
 import type { SummernoteRef } from "./SummernoteEditor";
+import { scanContentHealth } from "@/lib/content-audit";
 
 const SummernoteEditor = dynamic(() => import("./SummernoteEditor"), { ssr: false });
 
@@ -71,6 +72,67 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [existingBlogs, setExistingBlogs] = useState<{title: string, slug: string}[]>([]);
     const [linkSearch, setLinkSearch] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+    async function handleAutoUploadBase64Images(html: string): Promise<{ success: boolean; updatedHtml: string; count: number; error?: string }> {
+        const regex = /data:image\/([^;]+);base64,([A-Za-z0-9+/=\s\r\n]+)/gi;
+        const matches: { full: string; ext: string; mimeType: string; base64: string }[] = [];
+        let match;
+        while ((match = regex.exec(html)) !== null) {
+            matches.push({
+                full: match[0],
+                ext: match[1] === 'svg+xml' ? 'svg' : (match[1] === 'jpeg' ? 'jpg' : match[1]),
+                mimeType: match[1] === 'svg+xml' ? 'image/svg+xml' : `image/${match[1]}`,
+                base64: match[2].replace(/\s/g, ''),
+            });
+        }
+
+        if (matches.length === 0) {
+            return { success: true, updatedHtml: html, count: 0 };
+        }
+
+        let updatedHtml = html;
+        let convertedCount = 0;
+
+        for (let i = 0; i < matches.length; i++) {
+            const item = matches[i];
+            try {
+                const byteCharacters = atob(item.base64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let j = 0; j < byteCharacters.length; j++) {
+                    byteNumbers[j] = byteCharacters.charCodeAt(j);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: item.mimeType });
+                const file = new File([blob], `migrated-paste-${Date.now()}-${i}.${item.ext}`, { type: item.mimeType });
+
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const res = await fetch("/api/upload", { method: "POST", body: formData });
+                if (!res.ok) {
+                    throw new Error("Upload request failed");
+                }
+                const data = await res.json();
+                if (data && data.url) {
+                    updatedHtml = updatedHtml.replace(item.full, data.url);
+                    convertedCount++;
+                } else {
+                    throw new Error(data?.error || "Invalid response from upload API");
+                }
+            } catch (e: unknown) {
+                console.error("Error auto-uploading base64 image:", e);
+                return {
+                    success: false,
+                    updatedHtml: html,
+                    count: convertedCount,
+                    error: `Failed to upload image ${i + 1}: ${(e as Error).message || "Unknown error"}`
+                };
+            }
+        }
+
+        return { success: true, updatedHtml, count: convertedCount };
+    }
 
     // Fetch blogs for Link Suggestions
     useEffect(() => {
@@ -164,10 +226,46 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     };
 
     async function submit(status: "draft" | "published", isAutoSave = false) {
-        if (!isAutoSave) setError("");
+        if (!isAutoSave) {
+            setError("");
+            setSuccessMessage("");
+        }
         if (!form.title.trim()) { if (!isAutoSave) setError("Title is required."); return; }
         if (!form.slug.trim()) { if (!isAutoSave) setError("Slug is required."); return; }
         if (!form.content.trim()) { if (!isAutoSave) setError("Content is required."); return; }
+
+        let contentToSave = form.content;
+
+        if (form.content.includes("data:image/")) {
+            if (isAutoSave) return;
+
+            if (status === "published") setPublishing(true);
+            else setSaving(true);
+
+            setError("Embedded base64 images detected. Automatically converting to upload URLs...");
+            const uploadRes = await handleAutoUploadBase64Images(form.content);
+            
+            if (!uploadRes.success) {
+                setSaving(false);
+                setPublishing(false);
+                setError(`Embedded Base64 images are not allowed. Auto-conversion failed: ${uploadRes.error}`);
+                return;
+            }
+
+            contentToSave = uploadRes.updatedHtml;
+            setForm((f) => ({ ...f, content: uploadRes.updatedHtml }));
+            setSuccessMessage(`Successfully converted ${uploadRes.count} embedded Base64 image(s) to uploaded storage URLs.`);
+            setError("");
+        }
+
+        // Final client-side content health verification
+        const audit = scanContentHealth(contentToSave);
+        if (audit.status === "critical") {
+            setSaving(false);
+            setPublishing(false);
+            setError(audit.messages.join(" "));
+            return;
+        }
 
         if (!isAutoSave) {
             if (status === "published") setPublishing(true);
@@ -176,13 +274,14 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
         const payload = {
             ...form,
+            content: contentToSave,
             faqs: form.faqs.filter((f) => f.question.trim() && f.answer.trim()),
             tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
             status,
             seoTitle: form.seoTitle || form.title,
             seoDescription: form.seoDescription || form.excerpt,
             scheduledFor: form.scheduledFor ? new Date(form.scheduledFor).toISOString() : null,
-            readingTime: calculateReadingTime(form.content),
+            readingTime: calculateReadingTime(contentToSave),
         };
 
         const url = isEditing ? `/api/blogs/${initialData!._id}` : "/api/blogs";
@@ -235,6 +334,13 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                 <div className="flex items-center gap-2 bg-destructive/10 text-destructive text-sm px-4 py-3 rounded-lg">
                     <X className="h-4 w-4 shrink-0" />
                     {error}
+                </div>
+            )}
+
+            {successMessage && (
+                <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm px-4 py-3 rounded-lg">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    {successMessage}
                 </div>
             )}
 
@@ -306,6 +412,87 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
                         {/* Sidebar */}
                         <div className="space-y-6">
+                            {/* Content Health Card */}
+                            <Card>
+                                <CardHeader className="pb-3 px-4">
+                                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                                        <Activity className="h-4 w-4 text-primary" />
+                                        Content Health Audit
+                                    </CardTitle>
+                                    <CardDescription className="text-xs">Footprint and safety diagnostics</CardDescription>
+                                </CardHeader>
+                                <CardContent className="px-4 pb-4 space-y-3">
+                                    {(() => {
+                                        const audit = scanContentHealth(form.content);
+                                        const isSafe = audit.status === "safe";
+                                        const isWarning = audit.status === "warning";
+                                        const isCritical = audit.status === "critical";
+
+                                        return (
+                                            <div className="space-y-3">
+                                                <div className="flex items-center justify-between text-xs border-b pb-2 border-border">
+                                                    <span className="text-muted-foreground">SEO Status:</span>
+                                                    <Badge
+                                                        className="text-[10px] uppercase font-bold"
+                                                        variant={isSafe ? "default" : (isWarning ? "secondary" : "destructive")}
+                                                    >
+                                                        {audit.status}
+                                                    </Badge>
+                                                </div>
+
+                                                <div className="space-y-1.5">
+                                                    <div className="flex justify-between text-xs font-medium">
+                                                        <span>Size:</span>
+                                                        <span className={cn(
+                                                            audit.contentSize > 1.5 * 1024 * 1024 ? "text-destructive font-bold" : 
+                                                            (audit.contentSize > 500 * 1024 ? "text-yellow-600 dark:text-yellow-400 font-semibold" : "text-green-600 dark:text-green-400")
+                                                        )}>
+                                                            {(audit.contentSize / 1024).toFixed(1)} KB
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between text-xs">
+                                                        <span className="text-muted-foreground">Images:</span>
+                                                        <span className="font-medium">{audit.imageCount} total</span>
+                                                    </div>
+                                                    <div className="flex justify-between text-xs">
+                                                        <span className="text-muted-foreground">Base64 Images:</span>
+                                                        <span className={cn(
+                                                            "font-semibold",
+                                                            audit.base64Count > 0 ? "text-destructive font-bold" : "text-green-600 dark:text-green-400"
+                                                        )}>
+                                                            {audit.base64Count} found
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between text-xs">
+                                                        <span className="text-muted-foreground">Est. Render Page Size:</span>
+                                                        <span className="font-medium">
+                                                            {((audit.contentSize * (audit.base64Count > 0 ? 2 : 1) + 20 * 1024) / 1024).toFixed(1)} KB
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {audit.messages.length > 0 && (
+                                                    <div className="mt-3 pt-3 border-t border-border space-y-1.5">
+                                                        {audit.messages.map((msg, i) => (
+                                                            <div key={i} className="flex gap-1.5 items-start text-[11px] leading-tight">
+                                                                {isCritical ? (
+                                                                    <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
+                                                                ) : (
+                                                                    <AlertTriangle className="h-3.5 w-3.5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
+                                                                )}
+                                                                <span className={isCritical ? "text-destructive" : "text-muted-foreground"}>
+                                                                    {msg}
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
+                                </CardContent>
+                            </Card>
+
                             {/* Link Suggestions */}
                             <Card className="sticky top-20">
                                 <CardHeader className="pb-3 px-4">

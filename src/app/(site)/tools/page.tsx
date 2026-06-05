@@ -12,7 +12,7 @@ export default function ToolsPage() {
     return (
         <div className="container-wide py-12 md:py-16">
             <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold mb-4">Free Online Tools</h1>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">Free Online Tools</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                     A collection of helpful utilities and generators to boost your productivity and creativity.
                 </p>

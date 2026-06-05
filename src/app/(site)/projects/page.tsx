@@ -7,7 +7,6 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
 import Link from "next/link";
 
 // Image imports
-import sharikPortrait from "@/assets/sharik-portrait-3.jpeg";
 import leadgenLogo from "@/assets/logos/leadgen.png";
 import uniqodeLogo from "@/assets/logos/uniqode.svg";
 import tqrcgLogo from "@/assets/logos/tqrcg.jpg";
@@ -139,28 +138,24 @@ export default function ProjectsPage() {
 
             <section className="section">
                 <div className="container-wide">
-                    {/* Header with Image */}
-                    <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
-                        <FadeIn className="lg:col-span-3">
-                            <div className="text-center lg:text-left">
-                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
-                                    Projects & <span className="text-primary">Case Studies</span>
-                                </h1>
-                                <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-                                    Real results from real campaigns. Here are some of the companies I've helped grow through strategic SEO and link building.
-                                </p>
+                    {/* Revamped Hero Section */}
+                    <div className="relative text-center py-10 sm:py-16 mb-12 md:mb-16 border-b border-border/40 overflow-hidden">
+                        {/* Radial glowing gradient background */}
+                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(var(--primary-rgb),0.03),transparent_60%)] pointer-events-none -z-10" />
+                        
+                        <FadeIn>
+                            <div className="flex justify-center mb-6">
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold uppercase tracking-wider">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                                    Proven SEO Campaigns
+                                </div>
                             </div>
-                        </FadeIn>
-                        <FadeIn delay={0.1} className="lg:col-span-2 hidden lg:block">
-                            <div className="relative max-w-xs ml-auto">
-                                <Image
-                                    src={sharikPortrait}
-                                    alt="Sharik Rasool"
-                                    className="w-full aspect-[3/4] object-cover object-top rounded-2xl shadow-lg"
-                                    placeholder="blur"
-                                />
-                                <div className="absolute -bottom-3 -right-3 w-full h-full bg-primary/20 rounded-2xl -z-10" />
-                            </div>
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight max-w-3xl mx-auto">
+                                Projects & <span className="text-primary">Case Studies</span>
+                            </h1>
+                            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                                Real results from real campaigns. Here are some of the companies I've helped grow through strategic search engine optimization and high-impact link building.
+                            </p>
                         </FadeIn>
                     </div>
 

@@ -57,7 +57,7 @@ export default async function BlogPage({
             <div className="container-wide">
                 <FadeIn>
                     <div className="text-center mb-16 pt-8">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">
                             The SEO <span className="text-primary italic">Lab</span>
                         </h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">

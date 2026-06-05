@@ -78,7 +78,7 @@ export function ContactPageContent() {
                     {/* Header */}
                     <FadeIn>
                         <div className="text-center mb-8 md:mb-12">
-                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">
                                 Let's <span className="text-primary">Connect</span>
                             </h1>
                             <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 md:px-0">

@@ -3,6 +3,7 @@ import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { scanContentHealth } from "@/lib/content-audit";
 
 export async function GET() {
     try {
@@ -25,6 +26,18 @@ export async function POST(request: Request) {
     try {
         await connectDB();
         const data = await request.json();
+        
+        // Content Health Audit Validation
+        if (data && typeof data.content === "string") {
+            const audit = scanContentHealth(data.content);
+            if (audit.status === "critical") {
+                return NextResponse.json(
+                    { error: `Validation Blocked: ${audit.messages.join(" ")}` },
+                    { status: 400 }
+                );
+            }
+        }
+
         const blog = await Blog.create(data);
         
         revalidatePath("/blog");
