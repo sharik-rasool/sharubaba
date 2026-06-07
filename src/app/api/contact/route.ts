@@ -53,11 +53,14 @@ export async function POST(request: Request) {
       accessToken: process.env.EMAILJS_PRIVATE_KEY, // Optional if required by EmailJS account settings
       template_params: {
         from_name: name,
+        name: name, // Alias
         from_email: email,
-        company,
-        website,
+        email: email, // Alias
+        company: company || '',
+        website: website || '',
         message,
-        ip_address: ip, // Pass form filler IP to EmailJS
+        ip_address: ip,
+        ip: ip, // Alias
       },
     };
 
