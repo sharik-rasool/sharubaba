@@ -60,10 +60,17 @@ export async function POST(request: Request) {
       },
     };
 
+    const userAgent = request.headers.get('user-agent') || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    const requestOrigin = request.headers.get('origin') || 'https://www.sharikrasool.com';
+    const referer = request.headers.get('referer') || 'https://www.sharikrasool.com/contact';
+
     const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': userAgent,
+        'Origin': requestOrigin,
+        'Referer': referer,
       },
       body: JSON.stringify(emailJsPayload),
     });
