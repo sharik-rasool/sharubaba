@@ -15,21 +15,22 @@ import dominionLogo from "@/assets/logos/dominion.png";
 import rayobyteLogo from "@/assets/logos/rayobyte.png";
 
 export const metadata: Metadata = {
-    title: "SEO Projects & Case Studies | Sharik Rasool",
+    title: "SEO Projects & Case Studies | SaaS & Tech Growth Results by Sharik",
     description:
-        "Explore successful SEO and link building projects with measurable results. See how strategic SEO has driven DR growth, traffic increases, and ranking improvements.",
+        "Explore successful SEO and link building case studies. See how strategic campaign optimization drives domain authority, traffic growth, and search rankings.",
     alternates: { canonical: "https://www.sharikrasool.com/projects" },
     openGraph: {
-        title: "SEO Projects & Case Studies | Sharik Rasool",
+        title: "SEO Projects & Case Studies | SaaS & Tech Growth Results by Sharik",
         description:
-            "Real results: DR growth, 300%+ traffic increases, and 500+ high-quality backlinks built for SaaS and tech companies.",
+            "Explore successful SEO and link building case studies. See how strategic campaign optimization drives domain authority, traffic growth, and search rankings.",
         url: "https://www.sharikrasool.com/projects",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "SEO Projects & Case Studies | Sharik Rasool",
-        description: "Real SEO results: DR growth, 300%+ traffic increases for SaaS companies.",
+        title: "SEO Projects & Case Studies | SaaS & Tech Growth Results by Sharik",
+        description:
+            "Explore successful SEO and link building case studies. See how strategic campaign optimization drives domain authority, traffic growth, and search rankings.",
     },
 };
 

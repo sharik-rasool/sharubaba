@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Terms & Conditions",
-    description: "Terms and conditions for using Sharik Rasool's website and services.",
+    title: "Terms and Conditions of Service | Sharik Rasool SEO Consultant",
+    description:
+        "Read the official terms and conditions for using Sharik Rasool's website and SEO services. Learn about our service agreements, liabilities, and legal rules.",
     alternates: { canonical: "https://www.sharikrasool.com/terms" },
     robots: {
         index: false,

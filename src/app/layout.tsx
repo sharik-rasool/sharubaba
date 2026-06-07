@@ -6,12 +6,9 @@ const BASE_URL = "https://www.sharikrasool.com";
 
 export const metadata: Metadata = {
     metadataBase: new URL(BASE_URL),
-    title: {
-        default: "Sharik Rasool | SEO Strategist & Link Builder",
-        template: "%s | Sharik Rasool",
-    },
+    title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
     description:
-        "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and organic traffic.",
+        "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
     keywords: ["SEO strategist", "link builder", "SaaS SEO", "organic traffic", "domain authority", "backlinks"],
     authors: [{ name: "Sharik Rasool", url: BASE_URL }],
     creator: "Sharik Rasool",
@@ -20,16 +17,16 @@ export const metadata: Metadata = {
         locale: "en_US",
         url: BASE_URL,
         siteName: "Sharik Rasool",
-        title: "Sharik Rasool | SEO Strategist & Link Builder",
+        title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically.",
+            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
         images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Sharik Rasool | SEO Strategist & Link Builder",
+        title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically.",
+            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
         images: ["/og-image.jpg"],
     },
     robots: {

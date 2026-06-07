@@ -4,8 +4,9 @@ import { toolsData } from "@/lib/tools-data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Free Online Tools - Sharik Rasool",
-    description: "A collection of free online tools for developers, writers, and creators. Generators, converters, and utilities.",
+    title: "Free Online Tools & Generators for Developers, Writers & Creators",
+    description:
+        "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
 };
 
 export default function ToolsPage() {

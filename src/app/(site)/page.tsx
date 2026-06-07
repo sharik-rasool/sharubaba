@@ -6,21 +6,22 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { CTASection } from "@/components/home/CTASection";
 
 export const metadata: Metadata = {
-    title: "Sharik Rasool | SEO Strategist & Link Builder",
+    title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
     description:
         "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. 500+ high-quality backlinks built.",
     alternates: { canonical: "https://www.sharikrasool.com" },
     openGraph: {
-        title: "Sharik Rasool | SEO Strategist & Link Builder",
+        title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Expert SEO strategist and link builder. I help SaaS and tech companies increase domain authority, organic traffic, and search rankings.",
+            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. 500+ high-quality backlinks built.",
         url: "https://www.sharikrasool.com",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Sharik Rasool | SEO Strategist & Link Builder",
-        description: "Expert SEO strategist helping SaaS companies grow organically.",
+        title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
+        description:
+            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. 500+ high-quality backlinks built.",
     },
 };
 

@@ -16,20 +16,22 @@ import {
 } from "@/components/ui/pagination";
 
 export const metadata: Metadata = {
-    title: "SEO Blog | Sharik Rasool — Link Building & SEO Strategies",
+    title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
     description:
-        "Actionable SEO and link building strategies from Sharik Rasool. Tips for SaaS companies, domain authority growth, and organic traffic.",
+        "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
     alternates: { canonical: "https://www.sharikrasool.com/blog" },
     openGraph: {
-        title: "SEO Blog | Sharik Rasool",
-        description: "Actionable SEO and link building strategies that actually work.",
+        title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
+        description:
+            "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
         url: "https://www.sharikrasool.com/blog",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "SEO Blog | Sharik Rasool",
-        description: "Actionable SEO and link building strategies that actually work.",
+        title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
+        description:
+            "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
     },
 };
 

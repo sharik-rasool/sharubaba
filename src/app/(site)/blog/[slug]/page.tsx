@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const baseUrl = "https://www.sharikrasool.com";
 
     return {
-        title: `${seoTitle} | Sharik Rasool`,
+        title: seoTitle,
         description: seoDescription,
         alternates: { canonical: post.canonicalUrl || `${baseUrl}/blog/${post.slug}` },
         robots: post.robotsMeta || "index, follow",

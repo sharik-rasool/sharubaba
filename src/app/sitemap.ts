@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getPublishedBlogs } from "@/lib/blogs";
+import { toolsData } from "@/lib/tools-data";
 
 const BASE_URL = "https://www.sharikrasool.com";
 
@@ -22,5 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
     }));
 
-    return [...staticPages, ...blogPages];
+    const toolPages: MetadataRoute.Sitemap = toolsData.map((tool) => ({
+        url: `${BASE_URL}/tools/${tool.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.6,
+    }));
+
+    return [...staticPages, ...blogPages, ...toolPages];
 }

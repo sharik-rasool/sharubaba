@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     if (!tool) return {};
 
     return {
-        title: `${tool.title} - Sharik Rasool Tools`,
-        description: tool.description,
+        title: tool.metaTitle,
+        description: tool.metaDescription,
     };
 }
 
