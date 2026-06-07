@@ -8,7 +8,7 @@ const RATE_LIMIT_MAX = 5;
 
 export async function POST(request: Request) {
   try {
-    const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+    const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || '127.0.0.1';
     const timestamp = Date.now();
 
     const body = await request.json();
@@ -57,6 +57,7 @@ export async function POST(request: Request) {
         company,
         website,
         message,
+        ip_address: ip, // Pass form filler IP to EmailJS
       },
     };
 
@@ -79,6 +80,38 @@ export async function POST(request: Request) {
       const errorText = await response.text();
       console.error(`[CONTACT FORM] EmailJS API Error:`, errorText);
       throw new Error('Failed to send email via EmailJS');
+    }
+
+    // 5. Send Lead to Google Sheets Webhook (optional)
+    const sheetsWebhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    if (sheetsWebhookUrl) {
+      try {
+        const leadPayload = {
+          timestamp: new Date(timestamp).toISOString(),
+          name,
+          email,
+          company: company || '',
+          website: website || '',
+          message,
+          ip_address: ip,
+        };
+
+        const sheetResponse = await fetch(sheetsWebhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(leadPayload),
+        });
+
+        if (!sheetResponse.ok) {
+          console.error(`[CONTACT FORM] Google Sheets Webhook failed with status: ${sheetResponse.status}`);
+        } else {
+          console.log(`[CONTACT FORM] Successfully recorded lead in Google Sheets`);
+        }
+      } catch (sheetError) {
+        console.error(`[CONTACT FORM] Error sending lead to Google Sheets:`, sheetError);
+      }
     }
 
     console.log(`[CONTACT FORM] [${new Date(timestamp).toISOString()}] [IP: ${ip}] Success - Name: ${name}, Email: ${email}`);
