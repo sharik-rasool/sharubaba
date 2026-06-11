@@ -1,9 +1,14 @@
 import ExcelJS from "exceljs";
 import path from "path";
+import dotenv from "dotenv";
+import { MongoClient } from "mongodb";
+
+// Load environment variables from .env.local
+dotenv.config({ path: ".env.local" });
 
 const BASE_URL = "https://www.sharikrasool.com";
 
-// Data structures
+// 1. Static Core Pages (Always the same core paths)
 const staticPages = [
     {
         name: "Homepage",
@@ -97,172 +102,20 @@ const staticPages = [
     }
 ];
 
-const blogPages = [
-    {
-        name: "WordPress SEO Freelancer",
-        path: "/blog/wordpress-seo-freelancer",
-        title: "WordPress SEO Freelancer | SaaS Search Rankings growth",
-        description: "Hire a professional WordPress SEO freelancer to optimize content hierarchy, crawl efficiency, meta tags, and build clean internal backlinks.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/wordpress-seo-freelancer`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "How to Start Freelancing for Beginners",
-        path: "/blog/how-to-start-freelancing-for-beginners",
-        title: "How to Start Freelancing for Beginners | Step-by-Step Guide",
-        description: "A complete starter guide to choosing a niche, setting up your freelance services, and landing your first client with zero experience.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/how-to-start-freelancing-for-beginners`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "9 Freelancing Tips That Actually Work",
-        path: "/blog/freelancing-tips-that-actually-works",
-        title: "9 Freelancing Tips That Actually Work | Scale Your Business",
-        description: "Actionable freelancing tips and productivity strategies for growing client contracts, structuring fees, and managing work-life balance.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/freelancing-tips-that-actually-works`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "The Pros and Cons of Freelancing",
-        path: "/blog/the-pros-and-cons-of-freelancing",
-        title: "The Pros and Cons of Freelancing | Career Choice Breakdown",
-        description: "We weigh the advantages of flexible work schedules and freedom against the disadvantages of client acquisition and unstable income.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/the-pros-and-cons-of-freelancing`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "15 Best Freelancing Ideas to Build Career",
-        path: "/blog/best-freelancing-ideas-to-build-career",
-        title: "15 Best Freelancing Ideas to Build a Profitable Career",
-        description: "Explore high-demand freelance career fields, including coding, SEO, copywriting, and design, to kickstart your freelancing journey.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/best-freelancing-ideas-to-build-career`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "How to Write a Freelance Resume",
-        path: "/blog/how-to-write-a-freelancing-resume",
-        title: "How to Write a Freelance Resume | Portfolios and Formats",
-        description: "Learn how to structure a professional freelance resume to showcase contract projects, portfolios, and key skills to land corporate gigs.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/how-to-write-a-freelancing-resume`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "Freelance Social Media Manager Tips",
-        path: "/blog/freelance-social-media-manager-tips",
-        title: "Freelance Social Media Manager Tips | Client Acquisition",
-        description: "Expert tips for freelance social media managers on onboarding clients, scaling content plans, and tracking engagement metrics.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/freelance-social-media-manager-tips`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "Freelancing vs Entrepreneurship Career Guide",
-        path: "/blog/freelancing-vs-entrepreneurship-career-guide",
-        title: "Freelancing vs Entrepreneurship | Which Career is Best?",
-        description: "An in-depth comparison of freelance service contracts versus building a scalable startup business to find your perfect career path.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/freelancing-vs-entrepreneurship-career-guide`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    },
-    {
-        name: "How to Start Freelancing as a Student",
-        path: "/blog/how-to-start-freelancing-as-a-student",
-        title: "How to Start Freelancing as a Student | Earn While Studying",
-        description: "Learn how to balance university classes while earning a freelance income online with easy high-income digital service niches.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/blog/how-to-start-freelancing-as-a-student`,
-        status: "Indexed",
-        notes: "CMS published post. Repetitive brand suffix cleaned."
-    }
-];
+// 2. Interactive Tools (Imported dynamically from src/lib/tools-data)
+import { toolsData } from "../src/lib/tools-data";
+const toolPages = toolsData.map(tool => ({
+    name: tool.title,
+    path: `/tools/${tool.slug}`,
+    title: tool.metaTitle,
+    description: tool.metaDescription,
+    robots: "index, follow",
+    canonical: `${BASE_URL}/tools/${tool.slug}`,
+    status: "Indexed",
+    notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
+}));
 
-const toolPages = [
-    {
-        name: "AI Image Prompt Generator",
-        path: "/tools/chatgpt-image-generator",
-        title: "AI Image Prompt Generator | Create Midjourney & DALL-E Prompts",
-        description: "Generate detailed, creative prompts for ChatGPT, Midjourney, DALL-E, and Stable Diffusion. Boost your AI art generation quality with expert prompt templates.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/chatgpt-image-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "Elf Name Generator",
-        path: "/tools/elf-name-generator",
-        title: "Elf Name Generator | Create Mystical Elvish Names for Fantasy",
-        description: "Generate unique mystical elvish names for fantasy characters, stories, and games. Try our free online elf name generator to find the perfect magical name.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/elf-name-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "IEEE Citation Generator",
-        path: "/tools/ieee-citation-generator",
-        title: "IEEE Citation Generator | Free Tool for Academic Paper Citations",
-        description: "Generate properly formatted IEEE citations and bibliography entries for academic papers. Free online citation maker for research articles, books, and websites.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/ieee-citation-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "Japanese Name Generator",
-        path: "/tools/japanese-name-generator",
-        title: "Japanese Name Generator | Create Authentic Names with Meanings",
-        description: "Create authentic Japanese names with their kanji characters and deep linguistic meanings. Free online tool for writers, gamers, and language enthusiasts.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/japanese-name-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "Random Animal Generator",
-        path: "/tools/random-animal-generator",
-        title: "Random Animal Generator | Discover Wild Species & Fun Facts",
-        description: "Discover random animals from around the world with fascinating species facts, pictures, and habitat details. Fun and educational online animal generator tool.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/random-animal-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "Random NFL Team Generator",
-        path: "/tools/random-nfl-team-generator",
-        title: "Random NFL Team Generator | Pick Teams for Fantasy & Leagues",
-        description: "Generate a random NFL team instantly for fantasy football leagues, challenges, or trivia games. Free online picker tool covering all thirty-two active teams.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/random-nfl-team-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    },
-    {
-        name: "Random Pokémon Generator",
-        path: "/tools/random-pokemon-generator",
-        title: "Random Pokémon Generator | Pick Random Pokémon with Base Stats",
-        description: "Generate random Pokémon instantly with complete base stats, types, and official descriptions. Perfect tool for fantasy drafts, team building, and challenges.",
-        robots: "index, follow",
-        canonical: `${BASE_URL}/tools/random-pokemon-generator`,
-        status: "Indexed",
-        notes: "Custom WebApplication JSON-LD schema injected. Self-referencing canonical fixed."
-    }
-];
-
+// 3. Admin Dashboard
 const adminPages = [
     {
         name: "Admin Login Screen",
@@ -326,26 +179,26 @@ const adminPages = [
     }
 ];
 
-// Helper to create and style worksheets
-function populateWorksheet(workbook, name, data, tabColor) {
+// Helper to style worksheets
+function populateWorksheet(workbook: ExcelJS.Workbook, name: string, data: any[], tabColor: string) {
     const ws = workbook.addWorksheet(name, {
         views: [{ showGridLines: true }],
         properties: { tabColor: { argb: tabColor } }
     });
 
-    // Main Title Banner Block
+    // Title banner block
     ws.mergeCells("A1:J2");
     const bannerCell = ws.getCell("A1");
     bannerCell.value = `sharikrasool.com — Website SEO Audit & Pages Catalog [${name}]`;
-    bannerCell.font = { name: "Arial", size: 16, bold: true, color: { argb: "FFFFFFFF" } };
+    bannerCell.font = { name: "Arial", size: 14, bold: true, color: { argb: "FFFFFFFF" } };
     bannerCell.alignment = { vertical: "middle", horizontal: "center" };
     bannerCell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "FF1E3A8A" } // Dark blue theme
+        fgColor: { argb: "FF1E3A8A" }
     };
 
-    // Columns structure definition
+    // Columns
     ws.columns = [
         { header: "Page Name", key: "name", width: 25 },
         { header: "URL Path", key: "path", width: 35 },
@@ -359,10 +212,8 @@ function populateWorksheet(workbook, name, data, tabColor) {
         { header: "SEO Notes / Updates", key: "notes", width: 45 }
     ];
 
-    // Push headers to row 4 (spacing after banner)
+    // Headers
     ws.getRow(4).values = ws.columns.map(c => c.header);
-    
-    // Style Table Headers Row
     const headerRow = ws.getRow(4);
     headerRow.height = 28;
     headerRow.eachCell((cell) => {
@@ -370,7 +221,7 @@ function populateWorksheet(workbook, name, data, tabColor) {
         cell.fill = {
             type: "pattern",
             pattern: "solid",
-            fgColor: { argb: "FF3B82F6" } // Light blue accent theme
+            fgColor: { argb: "FF3B82F6" }
         };
         cell.alignment = { vertical: "middle", horizontal: "left" };
         cell.border = {
@@ -379,9 +230,9 @@ function populateWorksheet(workbook, name, data, tabColor) {
         };
     });
 
-    // Populate data
+    // Populate rows
     data.forEach((item, index) => {
-        const rowNumber = index + 5; // Start from row 5
+        const rowNumber = index + 5;
         const row = ws.getRow(rowNumber);
         
         row.values = {
@@ -399,7 +250,6 @@ function populateWorksheet(workbook, name, data, tabColor) {
 
         row.height = 22;
 
-        // Apply cell styling (zebra striping) and borders
         const isEven = index % 2 === 0;
         row.eachCell((cell) => {
             cell.font = { name: "Arial", size: 10 };
@@ -414,12 +264,12 @@ function populateWorksheet(workbook, name, data, tabColor) {
                 cell.fill = {
                     type: "pattern",
                     pattern: "solid",
-                    fgColor: { argb: "FFF9FAFB" } // Very light grey zebra stripe
+                    fgColor: { argb: "FFF9FAFB" }
                 };
             }
         });
 
-        // Add index status selection dropdown (Data Validation)
+        // Cell dropdown validation
         const statusCell = ws.getCell(`H${rowNumber}`);
         statusCell.dataValidation = {
             type: 'list',
@@ -430,38 +280,73 @@ function populateWorksheet(workbook, name, data, tabColor) {
             error: 'Please select from the dropdown choices: Indexed, Not Indexed, Excluded (Noindex Set)'
         };
         
-        // Color status cells based on default values
         if (item.status === "Indexed") {
             statusCell.fill = {
                 type: "pattern",
                 pattern: "solid",
-                fgColor: { argb: "FFD1FAE5" } // Soft Green
+                fgColor: { argb: "FFD1FAE5" }
             };
             statusCell.font = { name: "Arial", size: 10, color: { argb: "FF065F46" }, bold: true };
         } else if (item.status === "Excluded (Noindex Set)") {
             statusCell.fill = {
                 type: "pattern",
                 pattern: "solid",
-                fgColor: { argb: "FFFEE2E2" } // Soft Red
+                fgColor: { argb: "FFFEE2E2" }
             };
             statusCell.font = { name: "Arial", size: 10, color: { argb: "FF991B1B" }, bold: true };
         }
     });
 
-    // Make sure column keys align properly
     ws.columns.forEach((col) => {
         col.key = col.key; 
     });
 }
 
+async function fetchLiveBlogs() {
+    const mongoUri = process.env.MONGODB_URI;
+    if (!mongoUri) {
+        console.warn("MONGODB_URI not found. Falling back to empty blog list.");
+        return [];
+    }
+
+    const client = new MongoClient(mongoUri);
+    try {
+        await client.connect();
+        const db = client.db();
+        const posts = await db.collection("blogs")
+            .find({ status: "published" })
+            .sort({ createdAt: -1 })
+            .toArray();
+
+        return posts.map(blog => ({
+            name: blog.title || "Untitled Post",
+            path: `/blog/${blog.slug}`,
+            title: blog.seoTitle || blog.title || "",
+            description: blog.seoDescription || blog.excerpt || "",
+            robots: blog.robotsMeta || "index, follow",
+            canonical: blog.canonicalUrl || `${BASE_URL}/blog/${blog.slug}`,
+            status: "Indexed",
+            notes: `Live DB Blog Post. Last updated on ${blog.updatedAt ? new Date(blog.updatedAt).toLocaleDateString() : "N/A"}.`
+        }));
+    } catch (err: any) {
+        console.error("Failed to fetch blogs from database:", err.message);
+        return [];
+    } finally {
+        await client.close();
+    }
+}
+
 async function main() {
+    console.log("Fetching live blogs from database...");
+    const blogPages = await fetchLiveBlogs();
+    console.log(`Successfully fetched ${blogPages.length} live blog posts.`);
+
     const workbook = new ExcelJS.Workbook();
     workbook.creator = "Sharik Rasool SEO Consultant";
     workbook.lastModifiedBy = "Sharik Rasool";
     workbook.created = new Date();
     workbook.modified = new Date();
 
-    // Populate Worksheet Tabs
     populateWorksheet(workbook, "Static Core Pages", staticPages, "FF3B82F6"); // Blue
     populateWorksheet(workbook, "Blog Posts Pages", blogPages, "FF10B981"); // Green
     populateWorksheet(workbook, "Interactive Tools", toolPages, "FFF59E0B"); // Orange
@@ -471,7 +356,7 @@ async function main() {
     const filepath = path.join(process.cwd(), filename);
 
     await workbook.xlsx.writeFile(filepath);
-    console.log(`Successfully generated stylized Excel spreadsheet at: ${filepath}`);
+    console.log(`Successfully generated dynamic Excel spreadsheet at: ${filepath}`);
 }
 
 main().catch(err => {
