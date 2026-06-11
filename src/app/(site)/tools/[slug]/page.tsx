@@ -31,9 +31,23 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     const tool = toolsData.find((t) => t.slug === slug);
     if (!tool) return {};
 
+    const toolUrl = `https://www.sharikrasool.com/tools/${slug}`;
+
     return {
         title: tool.metaTitle,
         description: tool.metaDescription,
+        alternates: { canonical: toolUrl },
+        openGraph: {
+            title: tool.metaTitle,
+            description: tool.metaDescription,
+            url: toolUrl,
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: tool.metaTitle,
+            description: tool.metaDescription,
+        },
     };
 }
 
@@ -53,9 +67,31 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
     const ToolComponent = componentMap[slug];
 
+    const toolSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": tool.title,
+        "description": tool.description,
+        "url": `https://www.sharikrasool.com/tools/${tool.slug}`,
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+        },
+    };
+
     return (
-        <div className="py-8">
-            <ToolComponent />
-        </div>
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }}
+            />
+            <div className="py-8">
+                <ToolComponent />
+            </div>
+        </>
     );
 }

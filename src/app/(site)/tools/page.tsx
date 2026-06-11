@@ -7,6 +7,20 @@ export const metadata: Metadata = {
     title: "Free Online Tools & Generators for Developers, Writers & Creators",
     description:
         "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+    alternates: { canonical: "https://www.sharikrasool.com/tools" },
+    openGraph: {
+        title: "Free Online Tools & Generators for Developers, Writers & Creators",
+        description:
+            "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+        url: "https://www.sharikrasool.com/tools",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Free Online Tools & Generators for Developers, Writers & Creators",
+        description:
+            "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+    },
 };
 
 export default function ToolsPage() {
