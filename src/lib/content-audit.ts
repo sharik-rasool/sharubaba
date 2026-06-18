@@ -244,7 +244,8 @@ export function scanContentHealth(
 
     if (blogMeta) {
         const expectedCanonical = `https://www.sharikrasool.com/blog/${blogMeta.slug}`;
-        if (!blogMeta.canonicalUrl || blogMeta.canonicalUrl.trim() !== expectedCanonical) {
+        const canonical = blogMeta.canonicalUrl?.trim() || expectedCanonical;
+        if (!canonical || canonical.trim() === "") {
             missingCanonical = true;
         }
 

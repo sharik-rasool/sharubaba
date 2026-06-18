@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare, CalendarIcon, Clock, Activity, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { Loader2, Save, Send, X, Upload, ImageIcon, Plus, Trash2, Search, Link2, ExternalLink, PenSquare, CalendarIcon, Clock, Activity, CheckCircle2, AlertTriangle, XCircle, Sparkles } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -61,9 +61,33 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         ogImage: initialData?.ogImage ?? "",
         scheduledFor: initialData?.scheduledFor ? new Date(initialData.scheduledFor).toISOString() : "",
         faqs: initialData?.faqs ?? [],
+        
+        // NEW SEO Automation Fields
+        aiGenerated: initialData?.aiGenerated ?? false,
+        primaryKeyword: initialData?.primaryKeyword ?? "",
+        secondaryKeywords: initialData?.secondaryKeywords?.join(", ") ?? "",
+        anchors: initialData?.anchors?.join(", ") ?? "",
+        contentBrief: initialData?.contentBrief ?? {
+            intent: "",
+            primaryKeyword: "",
+            secondaryKeywords: [],
+            competitorHeadings: [],
+            paaQuestions: [],
+            entities: []
+        },
+        qaReport: initialData?.qaReport ?? {
+            wordCount: 0,
+            headingCounts: {},
+            internalLinkCount: 0,
+            primaryKeywordPresence: false,
+            metaTitleLength: 0,
+            metaDescriptionLength: 0,
+            status: "failed"
+        }
     });
 
     const [slugManuallyEdited, setSlugManuallyEdited] = useState(isEditing);
+    const [canonicalManuallyEdited, setCanonicalManuallyEdited] = useState(!!initialData?.canonicalUrl);
     const [saving, setSaving] = useState(false);
     const [publishing, setPublishing] = useState(false);
     const [error, setError] = useState("");
@@ -73,6 +97,48 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     const [existingBlogs, setExistingBlogs] = useState<{title: string, slug: string}[]>([]);
     const [linkSearch, setLinkSearch] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [runningQa, setRunningQa] = useState(false);
+
+    const runOnDemandValidation = async () => {
+        setRunningQa(true);
+        setError("");
+        setSuccessMessage("");
+        try {
+            const res = await fetch("/api/automation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "validate",
+                    content: form.content,
+                    seoTitle: form.seoTitle || form.title,
+                    seoDescription: form.seoDescription || form.excerpt,
+                    primaryKeyword: form.primaryKeyword
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setForm(f => ({ ...f, qaReport: data.qaReport }));
+                setSuccessMessage("On-demand SEO QA Validation report successfully updated!");
+            } else {
+                throw new Error(data.error || "Validation failed");
+            }
+        } catch (err: unknown) {
+            setError((err as Error).message || "Failed to validate SEO QA.");
+        } finally {
+            setRunningQa(false);
+        }
+    };
+
+    const updateBrief = (key: string, value: unknown) => {
+        setHasUnsavedChanges(true);
+        setForm(f => ({
+            ...f,
+            contentBrief: {
+                ...f.contentBrief,
+                [key]: value
+            }
+        }));
+    };
 
     async function handleAutoUploadBase64Images(html: string): Promise<{ success: boolean; updatedHtml: string; count: number; error?: string }> {
         const regex = /data:image\/([^;]+);base64,([A-Za-z0-9+/=\s\r\n]+)/gi;
@@ -152,6 +218,13 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             setForm((f) => ({ ...f, slug: slugify(f.title) }));
         }
     }, [form.title, slugManuallyEdited]);
+
+    // Auto-generate canonicalUrl
+    useEffect(() => {
+        if (!canonicalManuallyEdited && form.slug) {
+            setForm((f) => ({ ...f, canonicalUrl: `https://www.sharikrasool.com/blog/${f.slug}` }));
+        }
+    }, [form.slug, canonicalManuallyEdited]);
 
     // Unsaved changes warning
     useEffect(() => {
@@ -285,9 +358,16 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             content: contentToSave,
             faqs: form.faqs.filter((f) => f.question.trim() && f.answer.trim()),
             tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
-            status,
+            secondaryKeywords: typeof form.secondaryKeywords === "string"
+                ? form.secondaryKeywords.split(",").map((t) => t.trim()).filter(Boolean)
+                : form.secondaryKeywords,
+            anchors: typeof form.anchors === "string"
+                ? form.anchors.split(",").map((t) => t.trim()).filter(Boolean)
+                : form.anchors,
+            status: (status === "published" && form.scheduledFor && new Date(form.scheduledFor) > new Date()) ? "draft" : status,
             seoTitle: form.seoTitle || form.title,
             seoDescription: form.seoDescription || form.excerpt,
+            canonicalUrl: form.canonicalUrl || `https://www.sharikrasool.com/blog/${form.slug}`,
             scheduledFor: form.scheduledFor ? new Date(form.scheduledFor).toISOString() : null,
             readingTime: calculateReadingTime(contentToSave),
         };
@@ -328,6 +408,40 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             }
         }
     }
+
+    const images = useMemo(() => {
+        if (typeof window === "undefined" || !form.content) return [];
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(form.content, "text/html");
+            const imgElements = doc.querySelectorAll("img");
+            return Array.from(imgElements).map((img, index) => ({
+                index,
+                src: img.getAttribute("src") || "",
+                alt: img.getAttribute("alt") || "",
+                outerHTML: img.outerHTML
+            }));
+        } catch (err) {
+            console.error("Failed to parse images from content", err);
+            return [];
+        }
+    }, [form.content]);
+
+    const handleUpdateImageAlt = (imgIndex: number, newAlt: string) => {
+        if (typeof window === "undefined") return;
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(form.content, "text/html");
+            const imgElements = doc.querySelectorAll("img");
+            if (imgElements[imgIndex]) {
+                imgElements[imgIndex].setAttribute("alt", newAlt);
+                setForm(f => ({ ...f, content: doc.body.innerHTML }));
+                setHasUnsavedChanges(true);
+            }
+        } catch (err) {
+            console.error("Failed to update image alt text", err);
+        }
+    };
 
     const tagList = form.tags.split(",").map((t) => t.trim()).filter(Boolean);
     const filteredBlogs = existingBlogs.filter(b => b.title.toLowerCase().includes(linkSearch.toLowerCase()) && b.slug !== form.slug);
@@ -381,10 +495,11 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             </div>
 
             <Tabs defaultValue="content" className="w-full">
-                <TabsList className="flex w-full justify-start overflow-x-auto sm:grid sm:grid-cols-3 max-w-full sm:max-w-[400px] h-auto p-1 hide-scrollbar">
+                <TabsList className="flex w-full justify-start overflow-x-auto sm:grid sm:grid-cols-4 max-w-full sm:max-w-[500px] h-auto p-1 hide-scrollbar">
                     <TabsTrigger value="content">Content</TabsTrigger>
                     <TabsTrigger value="seo">SEO & Meta</TabsTrigger>
                     <TabsTrigger value="advanced">Advanced</TabsTrigger>
+                    <TabsTrigger value="ai-qa">AI & QA</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="content" className="mt-6">
@@ -783,6 +898,39 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                     )}
                                 </CardContent>
                             </Card>
+
+                            {/* Image Alt Texts Manager */}
+                            <Card>
+                                <CardHeader className="pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <ImageIcon className="h-4 w-4 text-primary" />
+                                        <CardTitle className="text-sm font-semibold">Image Alt Texts Manager</CardTitle>
+                                    </div>
+                                    <CardDescription className="text-xs">
+                                        Edit the alternate description (alt text) for images embedded in your content to boost SEO health and accessibility.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    {images.length === 0 ? (
+                                        <div className="text-center py-8 border border-dashed rounded-md text-muted-foreground text-xs flex flex-col items-center justify-center gap-2">
+                                            <ImageIcon className="h-8 w-8 opacity-30" />
+                                            <span>No images found in your blog content. Add images via the editor above.</span>
+                                        </div>
+                                    ) : (
+                                        <div className="grid gap-3 sm:grid-cols-1 md:grid-cols-2">
+                                            {images.map((img) => (
+                                                <ImageAltInput
+                                                    key={img.index}
+                                                    initialAlt={img.alt}
+                                                    index={img.index}
+                                                    src={img.src}
+                                                    onSave={handleUpdateImageAlt}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
                         </div>
 
                         <div className="space-y-6">
@@ -822,7 +970,11 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                         <Label className="text-xs font-semibold">Canonical URL</Label>
                                         <Input
                                             value={form.canonicalUrl}
-                                            onChange={set("canonicalUrl")}
+                                            onChange={(e) => {
+                                                setHasUnsavedChanges(true);
+                                                setForm((f) => ({ ...f, canonicalUrl: e.target.value }));
+                                                setCanonicalManuallyEdited(true);
+                                            }}
                                             placeholder="Leave blank to self-reference"
                                             className="text-sm"
                                         />
@@ -853,9 +1005,17 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-semibold">Status</Label>
                                     <div className="flex gap-2">
-                                        <Badge variant={form.status === "published" ? "default" : "secondary"}>
-                                            {form.status.toUpperCase()}
-                                        </Badge>
+                                        {(() => {
+                                            const isScheduled = form.scheduledFor && new Date(form.scheduledFor) > new Date();
+                                            return (
+                                                <Badge
+                                                    variant={isScheduled ? "outline" : form.status === "published" ? "default" : "secondary"}
+                                                    className={isScheduled ? "text-purple-600 border-purple-600 bg-purple-50 dark:text-purple-400 dark:border-purple-400 dark:bg-purple-950/20 uppercase" : ""}
+                                                >
+                                                    {isScheduled ? "SCHEDULED" : form.status.toUpperCase()}
+                                                </Badge>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
@@ -974,7 +1134,289 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                         </div>
                     </div>
                 </TabsContent>
+
+                <TabsContent value="ai-qa" className="mt-6">
+                    <div className="grid gap-6 lg:grid-cols-2">
+                        {/* Left Column: Automation & Content Brief */}
+                        <div className="space-y-6">
+                            {/* AI Configuration settings */}
+                            <Card>
+                                <CardHeader className="pb-3">
+                                    <CardTitle className="text-sm font-semibold">AI Generation Configuration</CardTitle>
+                                    <CardDescription className="text-xs">Identify if this article was auto-generated and manage target search terms.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="flex items-center gap-3 bg-muted/40 p-3 rounded-md border">
+                                        <input
+                                            type="checkbox"
+                                            id="aiGenerated"
+                                            checked={form.aiGenerated}
+                                            onChange={(e) => {
+                                                setHasUnsavedChanges(true);
+                                                setForm(f => ({ ...f, aiGenerated: e.target.checked }));
+                                            }}
+                                            className="rounded border-input text-violet-600 focus:ring-violet-500 h-4 w-4 cursor-pointer"
+                                        />
+                                        <Label htmlFor="aiGenerated" className="text-xs font-semibold cursor-pointer">Mark this post as AI-Generated</Label>
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Primary Focus Keyword</Label>
+                                        <Input
+                                            value={form.primaryKeyword}
+                                            onChange={(e) => {
+                                                setHasUnsavedChanges(true);
+                                                setForm(f => ({ ...f, primaryKeyword: e.target.value }));
+                                            }}
+                                            placeholder="e.g. freelance developer tips"
+                                            className="text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Secondary Keywords (comma-separated)</Label>
+                                        <Input
+                                            value={form.secondaryKeywords}
+                                            onChange={(e) => {
+                                                setHasUnsavedChanges(true);
+                                                setForm(f => ({ ...f, secondaryKeywords: e.target.value }));
+                                            }}
+                                            placeholder="e.g. start freelancing, software engineer gig, remote coding"
+                                            className="text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Keyword Anchors (comma-separated, used for linking to this post)</Label>
+                                        <Input
+                                            value={form.anchors}
+                                            onChange={(e) => {
+                                                setHasUnsavedChanges(true);
+                                                setForm(f => ({ ...f, anchors: e.target.value }));
+                                            }}
+                                            placeholder="e.g. freelancing guide, code remotely, developer career"
+                                            className="text-sm"
+                                        />
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            {/* Content Brief */}
+                            <Card>
+                                <CardHeader className="pb-3">
+                                    <CardTitle className="text-sm font-semibold">AI Content Brief Details</CardTitle>
+                                    <CardDescription className="text-xs">Edit search intent, entities, and competitive headings mappings.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Search Intent Type</Label>
+                                        <select
+                                            value={form.contentBrief?.intent || ""}
+                                            onChange={(e) => updateBrief("intent", e.target.value)}
+                                            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                                        >
+                                            <option value="">Select Intent...</option>
+                                            <option value="informational">Informational (How-to, Guides)</option>
+                                            <option value="commercial">Commercial (Reviews, Comparisons)</option>
+                                            <option value="transactional">Transactional (Buying, Hiring)</option>
+                                            <option value="navigational">Navigational (Logins, Brands)</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Competitor Headings Mapping (one per line)</Label>
+                                        <Textarea
+                                            value={Array.isArray(form.contentBrief?.competitorHeadings) ? form.contentBrief.competitorHeadings.join("\n") : ""}
+                                            onChange={(e) => updateBrief("competitorHeadings", e.target.value.split("\n").map(h => h.trim()).filter(Boolean))}
+                                            placeholder="Paste headings observed in competitor articles..."
+                                            rows={4}
+                                            className="text-sm resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">People Also Ask (PAA) Questions (one per line)</Label>
+                                        <Textarea
+                                            value={Array.isArray(form.contentBrief?.paaQuestions) ? form.contentBrief.paaQuestions.join("\n") : ""}
+                                            onChange={(e) => updateBrief("paaQuestions", e.target.value.split("\n").map(q => q.trim()).filter(Boolean))}
+                                            placeholder="Paste PAA questions found on Google..."
+                                            rows={3}
+                                            className="text-sm resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold">Semantic Entities & Topics (comma-separated)</Label>
+                                        <Textarea
+                                            value={Array.isArray(form.contentBrief?.entities) ? form.contentBrief.entities.join(", ") : ""}
+                                            onChange={(e) => updateBrief("entities", e.target.value.split(",").map(ent => ent.trim()).filter(Boolean))}
+                                            placeholder="e.g. Upwork, GitHub portfolio, client contracts, invoices"
+                                            rows={3}
+                                            className="text-sm resize-none"
+                                        />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Right Column: SEO QA Validation Report */}
+                        <div className="space-y-6">
+                            <Card>
+                                <CardHeader className="pb-3">
+                                    <div className="flex justify-between items-center">
+                                        <CardTitle className="text-sm font-semibold">SEO QA Validation Status</CardTitle>
+                                        <Badge className={cn(
+                                            "text-[10px] font-bold uppercase px-2 py-0.5 border-0",
+                                            form.qaReport?.status === "passed" ? "bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400" :
+                                            form.qaReport?.status === "warned" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/20 dark:text-yellow-400" :
+                                            "bg-red-100 text-red-700 dark:bg-red-950/20 dark:text-red-400"
+                                        )}>
+                                            {form.qaReport?.status || "failed"}
+                                        </Badge>
+                                    </div>
+                                    <CardDescription className="text-xs">Checker checklist for structural and content compliance.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="space-y-2 text-xs divide-y">
+                                        <div className="flex justify-between py-2 items-center">
+                                            <span className="text-muted-foreground">Word Count:</span>
+                                            <span className={cn(
+                                                "font-semibold",
+                                                form.qaReport?.wordCount >= 3000 ? "text-green-600 dark:text-green-400" : "text-destructive"
+                                            )}>
+                                                {form.qaReport?.wordCount || 0} words (Target &ge;3000)
+                                            </span>
+                                        </div>
+
+                                        <div className="flex justify-between py-2 items-center">
+                                            <span className="text-muted-foreground">Internal Link Count:</span>
+                                            <span className="font-semibold text-foreground">
+                                                {form.qaReport?.internalLinkCount || 0} links (Max 8)
+                                            </span>
+                                        </div>
+
+                                        <div className="flex justify-between py-2 items-center">
+                                            <span className="text-muted-foreground">Primary Keyword Presence:</span>
+                                            <span className={cn(
+                                                "font-semibold",
+                                                form.qaReport?.primaryKeywordPresence ? "text-green-600 dark:text-green-400" : "text-amber-500"
+                                            )}>
+                                                {form.qaReport?.primaryKeywordPresence ? "Found in Body" : "Not Found"}
+                                            </span>
+                                        </div>
+
+                                        <div className="flex justify-between py-2 items-center">
+                                            <span className="text-muted-foreground">Meta Title Character Length:</span>
+                                            <span className={cn(
+                                                "font-semibold",
+                                                (form.qaReport?.metaTitleLength >= 50 && form.qaReport?.metaTitleLength <= 60) ? "text-green-600 dark:text-green-400" : "text-amber-500"
+                                            )}>
+                                                {form.qaReport?.metaTitleLength || 0} chars (Optimal 50-60)
+                                            </span>
+                                        </div>
+
+                                        <div className="flex justify-between py-2 items-center">
+                                            <span className="text-muted-foreground">Meta Description Character Length:</span>
+                                            <span className={cn(
+                                                "font-semibold",
+                                                (form.qaReport?.metaDescriptionLength >= 140 && form.qaReport?.metaDescriptionLength <= 160) ? "text-green-600 dark:text-green-400" : "text-amber-500"
+                                            )}>
+                                                {form.qaReport?.metaDescriptionLength || 0} chars (Optimal 140-160)
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* QA validation trigger button */}
+                                    <div className="pt-4 border-t space-y-3">
+                                        <Button
+                                            type="button"
+                                            onClick={runOnDemandValidation}
+                                            disabled={runningQa || !form.primaryKeyword}
+                                            className="w-full gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-0 shadow-md font-semibold h-9"
+                                        >
+                                            {runningQa ? (
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : (
+                                                <Sparkles className="h-4 w-4" />
+                                            )}
+                                            Run On-Demand SEO QA Validation
+                                        </Button>
+                                        {!form.primaryKeyword && (
+                                            <p className="text-[10px] text-destructive text-center">
+                                                * Fill in the Primary Keyword first to execute validation checks.
+                                            </p>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                </TabsContent>
             </Tabs>
+        </div>
+    );
+}
+
+interface ImageAltInputProps {
+    initialAlt: string;
+    index: number;
+    src: string;
+    onSave: (index: number, newAlt: string) => void;
+}
+
+function ImageAltInput({ initialAlt, index, src, onSave }: ImageAltInputProps) {
+    const [value, setValue] = useState(initialAlt);
+
+    // Keep in sync if initialAlt changes from outside (e.g. editor updates)
+    useEffect(() => {
+        setValue(initialAlt);
+    }, [initialAlt]);
+
+    const isMissing = !value.trim();
+    const isTooShort = value.trim().length > 0 && value.trim().length < 5;
+    const hasGenericWord = ["image", "screenshot", "photo", "img", "pic", "picture", "logo"].some(
+        word => value.toLowerCase() === word || value.toLowerCase().includes(" " + word) || value.toLowerCase().includes(word + " ")
+    );
+
+    return (
+        <div className="flex items-start gap-4 p-3 border rounded-lg bg-card hover:bg-muted/10 transition-colors text-card-foreground">
+            <div className="relative w-16 h-16 shrink-0 rounded border overflow-hidden bg-muted flex items-center justify-center">
+                {src ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={src} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                    <span className="text-xs text-muted-foreground">No Src</span>
+                )}
+            </div>
+            <div className="flex-1 space-y-1.5 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-muted-foreground truncate">
+                        Image #{index + 1}
+                    </span>
+                    <div className="flex gap-1">
+                        {isMissing ? (
+                            <Badge variant="destructive" className="text-[9px] uppercase px-1 py-0 border-0">Missing Alt</Badge>
+                        ) : isTooShort ? (
+                            <Badge variant="secondary" className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100 dark:bg-yellow-950/30 dark:text-yellow-400 text-[9px] uppercase px-1 py-0 border-0">Too Short</Badge>
+                        ) : hasGenericWord ? (
+                            <Badge variant="secondary" className="bg-orange-100 text-orange-700 hover:bg-orange-100 dark:bg-orange-950/30 dark:text-orange-400 text-[9px] uppercase px-1 py-0 border-0">Generic Alt</Badge>
+                        ) : (
+                            <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-950/30 dark:text-green-400 text-[9px] uppercase px-1 py-0 border-0">SEO Compliant</Badge>
+                        )}
+                    </div>
+                </div>
+                <Input
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onBlur={() => {
+                        if (value !== initialAlt) {
+                            onSave(index, value);
+                        }
+                    }}
+                    placeholder="Describe this image for SEO..."
+                    className="h-8 text-sm"
+                />
+            </div>
         </div>
     );
 }

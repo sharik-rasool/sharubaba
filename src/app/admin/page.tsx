@@ -1,6 +1,6 @@
 import { getAllBlogs, getBlogLinkStats } from "@/lib/blogs";
 import Link from "next/link";
-import { FileText, Eye, FilePen, Plus, Link2, ExternalLink } from "lucide-react";
+import { FileText, Eye, FilePen, Plus, Link2, ExternalLink, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,8 +9,9 @@ export default async function AdminDashboard() {
     const blogs = await getAllBlogs();
     const linkStats = await getBlogLinkStats();
     
-    const published = blogs.filter((b) => b.status === "published");
-    const drafts = blogs.filter((b) => b.status === "draft");
+    const published = blogs.filter((b) => (b.status === "published" || (b.scheduledFor && new Date(b.scheduledFor) <= new Date())) && !(b.scheduledFor && new Date(b.scheduledFor) > new Date()));
+    const scheduled = blogs.filter((b) => b.scheduledFor && new Date(b.scheduledFor) > new Date());
+    const drafts = blogs.filter((b) => b.status === "draft" && !(b.scheduledFor && new Date(b.scheduledFor) > new Date()));
     const recent = blogs.slice(0, 5);
 
     const totalInternal = linkStats.reduce((s, b) => s + b.internal, 0);
@@ -33,7 +34,7 @@ export default async function AdminDashboard() {
             </div>
 
             {/* Stats */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <CardTitle className="text-sm font-medium text-muted-foreground">Total Posts</CardTitle>
@@ -59,6 +60,15 @@ export default async function AdminDashboard() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-3xl font-bold text-yellow-600">{drafts.length}</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardTitle className="text-sm font-medium text-muted-foreground">Scheduled</CardTitle>
+                        <Calendar className="h-4 w-4 text-purple-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold text-purple-600">{scheduled.length}</p>
                     </CardContent>
                 </Card>
                 <Card>
@@ -125,12 +135,18 @@ export default async function AdminDashboard() {
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-3 shrink-0">
-                                            <Badge
-                                                variant={post.status === "published" ? "default" : "secondary"}
-                                                className="text-xs"
-                                            >
-                                                {post.status}
-                                            </Badge>
+                                            {(() => {
+                                                const isScheduled = post.scheduledFor && new Date(post.scheduledFor) > new Date();
+                                                const isPublished = post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date());
+                                                return (
+                                                    <Badge
+                                                        variant={isScheduled ? "outline" : isPublished ? "default" : "secondary"}
+                                                        className={`text-xs uppercase px-1.5 py-0.5 ${isScheduled ? "text-purple-600 border-purple-600 bg-purple-50 dark:text-purple-400 dark:border-purple-400 dark:bg-purple-950/20" : ""}`}
+                                                    >
+                                                        {isScheduled ? "scheduled" : isPublished ? "published" : "draft"}
+                                                    </Badge>
+                                                );
+                                            })()}
                                             <Link
                                                 href={`/admin/blogs/${post._id}/edit`}
                                                 className="text-xs text-primary hover:underline"

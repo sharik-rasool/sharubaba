@@ -21,6 +21,33 @@ export type BlogDoc = {
     readingTime: number;
     createdAt: string;
     updatedAt: string;
+
+    // SEO Automation fields
+    aiGenerated?: boolean;
+    freshnessCheckedAt?: string;
+    primaryKeyword?: string;
+    secondaryKeywords?: string[];
+    anchors?: string[];
+    embeddings?: number[];
+    topicClusterId?: string;
+    pillarPageSlug?: string;
+    contentBrief?: {
+        intent: string;
+        primaryKeyword: string;
+        secondaryKeywords: string[];
+        competitorHeadings: string[];
+        paaQuestions: string[];
+        entities: string[];
+    };
+    qaReport?: {
+        wordCount: number;
+        headingCounts: Record<string, number>;
+        internalLinkCount: number;
+        primaryKeywordPresence: boolean;
+        metaTitleLength: number;
+        metaDescriptionLength: number;
+        status: "passed" | "warned" | "failed";
+    };
 };
 
 function serialize(doc: IBlog): BlogDoc {
@@ -60,6 +87,34 @@ function serialize(doc: IBlog): BlogDoc {
         readingTime: typeof obj.readingTime === 'number' ? obj.readingTime : 0,
         createdAt: (obj.createdAt instanceof Date) ? obj.createdAt.toISOString() : String(obj.createdAt || ""),
         updatedAt: (obj.updatedAt instanceof Date) ? obj.updatedAt.toISOString() : String(obj.updatedAt || ""),
+
+        aiGenerated: !!obj.aiGenerated,
+        freshnessCheckedAt: obj.freshnessCheckedAt instanceof Date ? obj.freshnessCheckedAt.toISOString() : undefined,
+        primaryKeyword: obj.primaryKeyword || "",
+        secondaryKeywords: Array.isArray(obj.secondaryKeywords) ? obj.secondaryKeywords : [],
+        anchors: Array.isArray(obj.anchors) ? obj.anchors : [],
+        embeddings: Array.isArray(obj.embeddings) ? obj.embeddings : [],
+        topicClusterId: obj.topicClusterId || "",
+        pillarPageSlug: obj.pillarPageSlug || "",
+        contentBrief: obj.contentBrief ? {
+            intent: obj.contentBrief.intent || "",
+            primaryKeyword: obj.contentBrief.primaryKeyword || "",
+            secondaryKeywords: Array.isArray(obj.contentBrief.secondaryKeywords) ? obj.contentBrief.secondaryKeywords : [],
+            competitorHeadings: Array.isArray(obj.contentBrief.competitorHeadings) ? obj.contentBrief.competitorHeadings : [],
+            paaQuestions: Array.isArray(obj.contentBrief.paaQuestions) ? obj.contentBrief.paaQuestions : [],
+            entities: Array.isArray(obj.contentBrief.entities) ? obj.contentBrief.entities : []
+        } : undefined,
+        qaReport: obj.qaReport ? {
+            wordCount: typeof obj.qaReport.wordCount === "number" ? obj.qaReport.wordCount : 0,
+            headingCounts: obj.qaReport.headingCounts instanceof Map 
+                ? Object.fromEntries(obj.qaReport.headingCounts) 
+                : (obj.qaReport.headingCounts || {}),
+            internalLinkCount: typeof obj.qaReport.internalLinkCount === "number" ? obj.qaReport.internalLinkCount : 0,
+            primaryKeywordPresence: !!obj.qaReport.primaryKeywordPresence,
+            metaTitleLength: typeof obj.qaReport.metaTitleLength === "number" ? obj.qaReport.metaTitleLength : 0,
+            metaDescriptionLength: typeof obj.qaReport.metaDescriptionLength === "number" ? obj.qaReport.metaDescriptionLength : 0,
+            status: obj.qaReport.status || "failed"
+        } : undefined
     };
 }
 
@@ -73,8 +128,16 @@ export async function getPublishedBlogs(): Promise<BlogDoc[]> {
         await db();
         const now = new Date();
         const blogs = await Blog.find({ 
-            status: "published",
-            $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+            $or: [
+                {
+                    status: "published",
+                    $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+                },
+                {
+                    status: "draft",
+                    scheduledFor: { $lte: now }
+                }
+            ]
         })
             .select("-content")
             .sort({ createdAt: -1 })

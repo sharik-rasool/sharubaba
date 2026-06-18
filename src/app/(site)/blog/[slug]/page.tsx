@@ -19,7 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
     const post = await getBlogBySlug(slug);
 
-    if (!post || post.status !== "published") {
+    const isLive = post && (post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date()));
+    if (!post || !isLive) {
         return { title: "Post Not Found" };
     }
 
@@ -62,7 +63,8 @@ export default async function BlogPostPage({ params }: Props) {
     const { slug } = await params;
     const post = await getBlogBySlug(slug);
 
-    if (!post || post.status !== "published") notFound();
+    const isLive = post && (post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date()));
+    if (!post || !isLive) notFound();
 
     const { toc, html: parsedHtml, headingCount } = parseHtmlForToc(post.content);
     const showToc = headingCount >= 3;

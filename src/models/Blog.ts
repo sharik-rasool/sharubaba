@@ -19,6 +19,35 @@ export interface IBlog extends Document {
     readingTime?: number;
     createdAt: Date;
     updatedAt: Date;
+    
+    // SEO Automation Fields
+    aiGenerated: boolean;
+    freshnessCheckedAt?: Date;
+    primaryKeyword: string;
+    secondaryKeywords: string[];
+    anchors: string[];
+    embeddings: number[];
+    topicClusterId?: string;
+    pillarPageSlug?: string;
+    
+    contentBrief?: {
+        intent: string;
+        primaryKeyword: string;
+        secondaryKeywords: string[];
+        competitorHeadings: string[];
+        paaQuestions: string[];
+        entities: string[];
+    };
+    
+    qaReport?: {
+        wordCount: number;
+        headingCounts: Record<string, number>;
+        internalLinkCount: number;
+        primaryKeywordPresence: boolean;
+        metaTitleLength: number;
+        metaDescriptionLength: number;
+        status: "passed" | "warned" | "failed";
+    };
 }
 
 const BlogSchema = new Schema<IBlog>(
@@ -44,6 +73,35 @@ const BlogSchema = new Schema<IBlog>(
         scheduledFor: { type: Date },
         viewCount: { type: Number, default: 0 },
         readingTime: { type: Number, default: 0 },
+        
+        // SEO Automation Fields
+        aiGenerated: { type: Boolean, default: false },
+        freshnessCheckedAt: { type: Date },
+        primaryKeyword: { type: String, default: "" },
+        secondaryKeywords: { type: [String], default: [] },
+        anchors: { type: [String], default: [] },
+        embeddings: { type: [Number], default: [] },
+        topicClusterId: { type: String, default: "" },
+        pillarPageSlug: { type: String, default: "" },
+        
+        contentBrief: {
+            intent: { type: String, default: "" },
+            primaryKeyword: { type: String, default: "" },
+            secondaryKeywords: { type: [String], default: [] },
+            competitorHeadings: { type: [String], default: [] },
+            paaQuestions: { type: [String], default: [] },
+            entities: { type: [String], default: [] }
+        },
+        
+        qaReport: {
+            wordCount: { type: Number },
+            headingCounts: { type: Map, of: Number },
+            internalLinkCount: { type: Number },
+            primaryKeywordPresence: { type: Boolean },
+            metaTitleLength: { type: Number },
+            metaDescriptionLength: { type: Number },
+            status: { type: String, enum: ["passed", "warned", "failed"] }
+        }
     },
     { timestamps: true }
 );

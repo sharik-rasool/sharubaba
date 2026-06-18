@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { 
     Activity, CheckCircle2, AlertTriangle, AlertCircle, 
     ArrowLeft, ExternalLink, PenSquare, ChevronDown, ChevronUp, 
-    Wrench, Sparkles, RefreshCw, Loader2, Search, Check 
+    Wrench, Sparkles, RefreshCw, Loader2, Search, Check, Terminal, Link2
 } from "lucide-react";
 import Link from "next/link";
 import { scanContentHealth, type ContentHealth } from "@/lib/content-audit";
@@ -27,13 +27,79 @@ interface SimpleBlog {
     ogImage?: string;
     coverImage?: string;
     tags?: string[];
+    
+    // NEW SEO automation fields
+    aiGenerated?: boolean;
+    primaryKeyword?: string;
+    secondaryKeywords?: string[];
+    anchors?: string[];
+    scheduledFor?: string;
+    contentBrief?: {
+        intent: string;
+        primaryKeyword: string;
+        secondaryKeywords: string[];
+        competitorHeadings: string[];
+        paaQuestions: string[];
+        entities: string[];
+    };
+    qaReport?: {
+        wordCount: number;
+        headingCounts: Record<string, number>;
+        internalLinkCount: number;
+        primaryKeywordPresence: boolean;
+        metaTitleLength: number;
+        metaDescriptionLength: number;
+        status: "passed" | "warned" | "failed";
+    };
+}
+
+interface AutomationProgress {
+    current: number;
+    total: number;
+}
+
+interface AutomationSummary {
+    successCount: number;
+    failedCount: number;
+}
+
+interface AutomationStatusState {
+    status: string;
+    progress?: AutomationProgress;
+    currentKeyword?: string;
+    error?: string;
+    startedAt?: string;
+    endedAt?: string;
+    pid?: number;
+    dryRun?: boolean;
+    summary?: AutomationSummary;
+}
+
+interface EstimateResultState {
+    success: boolean;
+    estimation: {
+        keywordsCount: number;
+        estFlashCalls: number;
+        estProCalls: number;
+        estFlashInputTokens: number;
+        estProInputTokens: number;
+        totalEstCost: number;
+    };
+    allScanned: Array<{
+        keyword: string;
+        status: "selected" | "duplicate" | "batch_duplicate" | "overlap" | "cannibalized";
+        matchedWith?: string;
+        reason?: string;
+        similarityScore?: number;
+    }>;
 }
 
 interface DiagnosticsTableProps {
     initialBlogs: SimpleBlog[];
+    defaultSheetUrl?: string;
 }
 
-export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps) {
+export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }: DiagnosticsTableProps) {
     const [blogs, setBlogs] = useState<SimpleBlog[]>(initialBlogs);
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<"all" | "safe" | "warning" | "critical">("all");
@@ -46,6 +112,132 @@ export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps
     const [repairingAll, setRepairingAll] = useState(false);
     const [actionMessage, setActionMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
     const [isPending, startTransition] = useTransition();
+
+    // Automation States
+    const [automationStatus, setAutomationStatus] = useState<AutomationStatusState>({ status: "idle", progress: { current: 0, total: 0 } });
+    const [logs, setLogs] = useState("");
+    const [sheetUrl, setSheetUrl] = useState(defaultSheetUrl);
+    const [dryRun, setDryRun] = useState(false);
+    const [estimateResult, setEstimateResult] = useState<EstimateResultState | null>(null);
+    const [estimating, setEstimating] = useState(false);
+    const [triggering, setTriggering] = useState(false);
+    const [cancelling, setCancelling] = useState(false);
+    const [isLogsExpanded, setIsLogsExpanded] = useState(false);
+
+    // Fetch automation background status
+    const fetchStatus = async () => {
+        try {
+            const res = await fetch("/api/automation");
+            if (res.ok) {
+                const data = await res.json();
+                setAutomationStatus(data.status || { status: "idle" });
+                setLogs(data.logs || "");
+                return data.status?.status || "idle";
+            }
+        } catch (err) {
+            console.error("Failed to fetch automation status:", err);
+        }
+        return "idle";
+    };
+
+    // Poll status when running
+    useState(() => {
+        fetchStatus();
+    });
+
+    useState(() => {
+        const interval = setInterval(async () => {
+            const currentStatus = await fetchStatus();
+            if (currentStatus !== "running" && automationStatus.status === "running") {
+                // Automation just finished, rescan blogs list
+                const res = await fetch("/api/blogs");
+                if (res.ok) {
+                    const freshBlogs = await res.json();
+                    setBlogs(freshBlogs);
+                }
+            }
+        }, 3000);
+        return () => clearInterval(interval);
+    });
+
+    const handleCalculateCost = async () => {
+        if (!sheetUrl) {
+            setActionMessage({ type: "error", text: "Please enter a Google Sheet URL first." });
+            return;
+        }
+        setEstimating(true);
+        setEstimateResult(null);
+        setActionMessage(null);
+        try {
+            const res = await fetch("/api/automation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "estimate", sheetUrl, dryRun })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setEstimateResult(data);
+                setActionMessage({ type: "success", text: "SEO Cannibalization Check & Cost Estimate completed." });
+            } else {
+                throw new Error(data.error || "Estimation failed");
+            }
+        } catch (err: unknown) {
+            setActionMessage({ type: "error", text: (err as Error).message || "Failed to calculate cost estimate." });
+        } finally {
+            setEstimating(false);
+        }
+    };
+
+    const handleTriggerAutomation = async () => {
+        if (!sheetUrl) {
+            setActionMessage({ type: "error", text: "Please enter a Google Sheet URL first." });
+            return;
+        }
+        setTriggering(true);
+        setEstimateResult(null);
+        setActionMessage(null);
+        try {
+            const res = await fetch("/api/automation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "trigger", sheetUrl, dryRun })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setActionMessage({ type: "success", text: "Blog writing automation process has started in the background." });
+                fetchStatus();
+            } else {
+                throw new Error(data.error || "Failed to trigger generation");
+            }
+        } catch (err: unknown) {
+            setActionMessage({ type: "error", text: (err as Error).message || "Failed to trigger automation." });
+        } finally {
+            setTriggering(false);
+        }
+    };
+
+    const handleCancelAutomation = async () => {
+        setCancelling(true);
+        setActionMessage(null);
+        try {
+            const res = await fetch("/api/automation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "cancel" })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setActionMessage({ type: "success", text: "Generation process cancelled." });
+                fetchStatus();
+            } else {
+                throw new Error(data.error || "Failed to cancel process");
+            }
+        } catch (err: unknown) {
+            setActionMessage({ type: "error", text: (err as Error).message || "Failed to terminate process." });
+        } finally {
+            setCancelling(false);
+        }
+    };
 
     // Trigger full diagnostic re-scan
     const [scanTrigger, setScanTrigger] = useState(0);
@@ -265,6 +457,228 @@ export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps
                 </div>
             )}
 
+            {/* Blogging Automation Control Center */}
+            <Card className="shadow-md border-violet-200 dark:border-violet-900/60 bg-gradient-to-br from-violet-50/20 via-background to-indigo-50/10">
+                <CardHeader className="pb-3 border-b border-violet-100 dark:border-violet-900/40">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Sparkles className="h-5 w-5 text-violet-600 dark:text-violet-400 animate-pulse" />
+                            <CardTitle className="text-base font-bold">Blogging Automation Control Center</CardTitle>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {automationStatus.status === "running" ? (
+                                <Badge className="bg-violet-600 hover:bg-violet-600 text-white animate-pulse">
+                                    <Loader2 className="h-3 w-3 animate-spin mr-1 inline" />
+                                    Running...
+                                </Badge>
+                            ) : (
+                                <Badge variant="secondary" className="capitalize text-xs font-semibold">
+                                    Last Status: {automationStatus.status}
+                                </Badge>
+                            )}
+                        </div>
+                    </div>
+                    <CardDescription className="text-xs">
+                        Auto-generate detailed 3000-word humanized blogs from research keywords, run dynamic cross-linking and validate on autopilot.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="p-5 space-y-4">
+                    {/* Input controls */}
+                    <div className="grid gap-4 md:grid-cols-3 items-end">
+                        <div className="md:col-span-2 space-y-1.5">
+                            <label className="text-xs font-semibold text-muted-foreground block">Google Sheets Keywords URL</label>
+                            <Input
+                                placeholder="Paste shareable Google Sheet link..."
+                                value={sheetUrl}
+                                onChange={(e) => setSheetUrl(e.target.value)}
+                                disabled={automationStatus.status === "running"}
+                                className="text-sm bg-background border-border h-10"
+                            />
+                        </div>
+                        <div className="flex items-center gap-6 h-10">
+                            <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-medium">
+                                <input
+                                    type="checkbox"
+                                    checked={dryRun}
+                                    onChange={(e) => setDryRun(e.target.checked)}
+                                    disabled={automationStatus.status === "running"}
+                                    className="rounded border-input text-violet-600 focus:ring-violet-500 h-4 w-4"
+                                />
+                                <span>Dry-Run (1 Post, No Saves)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* Cost Estimation Results */}
+                    {estimateResult && (
+                        <div className="bg-muted/30 border rounded-lg p-4 text-xs space-y-3 animate-in fade-in duration-300">
+                            <div className="flex justify-between items-center border-b pb-2">
+                                <span className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                                    <Activity className="h-4 w-4 text-violet-600" />
+                                    Pre-run Analysis
+                                </span>
+                                <span className="font-mono bg-violet-100 dark:bg-violet-950/30 text-violet-700 dark:text-violet-300 px-2 py-0.5 rounded font-bold">
+                                    Est. Gemini Cost: ${estimateResult.estimation.totalEstCost.toFixed(4)}
+                                </span>
+                            </div>
+                            <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4 text-[11px] text-muted-foreground">
+                                <div>Selected Keywords: <strong className="text-foreground">{estimateResult.estimation.keywordsCount}</strong></div>
+                                <div>Gemini Flash Calls: <strong className="text-foreground">{estimateResult.estimation.estFlashCalls}</strong></div>
+                                <div>Gemini Pro Calls: <strong className="text-foreground">{estimateResult.estimation.estProCalls}</strong></div>
+                                <div>Est. Tokens: <strong className="text-foreground">{(estimateResult.estimation.estFlashInputTokens + estimateResult.estimation.estProInputTokens).toLocaleString()}</strong></div>
+                            </div>
+                            {estimateResult.allScanned && estimateResult.allScanned.length > 0 && (
+                                <div className="space-y-1.5">
+                                    <span className="font-semibold text-[10px] uppercase text-muted-foreground block">Keywords Deduplication & Cannibalization Status:</span>
+                                    <div className="max-h-28 overflow-y-auto border rounded bg-background p-2 space-y-1">
+                                        {estimateResult.allScanned.map((s, i: number) => (
+                                            <div key={i} className="flex justify-between items-center text-[10px] border-b border-border/30 pb-0.5 last:border-b-0">
+                                                <span className="font-medium truncate max-w-[200px] sm:max-w-xs">{s.keyword}</span>
+                                                <span>
+                                                    {s.status === "selected" ? (
+                                                        <span className="text-green-600 dark:text-green-400 font-bold flex items-center gap-1">✓ Selected</span>
+                                                    ) : s.status === "duplicate" ? (
+                                                        <span className="text-red-500 font-medium flex items-center gap-1">✗ Duplicate DB (with: {s.matchedWith})</span>
+                                                    ) : s.status === "batch_duplicate" ? (
+                                                        <span className="text-amber-500 font-medium flex items-center gap-1">✗ Batch Duplicate</span>
+                                                    ) : s.status === "cannibalized" ? (
+                                                        <span className="text-red-500 font-medium flex items-center gap-1">✗ Cannibalized (Sim: {s.similarityScore})</span>
+                                                    ) : (
+                                                        <span className="text-yellow-600 font-medium flex items-center gap-1">⚠️ Overlap: {s.reason}</span>
+                                                    )}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Progress Bar & Live Status */}
+                    {automationStatus.status === "running" && (
+                        <div className="bg-violet-50/10 border border-violet-100 dark:border-violet-900/40 rounded-lg p-4 space-y-3">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="font-semibold text-violet-700 dark:text-violet-300 flex items-center gap-2">
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                    Active Task: {automationStatus.currentKeyword || "Starting..."}
+                                </span>
+                                <span className="font-mono font-bold">
+                                    {automationStatus.progress?.current || 0} / {automationStatus.progress?.total || 0} Complete
+                                </span>
+                            </div>
+                            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
+                                <div
+                                    className="bg-violet-600 h-2 rounded-full transition-all duration-500"
+                                    style={{
+                                        width: `${
+                                            automationStatus.progress && automationStatus.progress.total > 0
+                                                ? (automationStatus.progress.current / automationStatus.progress.total) * 100
+                                                : 5
+                                        }%`
+                                    }}
+                                />
+                            </div>
+                            {automationStatus.summary && (
+                                <div className="text-[10px] text-muted-foreground flex justify-between">
+                                    <span>Started: {new Date(automationStatus.startedAt || "").toLocaleTimeString()}</span>
+                                    <span>Success: {automationStatus.summary.successCount} | Failed: {automationStatus.summary.failedCount}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Last Run Results */}
+                    {automationStatus.status !== "running" && automationStatus.startedAt && (
+                        <div className={cn(
+                            "p-3 rounded-lg text-xs border flex items-center justify-between",
+                            automationStatus.status === "completed" 
+                                ? "bg-green-50/30 border-green-200 text-green-800 dark:text-green-400" 
+                                : "bg-red-50/30 border-red-200 text-red-800 dark:text-red-400"
+                        )}>
+                            <div>
+                                <strong>Last Automation Run Status: </strong>
+                                <span className="capitalize">{automationStatus.status}</span>
+                                {automationStatus.endedAt && (
+                                    <span className="text-muted-foreground"> at {new Date(automationStatus.endedAt || "").toLocaleString()}</span>
+                                )}
+                                {automationStatus.error && (
+                                    <div className="mt-1 font-mono text-[10px] text-red-600">{automationStatus.error}</div>
+                                )}
+                            </div>
+                            {automationStatus.summary && (
+                                <div className="text-right text-[10px] text-muted-foreground">
+                                    Success: {automationStatus.summary.successCount} | Failed: {automationStatus.summary.failedCount}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Action Buttons panel */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                        <div className="flex gap-2">
+                            {automationStatus.status === "running" ? (
+                                <Button
+                                    onClick={handleCancelAutomation}
+                                    disabled={cancelling}
+                                    variant="destructive"
+                                    size="sm"
+                                    className="gap-2 shadow-sm font-semibold"
+                                >
+                                    {cancelling ? <Loader2 className="h-4 w-4 animate-spin" /> : <AlertCircle className="h-4 w-4" />}
+                                    Cancel Pipeline Execution
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        onClick={handleCalculateCost}
+                                        disabled={estimating || triggering}
+                                        variant="outline"
+                                        size="sm"
+                                        className="gap-2 font-semibold h-9"
+                                    >
+                                        {estimating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Activity className="h-4 w-4" />}
+                                        Analyze Sheet & Estimate Cost
+                                    </Button>
+                                    <Button
+                                        onClick={handleTriggerAutomation}
+                                        disabled={triggering || estimating}
+                                        size="sm"
+                                        className="gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold border-0 shadow-md h-9"
+                                    >
+                                        {triggering ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                                        Trigger Generation Pipeline
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                        
+                        {logs && (
+                            <Button
+                                onClick={() => setIsLogsExpanded(!isLogsExpanded)}
+                                variant="ghost"
+                                size="sm"
+                                className="text-xs text-muted-foreground gap-1.5 hover:text-foreground h-9"
+                            >
+                                <Terminal className="h-4 w-4" />
+                                {isLogsExpanded ? "Hide Logs Window" : "Show Console Logs"}
+                                {isLogsExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                            </Button>
+                        )}
+                    </div>
+
+                    {/* Console Logs terminal box */}
+                    {isLogsExpanded && logs && (
+                        <div className="space-y-1 animate-in slide-in-from-top-2 duration-300">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Live Generation Output Logs:</span>
+                            <pre className="p-3 bg-slate-950 text-slate-200 border rounded font-mono text-[10px] overflow-y-auto max-h-56 leading-normal select-all">
+                                {logs}
+                            </pre>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+
             {/* Diagnostics Aggregate Cards */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 <Card className="shadow-sm">
@@ -454,13 +868,29 @@ export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps
                                                         </Button>
                                                     </td>
                                                     <td className="px-4 py-3.5">
-                                                        <p className="font-semibold text-foreground leading-snug line-clamp-1">{blog.title}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="font-semibold text-foreground leading-snug line-clamp-1">{blog.title}</p>
+                                                            {blog.aiGenerated && (
+                                                                <Badge className="bg-violet-100 hover:bg-violet-100 text-violet-700 dark:bg-violet-950/30 dark:text-violet-400 text-[9px] font-bold px-1.5 py-0.5 border-0 uppercase shrink-0">
+                                                                    AI
+                                                                </Badge>
+                                                            )}
+                                                        </div>
                                                         <p className="text-[10px] text-muted-foreground truncate font-mono mt-0.5">/blog/{blog.slug}</p>
                                                     </td>
                                                     <td className="px-4 py-3.5">
-                                                        <Badge variant={blog.status === "published" ? "default" : "secondary"} className="text-[9px] uppercase tracking-wide">
-                                                            {blog.status}
-                                                        </Badge>
+                                                        {(() => {
+                                                            const isScheduled = blog.scheduledFor && new Date(blog.scheduledFor) > new Date();
+                                                            const isPublished = blog.status === "published" || (blog.scheduledFor && new Date(blog.scheduledFor) <= new Date());
+                                                            return (
+                                                                <Badge
+                                                                    variant={isScheduled ? "outline" : isPublished ? "default" : "secondary"}
+                                                                    className={`text-[9px] uppercase tracking-wide ${isScheduled ? "text-purple-600 border-purple-600 bg-purple-50 dark:text-purple-400 dark:border-purple-400 dark:bg-purple-950/20" : ""}`}
+                                                                >
+                                                                    {isScheduled ? "scheduled" : isPublished ? "published" : "draft"}
+                                                                </Badge>
+                                                            );
+                                                        })()}
                                                     </td>
                                                     <td className="px-4 py-3.5 font-medium">
                                                         {(audit.contentSize / 1024).toFixed(1)} KB
@@ -504,7 +934,7 @@ export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps
                                                                     <PenSquare className="h-4 w-4 text-primary" />
                                                                 </Link>
                                                             </Button>
-                                                            {blog.status === "published" && (
+                                                            {(blog.status === "published" || (blog.scheduledFor && new Date(blog.scheduledFor) <= new Date())) && (
                                                                 <Button variant="ghost" size="icon" asChild className="h-8 w-8 shrink-0" title="View Article">
                                                                     <a href={`/blog/${blog.slug}`} target="_blank" rel="noopener noreferrer">
                                                                         <ExternalLink className="h-4 w-4 text-muted-foreground" />
@@ -725,6 +1155,158 @@ export default function DiagnosticsTable({ initialBlogs }: DiagnosticsTableProps
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+                                                                {/* 7. AI Content Brief */}
+                                                                {blog.aiGenerated && blog.contentBrief && (
+                                                                    <div className="bg-background p-4 rounded-lg border border-violet-100 dark:border-violet-900/60 shadow-sm space-y-3">
+                                                                        <h4 className="font-bold text-violet-800 dark:text-violet-200 uppercase tracking-wider text-[10px] flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                                                                            <Sparkles className="h-3.5 w-3.5 text-violet-500 animate-pulse" />
+                                                                            AI Content Brief & Intent
+                                                                        </h4>
+                                                                        <div className="space-y-2 text-[11px]">
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Search Intent:</span>
+                                                                                <Badge className="bg-violet-100 text-violet-700 hover:bg-violet-100 dark:bg-violet-950/30 dark:text-violet-400 capitalize text-[9px] px-1.5 py-0.5 border-0">
+                                                                                    {blog.contentBrief.intent || "informational"}
+                                                                                </Badge>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Primary Keyword:</span>
+                                                                                <span className="font-medium text-foreground italic">"{blog.contentBrief.primaryKeyword}"</span>
+                                                                            </div>
+                                                                            <div className="py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold block mb-1">Secondary Keywords:</span>
+                                                                                <div className="flex flex-wrap gap-1">
+                                                                                    {blog.contentBrief.secondaryKeywords?.map((sk, i) => (
+                                                                                        <Badge key={i} variant="outline" className="text-[9px] px-1 py-0 border-border/60">
+                                                                                            {sk}
+                                                                                        </Badge>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                            {blog.contentBrief.competitorHeadings && blog.contentBrief.competitorHeadings.length > 0 && (
+                                                                                <div className="py-1">
+                                                                                    <span className="text-slate-500 font-semibold block mb-1">Competitor Headings:</span>
+                                                                                    <ul className="list-disc pl-3.5 space-y-0.5 max-h-24 overflow-y-auto">
+                                                                                        {blog.contentBrief.competitorHeadings.map((ch, i) => (
+                                                                                            <li key={i} className="text-[10px] text-muted-foreground">{ch}</li>
+                                                                                        ))}
+                                                                                    </ul>
+                                                                                </div>
+                                                                            )}
+                                                                            {blog.contentBrief.paaQuestions && blog.contentBrief.paaQuestions.length > 0 && (
+                                                                                <div className="py-1 border-t border-border/20 pt-2">
+                                                                                    <span className="text-slate-500 font-semibold block mb-1">PAA Questions:</span>
+                                                                                    <ul className="list-decimal pl-3.5 space-y-0.5 max-h-24 overflow-y-auto">
+                                                                                        {blog.contentBrief.paaQuestions.map((q, i) => (
+                                                                                            <li key={i} className="text-[10px] text-muted-foreground">{q}</li>
+                                                                                        ))}
+                                                                                    </ul>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* 8. SEO QA Validation Report */}
+                                                                {blog.aiGenerated && blog.qaReport && (
+                                                                    <div className="bg-background p-4 rounded-lg border border-violet-100 dark:border-violet-900/60 shadow-sm space-y-3">
+                                                                        <h4 className="font-bold text-violet-800 dark:text-violet-200 uppercase tracking-wider text-[10px] flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                                                                            <CheckCircle2 className="h-3.5 w-3.5 text-violet-500" />
+                                                                            SEO QA Validation Report
+                                                                        </h4>
+                                                                        <div className="space-y-2 text-[11px]">
+                                                                            <div className="flex justify-between py-1 border-b border-border/20 items-center">
+                                                                                <span className="text-slate-500 font-semibold">Validation Status:</span>
+                                                                                <Badge className={cn(
+                                                                                    "text-[9px] font-bold uppercase border-0 px-2 py-0.5",
+                                                                                    blog.qaReport.status === "passed" ? "bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400" :
+                                                                                    blog.qaReport.status === "warned" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/20 dark:text-yellow-400" :
+                                                                                    "bg-red-100 text-red-700 dark:bg-red-950/20 dark:text-red-400"
+                                                                                )}>
+                                                                                    {blog.qaReport.status}
+                                                                                </Badge>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Word Count:</span>
+                                                                                <span className={cn(
+                                                                                    "font-medium",
+                                                                                    blog.qaReport.wordCount >= 3000 ? "text-green-600 dark:text-green-400 font-bold" : "text-destructive font-bold"
+                                                                                )}>
+                                                                                    {blog.qaReport.wordCount.toLocaleString()} words {blog.qaReport.wordCount >= 3000 ? "✓" : "✗"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Internal Links Count:</span>
+                                                                                <span className="font-medium text-foreground">{blog.qaReport.internalLinkCount} links</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Keyword in Body:</span>
+                                                                                <span className={cn(
+                                                                                    "font-medium",
+                                                                                    blog.qaReport.primaryKeywordPresence ? "text-green-600 dark:text-green-400 font-bold" : "text-destructive font-bold"
+                                                                                )}>
+                                                                                    {blog.qaReport.primaryKeywordPresence ? "Present ✓" : "Missing ✗"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Meta Title Length:</span>
+                                                                                <span className={cn(
+                                                                                    "font-medium",
+                                                                                    (blog.qaReport.metaTitleLength >= 50 && blog.qaReport.metaTitleLength <= 60) ? "text-green-600 dark:text-green-400 font-bold" : "text-yellow-600 dark:text-yellow-400 font-semibold"
+                                                                                )}>
+                                                                                    {blog.qaReport.metaTitleLength} chars {(blog.qaReport.metaTitleLength >= 50 && blog.qaReport.metaTitleLength <= 60) ? "(Optimal)" : "(Suboptimal)"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex justify-between py-1 border-b border-border/20">
+                                                                                <span className="text-slate-500 font-semibold">Meta Desc Length:</span>
+                                                                                <span className={cn(
+                                                                                    "font-medium",
+                                                                                    (blog.qaReport.metaDescriptionLength >= 140 && blog.qaReport.metaDescriptionLength <= 160) ? "text-green-600 dark:text-green-400 font-bold" : "text-yellow-600 dark:text-yellow-400 font-semibold"
+                                                                                )}>
+                                                                                    {blog.qaReport.metaDescriptionLength} chars {(blog.qaReport.metaDescriptionLength >= 140 && blog.qaReport.metaDescriptionLength <= 160) ? "(Optimal)" : "(Suboptimal)"}
+                                                                                </span>
+                                                                            </div>
+                                                                            {blog.scheduledFor && (
+                                                                                <div className="flex justify-between py-1 items-center bg-violet-50/50 dark:bg-violet-950/10 p-1.5 rounded mt-2">
+                                                                                    <span className="text-violet-700 dark:text-violet-300 font-semibold">Publication Queue:</span>
+                                                                                    <span className="font-mono text-[9px] text-violet-600 dark:text-violet-400 font-bold">
+                                                                                        {new Date(blog.scheduledFor).toLocaleString()}
+                                                                                    </span>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* 9. Refresh Workflow Placeholders */}
+                                                                {blog.aiGenerated && (
+                                                                    <div className="bg-background p-4 rounded-lg border border-border/60 shadow-sm space-y-3 flex flex-col justify-between">
+                                                                        <div>
+                                                                            <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[10px] flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                                                                                <Wrench className="h-3.5 w-3.5 text-indigo-500" />
+                                                                                Refresh Workflow Tools
+                                                                            </h4>
+                                                                            <p className="text-[10px] text-muted-foreground mt-2 leading-relaxed">
+                                                                                Maintain topical freshness and organic rankings by regenerating sections, auditing internal links or executing self-repair passes directly.
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="space-y-2 pt-4 border-t">
+                                                                            <Button variant="outline" size="sm" className="w-full text-[10px] h-8 justify-start gap-2 border-dashed" disabled>
+                                                                                <RefreshCw className="h-3.5 w-3.5" />
+                                                                                Refresh Article Outline (Future)
+                                                                            </Button>
+                                                                            <Button variant="outline" size="sm" className="w-full text-[10px] h-8 justify-start gap-2 border-dashed" disabled>
+                                                                                <Sparkles className="h-3.5 w-3.5" />
+                                                                                Regenerate Selected Section (Future)
+                                                                            </Button>
+                                                                            <Button variant="outline" size="sm" className="w-full text-[10px] h-8 justify-start gap-2 border-dashed" disabled>
+                                                                                <Link2 className="h-3.5 w-3.5" />
+                                                                                Re-run Internal Linker (Future)
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
 
                                                             </div>
 

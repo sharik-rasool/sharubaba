@@ -21,12 +21,40 @@ export default async function DiagnosticsPage() {
         canonicalUrl: blog.canonicalUrl || "",
         ogImage: blog.ogImage || "",
         coverImage: blog.coverImage || "",
-        tags: blog.tags || []
+        tags: blog.tags || [],
+        
+        // SEO Automation fields
+        aiGenerated: !!blog.aiGenerated,
+        primaryKeyword: blog.primaryKeyword || "",
+        secondaryKeywords: blog.secondaryKeywords || [],
+        anchors: blog.anchors || [],
+        scheduledFor: blog.scheduledFor ? new Date(blog.scheduledFor).toISOString() : undefined,
+        contentBrief: blog.contentBrief ? {
+            intent: blog.contentBrief.intent || "",
+            primaryKeyword: blog.contentBrief.primaryKeyword || "",
+            secondaryKeywords: blog.contentBrief.secondaryKeywords || [],
+            competitorHeadings: blog.contentBrief.competitorHeadings || [],
+            paaQuestions: blog.contentBrief.paaQuestions || [],
+            entities: blog.contentBrief.entities || []
+        } : undefined,
+        qaReport: blog.qaReport ? {
+            wordCount: blog.qaReport.wordCount || 0,
+            headingCounts: blog.qaReport.headingCounts instanceof Map 
+                ? Object.fromEntries(blog.qaReport.headingCounts) 
+                : (blog.qaReport.headingCounts || {}),
+            internalLinkCount: blog.qaReport.internalLinkCount || 0,
+            primaryKeywordPresence: !!blog.qaReport.primaryKeywordPresence,
+            metaTitleLength: blog.qaReport.metaTitleLength || 0,
+            metaDescriptionLength: blog.qaReport.metaDescriptionLength || 0,
+            status: blog.qaReport.status || "failed"
+        } : undefined
     }));
+
+    const defaultSheetUrl = process.env.GOOGLE_KEYWORDS_SHEET_URL || "";
 
     return (
         <div className="container mx-auto py-6 max-w-7xl">
-            <DiagnosticsTable initialBlogs={blogs} />
+            <DiagnosticsTable initialBlogs={blogs as unknown as Parameters<typeof DiagnosticsTable>[0]["initialBlogs"]} defaultSheetUrl={defaultSheetUrl} />
         </div>
     );
 }

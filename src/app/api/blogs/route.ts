@@ -8,7 +8,19 @@ import { scanContentHealth } from "@/lib/content-audit";
 export async function GET() {
     try {
         await connectDB();
-        const blogs = await Blog.find({ status: "published" })
+        const now = new Date();
+        const blogs = await Blog.find({
+            $or: [
+                {
+                    status: "published",
+                    $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+                },
+                {
+                    status: "draft",
+                    scheduledFor: { $lte: now }
+                }
+            ]
+        })
             .sort({ createdAt: -1 })
             .lean();
         return NextResponse.json(blogs);
