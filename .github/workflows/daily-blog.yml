@@ -1,8 +1,6 @@
 name: Daily Blog Generator
 
 on:
-  push:
-    branches: [ main ]
   schedule:
     # Runs daily at 1:00 AM UTC (6:30 AM IST)
     - cron: '30 1 * * *'
@@ -13,9 +11,6 @@ on:
         description: 'Number of blogs to write'
         required: false
         default: '1'
-
-permissions:
-  contents: write
 
 jobs:
   generate:
@@ -34,24 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Debug Secret Presence
-        run: |
-          echo "MONGODB_URI is defined: ${{ secrets.MONGODB_URI != '' }}"
-          echo "GROQ_API_KEY is defined: ${{ secrets.GROQ_API_KEY != '' }}"
-          echo "GOOGLE_KEYWORDS_SHEET_URL is defined: ${{ secrets.GOOGLE_KEYWORDS_SHEET_URL != '' }}"
-
       - name: Run Blog Automation
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GOOGLE_KEYWORDS_SHEET_URL: ${{ secrets.GOOGLE_KEYWORDS_SHEET_URL }}
         run: |
-          npx tsx scripts/run-blog-automation.ts --limit 1 --dry-run > scripts/actions-error.log 2>&1 || true
-
-      - name: Commit and Push Logs
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add scripts/actions-error.log
-          git commit -m "debug: save actions execution logs [skip ci]" || exit 0
-          git push origin main
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            npx tsx scripts/run-blog-automation.ts --limit ${{ github.event.inputs.limit }}
+          else
+            npx tsx scripts/run-blog-automation.ts --limit 1
+          fi
