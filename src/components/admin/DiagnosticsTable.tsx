@@ -1310,6 +1310,71 @@ export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }:
 
                                                             </div>
 
+                                                            {/* Outgoing Links Detailed Map */}
+                                                            <div className="mt-6 border-t border-border/40 pt-6">
+                                                                <div className="flex items-center justify-between mb-3">
+                                                                    <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                                                                        <Link2 className="h-3.5 w-3.5 text-blue-500" />
+                                                                        Detected Outgoing Links Map ({(audit.detectedLinks || []).length} links)
+                                                                    </h4>
+                                                                </div>
+                                                                {(!audit.detectedLinks || audit.detectedLinks.length === 0) ? (
+                                                                    <p className="text-muted-foreground text-xs italic">No outgoing links found in this post.</p>
+                                                                ) : (
+                                                                    <div className="border border-border/60 rounded-lg overflow-hidden bg-background">
+                                                                        <div className="overflow-x-auto max-h-[300px]">
+                                                                            <table className="w-full text-left text-xs border-collapse">
+                                                                                <thead>
+                                                                                    <tr className="bg-muted/40 border-b border-border/60 text-muted-foreground font-semibold sticky top-0 bg-muted/95 backdrop-blur-sm">
+                                                                                        <th className="px-3 py-2 w-[180px]">Anchor Text</th>
+                                                                                        <th className="px-3 py-2 w-[100px]">Type</th>
+                                                                                        <th className="px-3 py-2 w-[280px]">Target Destination</th>
+                                                                                        <th className="px-3 py-2">Placement Context</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody className="divide-y divide-border/40 font-normal">
+                                                                                    {audit.detectedLinks.map((link, lIdx) => (
+                                                                                        <tr key={lIdx} className="hover:bg-muted/20">
+                                                                                            <td className="px-3 py-2 font-medium truncate max-w-[180px] text-foreground align-top" title={link.text}>
+                                                                                                {link.text}
+                                                                                            </td>
+                                                                                            <td className="px-3 py-2 align-top">
+                                                                                                {link.isPlaceholder ? (
+                                                                                                    <Badge className="bg-red-100 text-red-700 dark:bg-red-950/20 dark:text-red-400 border-0 text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
+                                                                                                        broken
+                                                                                                    </Badge>
+                                                                                                ) : link.isInternal ? (
+                                                                                                    <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-950/20 dark:text-blue-400 border-0 text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
+                                                                                                        internal
+                                                                                                    </Badge>
+                                                                                                ) : (
+                                                                                                    <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-950/20 dark:text-orange-400 border-0 text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
+                                                                                                        external
+                                                                                                    </Badge>
+                                                                                                )}
+                                                                                            </td>
+                                                                                            <td className="px-3 py-2 font-mono text-[10px] truncate max-w-[280px] align-top" title={link.href}>
+                                                                                                {link.isPlaceholder ? (
+                                                                                                    <span className="text-destructive font-semibold">{link.href || "(empty)"}</span>
+                                                                                                ) : (
+                                                                                                    <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                                                                                                        {link.href}
+                                                                                                        <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                                                                                                    </a>
+                                                                                                )}
+                                                                                            </td>
+                                                                                            <td className="px-3 py-2 text-muted-foreground text-[11px] whitespace-normal break-all align-top leading-relaxed">
+                                                                                                {link.context}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    ))}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
                                                             {audit.messages.length > 0 && (
                                                                 <div className="mt-4 pt-3 border-t border-border/40">
                                                                     <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Detailed Action Items</div>

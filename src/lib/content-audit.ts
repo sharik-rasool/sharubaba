@@ -27,7 +27,7 @@ export interface ContentHealth {
     status: "safe" | "warning" | "critical";
     messages: string[];
 
-    // Phase 2 Additions
+    detectedLinks: DetectedLink[];
     malformedHeadingsCount: number;
     malformedHeadingsList: string[];
     missingCanonical: boolean;
@@ -49,6 +49,14 @@ export interface ContentHealth {
     renderedContentSize: number;
     imagePayloadEstimate: number;
     externalScriptsCount: number;
+}
+
+export interface DetectedLink {
+    text: string;
+    href: string;
+    isInternal: boolean;
+    isPlaceholder: boolean;
+    context: string;
 }
 
 export function scanContentHealth(
@@ -181,10 +189,13 @@ export function scanContentHealth(
     const duplicateAlts = allAlts.filter((alt, idx) => allAlts.indexOf(alt) !== idx);
 
     // 3. Link Analysis
-    const linkRegex = /<a\b([^>]*?)>/gi;
+    const linkRegex = /<a\b([^>]*?)>([\s\S]*?)<\/a>/gi;
     let linkMatch;
+    const detectedLinks: DetectedLink[] = [];
     while ((linkMatch = linkRegex.exec(content)) !== null) {
         const attrs = linkMatch[1] || "";
+        const innerContent = linkMatch[2] || "";
+        const anchorText = innerContent.replace(/<[^>]*>?/gm, "").trim() || "(empty)";
         const hrefMatch = attrs.match(/href\s*=\s*["']([^"']*)["']/i);
         const href = hrefMatch ? hrefMatch[1].trim() : "";
 
@@ -194,17 +205,35 @@ export function scanContentHealth(
             href.toLowerCase().includes("example.com") || 
             href.toLowerCase().includes("todo.com");
 
+        const isInternal = !isPlaceholder && (/^\/(?!\/)/.test(href) || 
+            href.includes("sharikrasool.com") || 
+            href.includes("localhost"));
+
         if (isPlaceholder) {
             brokenLinksCount++;
             brokenLinksList.push(href || "(empty)");
-        } else {
-            const isInternal = /^\/(?!\/)/.test(href) || 
-                href.includes("sharikrasool.com") || 
-                href.includes("localhost");
-            if (isInternal) {
-                internalLinksCount++;
-            }
+        } else if (isInternal) {
+            internalLinksCount++;
         }
+
+        // Build context snippet (placement)
+        const before = content.substring(Math.max(0, linkMatch.index - 60), linkMatch.index)
+            .replace(/<[^>]*>?/gm, " ")
+            .replace(/\s+/g, " ")
+            .slice(-40);
+        const after = content.substring(linkMatch.index + linkMatch[0].length, Math.min(content.length, linkMatch.index + linkMatch[0].length + 60))
+            .replace(/<[^>]*>?/gm, " ")
+            .replace(/\s+/g, " ")
+            .slice(0, 40);
+        const context = `...${before.trim()} [${anchorText}] ${after.trim()}...`;
+
+        detectedLinks.push({
+            text: anchorText,
+            href,
+            isInternal,
+            isPlaceholder,
+            context
+        });
     }
 
     // 4. Heading Hierarchy Check
@@ -512,6 +541,7 @@ export function scanContentHealth(
         messages,
 
         // Phase 2
+        detectedLinks,
         malformedHeadingsCount,
         malformedHeadingsList,
         missingCanonical,
