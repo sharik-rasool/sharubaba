@@ -5,13 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+export const revalidate = 0;
+
 export default async function AdminDashboard() {
     const blogs = await getAllBlogs();
     const linkStats = await getBlogLinkStats();
     
-    const published = blogs.filter((b) => (b.status === "published" || (b.scheduledFor && new Date(b.scheduledFor) <= new Date())) && !(b.scheduledFor && new Date(b.scheduledFor) > new Date()));
-    const scheduled = blogs.filter((b) => b.scheduledFor && new Date(b.scheduledFor) > new Date());
-    const drafts = blogs.filter((b) => b.status === "draft" && !(b.scheduledFor && new Date(b.scheduledFor) > new Date()));
+    const now = new Date();
+    const published = blogs.filter((b) => b.status === "published" || !!(b.scheduledFor && new Date(b.scheduledFor) <= now));
+    const scheduled = blogs.filter((b) => b.status !== "published" && !!(b.scheduledFor && new Date(b.scheduledFor) > now));
+    const drafts = blogs.filter((b) => b.status === "draft" && !b.scheduledFor);
     const recent = blogs.slice(0, 5);
 
     const totalInternal = linkStats.reduce((s, b) => s + b.internal, 0);
@@ -136,8 +139,9 @@ export default async function AdminDashboard() {
                                         </div>
                                         <div className="flex items-center gap-3 shrink-0">
                                             {(() => {
-                                                const isScheduled = post.scheduledFor && new Date(post.scheduledFor) > new Date();
-                                                const isPublished = post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date());
+                                                const nowObj = new Date();
+                                                const isScheduled = post.status !== "published" && !!(post.scheduledFor && new Date(post.scheduledFor) > nowObj);
+                                                const isPublished = post.status === "published" || !!(post.scheduledFor && new Date(post.scheduledFor) <= nowObj);
                                                 return (
                                                     <Badge
                                                         variant={isScheduled ? "outline" : isPublished ? "default" : "secondary"}

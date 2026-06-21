@@ -4,6 +4,8 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BlogList from "./BlogList";
 
+export const revalidate = 0;
+
 export default async function AdminBlogsPage() {
     const blogs = await getAllBlogs();
     const linkStats = await getBlogLinkStats();

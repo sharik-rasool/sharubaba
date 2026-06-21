@@ -34,14 +34,18 @@ export default function BlogList({ blogs, linkStats }: BlogListProps) {
             const matchesSearch = post.title.toLowerCase().includes(search.toLowerCase()) || 
                                 post.slug.toLowerCase().includes(search.toLowerCase());
             
-            const isScheduled = !!(post.scheduledFor && new Date(post.scheduledFor) > new Date());
+            const nowObj = new Date();
+            const isScheduled = post.status !== "published" && !!(post.scheduledFor && new Date(post.scheduledFor) > nowObj);
+            const isPublished = post.status === "published" || !!(post.scheduledFor && new Date(post.scheduledFor) <= nowObj);
+            const isDraft = post.status === "draft" && !post.scheduledFor;
+            
             let matchesStatus = true;
             if (statusFilter === "published") {
-                matchesStatus = (post.status === "published" || !!(post.scheduledFor && new Date(post.scheduledFor) <= new Date())) && !isScheduled;
+                matchesStatus = isPublished;
             } else if (statusFilter === "scheduled") {
                 matchesStatus = isScheduled;
             } else if (statusFilter === "draft") {
-                matchesStatus = post.status === "draft" && !isScheduled;
+                matchesStatus = isDraft;
             }
             
             return matchesSearch && matchesStatus;
@@ -113,6 +117,9 @@ export default function BlogList({ blogs, linkStats }: BlogListProps) {
                             ) : (
                                 filteredBlogs.map((post) => {
                                     const stats = linkMap.get(post._id) ?? { internal: 0, external: 0 };
+                                    const nowObj = new Date();
+                                    const isScheduled = post.status !== "published" && !!(post.scheduledFor && new Date(post.scheduledFor) > nowObj);
+                                    const isPublished = post.status === "published" || !!(post.scheduledFor && new Date(post.scheduledFor) <= nowObj);
                                     return (
                                         <tr key={post._id} className="hover:bg-muted/30 transition-colors">
                                             <td className="px-4 py-3">
@@ -134,18 +141,12 @@ export default function BlogList({ blogs, linkStats }: BlogListProps) {
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                {(() => {
-                                                    const isScheduled = post.scheduledFor && new Date(post.scheduledFor) > new Date();
-                                                    const isPublished = post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date());
-                                                    return (
-                                                        <Badge
-                                                            variant={isScheduled ? "outline" : isPublished ? "default" : "secondary"}
-                                                            className={`text-[10px] uppercase px-1.5 py-0 ${isScheduled ? "text-purple-600 border-purple-600 bg-purple-50 dark:text-purple-400 dark:border-purple-400 dark:bg-purple-950/20" : ""}`}
-                                                        >
-                                                            {isScheduled ? "scheduled" : isPublished ? "published" : "draft"}
-                                                        </Badge>
-                                                    );
-                                                })()}
+                                                <Badge
+                                                    variant={isScheduled ? "outline" : isPublished ? "default" : "secondary"}
+                                                    className={`text-[10px] uppercase px-1.5 py-0 ${isScheduled ? "text-purple-600 border-purple-600 bg-purple-50 dark:text-purple-400 dark:border-purple-400 dark:bg-purple-950/20" : ""}`}
+                                                >
+                                                    {isScheduled ? "scheduled" : isPublished ? "published" : "draft"}
+                                                </Badge>
                                             </td>
                                             <td className="px-4 py-3 hidden sm:table-cell text-muted-foreground text-xs">
                                                 {new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -158,7 +159,7 @@ export default function BlogList({ blogs, linkStats }: BlogListProps) {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center justify-end gap-1">
-                                                    {(post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date())) && (
+                                                    {isPublished && (
                                                         <Button variant="ghost" size="icon" asChild className="h-8 w-8" title="View Live">
                                                             <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">
                                                                 <ExternalLink className="h-4 w-4 text-muted-foreground" />
