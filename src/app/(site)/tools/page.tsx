@@ -4,12 +4,12 @@ import { toolsData } from "@/lib/tools-data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Free Online Tools & Generators for Developers, Writers & Creators",
+    title: "Free Online Tools & Generators",
     description:
         "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
     alternates: { canonical: "https://www.sharikrasool.com/tools" },
     openGraph: {
-        title: "Free Online Tools & Generators for Developers, Writers & Creators",
+        title: "Free Online Tools & Generators",
         description:
             "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
         url: "https://www.sharikrasool.com/tools",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Free Online Tools & Generators for Developers, Writers & Creators",
+        title: "Free Online Tools & Generators",
         description:
             "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
     },

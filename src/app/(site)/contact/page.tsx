@@ -23,12 +23,12 @@ const contactSchema = {
 };
 
 export const metadata: Metadata = {
-    title: "Contact Sharik Rasool | Free SEO & Link Building Consultation",
+    title: "Contact | Free SEO Consultation",
     description:
         "Get in touch with Sharik Rasool for SEO strategy and link building services. Free initial consultation. Based in Srinagar, J&K, serving clients worldwide.",
     alternates: { canonical: "https://www.sharikrasool.com/contact" },
     openGraph: {
-        title: "Contact Sharik Rasool | Free SEO & Link Building Consultation",
+        title: "Contact | Free SEO Consultation",
         description:
             "Get in touch with Sharik Rasool for SEO strategy and link building services. Free initial consultation. Based in Srinagar, J&K, serving clients worldwide.",
         url: "https://www.sharikrasool.com/contact",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary",
-        title: "Contact Sharik Rasool | Free SEO & Link Building Consultation",
+        title: "Contact | Free SEO Consultation",
         description:
             "Get in touch with Sharik Rasool for SEO strategy and link building services. Free initial consultation. Based in Srinagar, J&K, serving clients worldwide.",
     },

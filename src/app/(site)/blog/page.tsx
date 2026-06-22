@@ -16,12 +16,12 @@ import {
 } from "@/components/ui/pagination";
 
 export const metadata: Metadata = {
-    title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
+    title: "SEO & Link Building Blog",
     description:
         "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
     alternates: { canonical: "https://www.sharikrasool.com/blog" },
     openGraph: {
-        title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
+        title: "SEO & Link Building Blog",
         description:
             "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
         url: "https://www.sharikrasool.com/blog",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "SEO Blog | Actionable Link Building & SEO Strategies by Sharik",
+        title: "SEO & Link Building Blog",
         description:
             "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
     },

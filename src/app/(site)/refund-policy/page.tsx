@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Refund and Cancellation Policy | Sharik Rasool SEO Consultant",
+    title: "Refund & Cancellation Policy",
     description:
         "Read the official refund and cancellation policy for Sharik Rasool's SEO and link building services. Learn about contract termination and refund eligibility.",
     alternates: { canonical: "https://www.sharikrasool.com/refund-policy" },
