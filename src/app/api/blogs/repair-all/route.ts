@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { sanitizeContent, convertImageHeadings, generateHeadingIds } from "@/lib/blog-cleaner";
 
 export async function POST(_request: Request) {
@@ -30,11 +30,13 @@ export async function POST(_request: Request) {
                 
                 // Revalidate individual post page cache
                 revalidatePath(`/blog/${blog.slug}`);
+                revalidateTag(`blog-slug-${blog.slug}`);
             }
         }
 
         if (repairedCount > 0) {
             revalidatePath("/blog");
+            revalidateTag("blogs");
         }
 
         return NextResponse.json({ 

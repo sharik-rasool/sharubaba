@@ -1,10 +1,32 @@
 import React from "react";
+import { unstable_cache } from "next/cache";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const cache = <T extends Function>(fn: T): T => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (React as any).cache ? (React as any).cache(fn) : fn;
 };
+
+// A safe unstable_cache wrapper that falls back to the original function if executed outside Next.js runtime (e.g., in scripts).
+export function safeCache<T extends (...args: any[]) => Promise<any>>(
+    fn: T,
+    keyParts: string[],
+    options?: { revalidate?: number; tags?: string[] }
+): T {
+    const cachedFn = unstable_cache(fn, keyParts, options);
+    const wrapper = (async (...args: any[]) => {
+        try {
+            return await cachedFn(...args);
+        } catch (e: any) {
+            if (e && (e.message?.includes("incrementalCache") || e.message?.includes("Invariant"))) {
+                return await fn(...args);
+            }
+            throw e;
+        }
+    }) as unknown as T;
+    return wrapper;
+}
+
 import connectDB from "@/lib/db";
 import Blog, { IBlog } from "@/models/Blog";
 
@@ -130,30 +152,34 @@ async function db() {
     if (!conn) throw new Error("No database connection");
 }
 
-export const getPublishedBlogs = cache(async (): Promise<BlogDoc[]> => {
-    try {
-        await db();
-        const now = new Date();
-        const blogs = await Blog.find({ 
-            $or: [
-                {
-                    status: "published",
-                    $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
-                },
-                {
-                    status: "draft",
-                    scheduledFor: { $lte: now }
-                }
-            ]
-        })
-            .select("title slug excerpt coverImage tags readingTime createdAt status scheduledFor updatedAt")
-            .sort({ createdAt: -1 })
-            .lean<IBlog[]>();
-        return blogs.map((b) => serialize(b as unknown as IBlog));
-    } catch {
-        return [];
-    }
-});
+export const getPublishedBlogs = safeCache(
+    async (): Promise<BlogDoc[]> => {
+        try {
+            await db();
+            const now = new Date();
+            const blogs = await Blog.find({ 
+                $or: [
+                    {
+                        status: "published",
+                        $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+                    },
+                    {
+                        status: "draft",
+                        scheduledFor: { $lte: now }
+                    }
+                ]
+            })
+                .select("title slug excerpt coverImage tags readingTime createdAt status scheduledFor updatedAt")
+                .sort({ createdAt: -1 })
+                .lean<IBlog[]>();
+            return blogs.map((b) => serialize(b as unknown as IBlog));
+        } catch {
+            return [];
+        }
+    },
+    ["published-blogs"],
+    { revalidate: 3600, tags: ["blogs"] }
+);
 
 export const getAllBlogs = cache(async (): Promise<BlogDoc[]> => {
     try {
@@ -205,10 +231,17 @@ export async function getBlogLinkStats(): Promise<{ id: string; internal: number
 
 export const getBlogBySlug = cache(async (slug: string): Promise<BlogDoc | null> => {
     try {
-        await db();
-        const blog = await Blog.findOne({ slug }).select("-embeddings -contentBrief -qaReport").lean<IBlog>();
-        if (!blog) return null;
-        return serialize(blog as unknown as IBlog);
+        const fetchBlog = safeCache(
+            async (s: string) => {
+                await db();
+                const blog = await Blog.findOne({ slug: s }).select("-embeddings -contentBrief -qaReport").lean<IBlog>();
+                if (!blog) return null;
+                return serialize(blog as unknown as IBlog);
+            },
+            [`blog-slug-${slug}`],
+            { revalidate: 3600, tags: [`blog-slug-${slug}`, "blogs"] }
+        );
+        return await fetchBlog(slug);
     } catch {
         return null;
     }

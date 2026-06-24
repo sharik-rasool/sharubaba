@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { sanitizeContent, convertImageHeadings, generateHeadingIds } from "@/lib/blog-cleaner";
 
 export async function POST(
@@ -37,6 +37,9 @@ export async function POST(
         // Revalidate NextJS routes
         revalidatePath("/blog");
         revalidatePath(`/blog/${blog.slug}`);
+        
+        revalidateTag("blogs");
+        revalidateTag(`blog-slug-${blog.slug}`);
 
         return NextResponse.json({ success: true, blog });
     } catch (error) {

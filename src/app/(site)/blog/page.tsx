@@ -17,22 +17,22 @@ import {
 } from "@/components/ui/pagination";
 
 export const metadata: Metadata = {
-    title: "SEO & Link Building Blog",
+    title: "Blog & Insights",
     description:
-        "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
+        "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
     alternates: { canonical: "https://www.sharikrasool.com/blog" },
     openGraph: {
-        title: "SEO & Link Building Blog",
+        title: "Blog & Insights",
         description:
-            "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
+            "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
         url: "https://www.sharikrasool.com/blog",
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "SEO & Link Building Blog",
+        title: "Blog & Insights",
         description:
-            "Explore actionable SEO and link building strategies. Get expert tips on growing organic traffic, boosting domain authority, and scaling SaaS search rankings.",
+            "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
     },
 };
 
@@ -61,10 +61,10 @@ export default async function BlogPage({
                 <FadeIn>
                     <div className="text-center mb-16 pt-8">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">
-                            The SEO <span className="text-primary italic">Lab</span>
+                            Blog & <span className="text-primary italic">Insights</span>
                         </h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
-                            Practical, evidence-based SEO and link building strategies designed for modern SaaS companies and digital growth.
+                            Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.
                         </p>
                     </div>
                 </FadeIn>
@@ -191,29 +191,27 @@ export default async function BlogPage({
                         {/* Educational / Explanatory Section to boost Text-to-HTML ratio and build SEO topical authority */}
                         <div className="mt-20 md:mt-28 border-t border-border/50 pt-12 md:pt-16 max-w-4xl mx-auto">
                             <div className="prose dark:prose-invert max-w-none mb-12 space-y-6">
-                                <h2 className="text-2xl md:text-3xl font-bold">What is The SEO Lab Blog?</h2>
+                                <h2 className="text-2xl md:text-3xl font-bold">What is this Blog About?</h2>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    The SEO Lab is an educational resource dedicated to demystifying modern search engine optimization, 
-                                    organic traffic growth, and editorial-focused link building. We focus on evidence-based, practical strategies 
-                                    that help SaaS brands, developers, and digital publishers scale their rankings on Google safely and sustainably.
+                                    This blog is a dedicated resource for sharing practical insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings. We focus on actionable advice that helps developers, creators, marketers, and digital brands navigate online business growth and scale their web presence.
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                                     <div className="space-y-2">
-                                        <h3 className="text-base font-semibold text-foreground">SaaS Search Strategies</h3>
+                                        <h3 className="text-base font-semibold text-foreground">SEO & Link Building</h3>
                                         <p className="text-xs text-muted-foreground">
-                                            Learn how to map out search intent, write high-intent product comparison guides, and build landing page models that convert organic traffic.
+                                            Practical guides on modern search engine optimization, keyword strategy, technical auditing, and securing high-quality editorial backlinks.
                                         </p>
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-base font-semibold text-foreground">Outreach & Link Building</h3>
+                                        <h3 className="text-base font-semibold text-foreground">Freelancing & Business</h3>
                                         <p className="text-xs text-muted-foreground">
-                                            Discover how to craft high-conversion outreach emails, secure guest contributions on high-DA sites, and earn permanent editorial backlink placements.
+                                            Actionable advice on starting a freelance career, finding high-paying clients, marketing yourself, and scaling B2B/B2C business ventures.
                                         </p>
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-base font-semibold text-foreground">Technical SEO & Audits</h3>
+                                        <h3 className="text-base font-semibold text-foreground">Digital Trends & Ecommerce</h3>
                                         <p className="text-xs text-muted-foreground">
-                                            Step-by-step guides on technical indexing, optimizing Core Web Vitals, structuring JSON-LD schema markup, and fixing crawl errors.
+                                            Explore the latest ecommerce setups, digital marketing platforms, blogging systems, and emerging internet happenings.
                                         </p>
                                     </div>
                                 </div>
@@ -227,10 +225,10 @@ export default async function BlogPage({
                                         className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
                                     >
                                         <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
-                                            How frequently do you publish new SEO and growth guides?
+                                            How frequently do you publish new articles and guides?
                                         </AccordionTrigger>
                                         <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
-                                            We publish fresh, data-backed guides twice a week, covering the latest shifts in Google algorithms, technical web optimizations, and content marketing systems.
+                                            We publish fresh, data-backed articles regularly, covering the latest shifts in Google algorithms, freelancing workflows, digital marketing trends, and new web tools.
                                         </AccordionContent>
                                     </AccordionItem>
 
@@ -239,10 +237,10 @@ export default async function BlogPage({
                                         className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
                                     >
                                         <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
-                                            Can I pitch a guest post for publication on The SEO Lab?
+                                            Can I pitch a guest post for publication on this blog?
                                         </AccordionTrigger>
                                         <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
-                                            I accept high-quality guest contributions from fellow digital marketers, SaaS founders, and developers. Pitches must contain unique case studies, data, or technical walkthroughs that haven't been published elsewhere.
+                                            I accept high-quality guest contributions from digital marketers, freelance professionals, ecommerce owners, and developers. Pitches must contain unique case studies, data, or practical advice that hasn't been published elsewhere.
                                         </AccordionContent>
                                     </AccordionItem>
 
@@ -251,10 +249,10 @@ export default async function BlogPage({
                                         className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
                                     >
                                         <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
-                                            Who is the primary audience for these SEO tutorials?
+                                            Who is the primary audience for these resources?
                                         </AccordionTrigger>
                                         <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
-                                            These articles are written primarily for SaaS founders, product marketing managers, in-house content creators, freelance developers, and agency owners seeking structured roadmaps to grow organic traffic.
+                                            These articles are written primarily for freelance developers, SaaS founders, digital publishers, B2B/B2C marketers, ecommerce store owners, and anyone looking to stay updated with internet trends.
                                         </AccordionContent>
                                     </AccordionItem>
                                 </Accordion>

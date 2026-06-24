@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { scanContentHealth } from "@/lib/content-audit";
 
 export async function GET(
@@ -54,6 +54,9 @@ export async function PUT(
         revalidatePath("/blog");
         revalidatePath(`/blog/${blog.slug}`);
         
+        revalidateTag("blogs");
+        revalidateTag(`blog-slug-${blog.slug}`);
+        
         return NextResponse.json(blog);
     } catch (error: unknown) {
         if ((error as { code?: number }).code === 11000) {
@@ -80,6 +83,9 @@ export async function DELETE(
         
         revalidatePath("/blog");
         revalidatePath(`/blog/${blog.slug}`);
+        
+        revalidateTag("blogs");
+        revalidateTag(`blog-slug-${blog.slug}`);
         
         return NextResponse.json({ success: true });
     } catch {

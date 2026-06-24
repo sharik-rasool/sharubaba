@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Blog from "@/models/Blog";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { scanContentHealth } from "@/lib/content-audit";
 
 export async function GET() {
@@ -53,6 +53,7 @@ export async function POST(request: Request) {
         const blog = await Blog.create(data);
         
         revalidatePath("/blog");
+        revalidateTag("blogs");
         
         return NextResponse.json(blog, { status: 201 });
     } catch (error: unknown) {
