@@ -1,3 +1,8 @@
+import React from "react";
+
+// Fallback to no-op if cache is not available (e.g. when running scratch scripts outside Next.js RSC)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cache = (React as any).cache || (<T extends (...args: any[]) => any>(fn: T): T => fn);
 import connectDB from "@/lib/db";
 import Blog, { IBlog } from "@/models/Blog";
 
@@ -123,7 +128,7 @@ async function db() {
     if (!conn) throw new Error("No database connection");
 }
 
-export async function getPublishedBlogs(): Promise<BlogDoc[]> {
+export const getPublishedBlogs = cache(async (): Promise<BlogDoc[]> => {
     try {
         await db();
         const now = new Date();
@@ -139,24 +144,24 @@ export async function getPublishedBlogs(): Promise<BlogDoc[]> {
                 }
             ]
         })
-            .select("-content")
+            .select("title slug excerpt coverImage tags readingTime createdAt status scheduledFor updatedAt")
             .sort({ createdAt: -1 })
             .lean<IBlog[]>();
         return blogs.map((b) => serialize(b as unknown as IBlog));
     } catch {
         return [];
     }
-}
+});
 
-export async function getAllBlogs(): Promise<BlogDoc[]> {
+export const getAllBlogs = cache(async (): Promise<BlogDoc[]> => {
     try {
         await db();
-        const blogs = await Blog.find({}).select("-content").sort({ createdAt: -1 }).lean<IBlog[]>();
+        const blogs = await Blog.find({}).select("-content -embeddings").sort({ createdAt: -1 }).lean<IBlog[]>();
         return blogs.map((b) => serialize(b as unknown as IBlog));
     } catch {
         return [];
     }
-}
+});
 
 export async function getBlogLinkStats(): Promise<{ id: string; internal: number; external: number }[]> {
     try {
@@ -196,24 +201,24 @@ export async function getBlogLinkStats(): Promise<{ id: string; internal: number
     }
 }
 
-export async function getBlogBySlug(slug: string): Promise<BlogDoc | null> {
+export const getBlogBySlug = cache(async (slug: string): Promise<BlogDoc | null> => {
     try {
         await db();
-        const blog = await Blog.findOne({ slug }).lean<IBlog>();
+        const blog = await Blog.findOne({ slug }).select("-embeddings -contentBrief -qaReport").lean<IBlog>();
         if (!blog) return null;
         return serialize(blog as unknown as IBlog);
     } catch {
         return null;
     }
-}
+});
 
-export async function getBlogById(id: string): Promise<BlogDoc | null> {
+export const getBlogById = cache(async (id: string): Promise<BlogDoc | null> => {
     try {
         await db();
-        const blog = await Blog.findById(id).lean<IBlog>();
+        const blog = await Blog.findById(id).select("-embeddings").lean<IBlog>();
         if (!blog) return null;
         return serialize(blog as unknown as IBlog);
     } catch {
         return null;
     }
-}
+});

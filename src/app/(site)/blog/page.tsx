@@ -75,7 +75,7 @@ export default async function BlogPage({
                 ) : (
                     <>
                         <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            {posts.map((post) => (
+                            {posts.map((post, index) => (
                                 <StaggerItem key={post._id} className="h-full">
                                     <Link href={`/blog/${post.slug}`} className="block h-full group">
                                         <Card className="hover:shadow-xl transition-all duration-300 h-full flex flex-col border-border/50 group-hover:border-primary/20 overflow-hidden">
@@ -85,6 +85,7 @@ export default async function BlogPage({
                                                         src={post.coverImage}
                                                         alt={post.title}
                                                         fill
+                                                        priority={index === 0}
                                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                     />
