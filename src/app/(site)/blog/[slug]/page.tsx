@@ -290,6 +290,32 @@ export default async function BlogPostPage({ params }: Props) {
                         </div>
                     </div>
                 )}
+
+                {/* E-E-A-T Author Bio Card to boost visible text and search authority */}
+                <div className="mt-16 border-t border-border pt-12">
+                    <div className="p-6 md:p-8 rounded-2xl border border-border/60 bg-muted/30 shadow-sm flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+                        <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 overflow-hidden border border-primary/20">
+                            <User className="h-10 w-10 text-primary" />
+                        </div>
+                        <div className="space-y-3">
+                            <h3 className="text-lg md:text-xl font-bold text-foreground">Written by Sharik Rasool</h3>
+                            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                                Sharik Rasool is an experienced SaaS SEO Strategist and Editorial Link Builder with over 7 years of hands-on experience. 
+                                He helps tech brands, B2B startups, and digital creators build domain authority and unlock compound organic traffic growth. 
+                                Through personalized outreach and database audits, Sharik has helped scale search engine rankings and earn high-quality backlink profiles.
+                            </p>
+                            <div className="flex flex-wrap gap-4 pt-1 justify-center md:justify-start">
+                                <Link href="/about" className="text-xs font-bold text-primary hover:underline uppercase tracking-wider animate-pulse hover:animate-none">
+                                    About Me &rarr;
+                                </Link>
+                                <span className="text-muted-foreground/30">|</span>
+                                <Link href="/contact" className="text-xs font-bold text-primary hover:underline uppercase tracking-wider">
+                                    Get Free SEO Consultation &rarr;
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </article>
     );

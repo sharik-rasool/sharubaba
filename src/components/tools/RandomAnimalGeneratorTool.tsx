@@ -87,19 +87,46 @@ export function RandomAnimalGeneratorTool() {
                     </Button>
                 </div>
 
-                <div className="mt-12 prose-custom">
-                    <h2 className="text-2xl font-semibold mb-4">About This Tool</h2>
-                    <p className="text-muted-foreground mb-4">
-                        Our Random Animal Generator is a fun and educational tool that helps you discover amazing animals from around the world.
-                        Each generation provides you with the animal's name, an interesting fact, their natural habitat, and dietary classification.
+                <div className="prose-custom mt-12 border-t border-border/50 pt-8 max-w-2xl">
+                    <h2 className="text-2xl font-semibold mb-4">About the Random Animal Generator</h2>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                        Our Random Animal Generator is a fun, lightweight educational utility designed to help students, 
+                        writers, and nature lovers discover wildlife species from all corners of the globe. Each click 
+                        introduces a random animal accompanied by their habitat, dietary behavior, and an intriguing, less-known biological fact.
                     </p>
-                    <h3 className="text-xl font-semibold mb-3">Use Cases</h3>
-                    <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                        <li>Educational activities for children</li>
-                        <li>Writing prompts for creative stories</li>
-                        <li>Trivia games and quizzes</li>
-                        <li>Learning about wildlife and biodiversity</li>
+
+                    <h3 className="text-xl font-semibold mb-3">Ecosystems & Dietary Classifications</h3>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                        The generator catalogs animals living across diverse global biomes (from the freezing Antarctic shelves 
+                        to tropical ocean depths and hot African savannas) and categorizes their diet:
+                    </p>
+                    <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-8">
+                        <li><strong>Carnivores:</strong> Meat-eating species whose diets consist of other animals (e.g. Lions, Octopuses, and Dolphins).</li>
+                        <li><strong>Herbivores:</strong> Plant-eating species whose systems are adapted to digest vegetation (e.g. Elephants, Giraffes, and Koalas).</li>
+                        <li><strong>Omnivores:</strong> Species with versatile diets consisting of both plants and meats (e.g. Red Pandas).</li>
                     </ul>
+
+                    <h3 className="text-xl font-semibold mb-4">Frequently Asked Questions</h3>
+                    <div className="space-y-4 text-muted-foreground">
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">What types of species are in the database?</h4>
+                            <p className="text-sm leading-relaxed">
+                                The database contains mammals, birds, marine life, and unique amphibians (such as the Axolotl). We regularly update the pool to include both common animals and rare, fascinating creatures.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">How can educators use this tool?</h4>
+                            <p className="text-sm leading-relaxed">
+                                Teachers can use this tool for daily science warm-ups, prompting kids to write stories about the generated animal, or starting research assignments on the animal's natural habitat.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">Why is biological diversity important?</h4>
+                            <p className="text-sm leading-relaxed">
+                                Every species plays a crucial role in maintaining the balance of their respective ecosystem. Learning about unique adaptations (like the Axolotl's limb regeneration) fosters curiosity and environmental conservation awareness.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
 import { ObfuscatedContact } from "@/components/ObfuscatedContact";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 export function ContactPageContent() {
     const { toast } = useToast();
@@ -271,6 +272,82 @@ export function ContactPageContent() {
                                     )}
                                 </CardContent>
                             </Card>
+                        </FadeIn>
+                    </div>
+
+                    {/* FAQ Section */}
+                    <div className="mt-16 md:mt-24 border-t border-border/50 pt-12 md:pt-16 max-w-3xl mx-auto">
+                        <FadeIn>
+                            <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
+                                Consultation & Services FAQ
+                            </h2>
+                            <p className="text-muted-foreground text-center mb-8 md:mb-12 text-sm md:text-base">
+                                Answers to common questions about starting an SEO engagement, audits, and timelines.
+                            </p>
+                        </FadeIn>
+
+                        <FadeIn delay={0.15}>
+                            <Accordion type="single" collapsible className="w-full space-y-4">
+                                <AccordionItem 
+                                    value="contact-faq-1" 
+                                    className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                >
+                                    <AccordionTrigger className="text-left font-semibold text-sm md:text-base py-4 hover:no-underline">
+                                        What happens after I submit the contact form?
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-muted-foreground text-xs md:text-sm leading-relaxed pb-5 pt-1">
+                                        I will review your message, website URL, and current search visibility within 24 hours. I'll email you back to schedule a free 30-minute introductory Zoom call where we discuss your growth goals, target audience, and identify immediate SEO gaps.
+                                    </AccordionContent>
+                                </AccordionItem>
+
+                                <AccordionItem 
+                                    value="contact-faq-2" 
+                                    className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                >
+                                    <AccordionTrigger className="text-left font-semibold text-sm md:text-base py-4 hover:no-underline">
+                                        Is the initial consultation really free and no-obligation?
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-muted-foreground text-xs md:text-sm leading-relaxed pb-5 pt-1">
+                                        Yes, absolutely. The introductory session is entirely educational. We discuss your SaaS product, competitor landscape, and target keywords. My goal is to outline a high-level roadmap. If we decide not to work together, you keep the roadmap and advice free of charge.
+                                    </AccordionContent>
+                                </AccordionItem>
+
+                                <AccordionItem 
+                                    value="contact-faq-3" 
+                                    className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                >
+                                    <AccordionTrigger className="text-left font-semibold text-sm md:text-base py-4 hover:no-underline">
+                                        What information should I have ready for our call?
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-muted-foreground text-xs md:text-sm leading-relaxed pb-5 pt-1">
+                                        It is helpful to have your Google Analytics and Search Console access ready, a list of your top 3 to 5 direct competitors, your target product pages, and a clear idea of your marketing budget and current growth targets.
+                                    </AccordionContent>
+                                </AccordionItem>
+
+                                <AccordionItem 
+                                    value="contact-faq-4" 
+                                    className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                >
+                                    <AccordionTrigger className="text-left font-semibold text-sm md:text-base py-4 hover:no-underline">
+                                        Do you work with pre-revenue startups?
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-muted-foreground text-xs md:text-sm leading-relaxed pb-5 pt-1">
+                                        I work with startups at all stages. For pre-revenue or early-stage brands, we usually focus on high-impact foundation building—like structural technical SEO, setting up topic hubs, and key content briefs. This ensures that when you're ready to launch, Google is already indexing an optimized structure.
+                                    </AccordionContent>
+                                </AccordionItem>
+
+                                <AccordionItem 
+                                    value="contact-faq-5" 
+                                    className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                >
+                                    <AccordionTrigger className="text-left font-semibold text-sm md:text-base py-4 hover:no-underline">
+                                        What pricing models or contract lengths do you offer?
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-muted-foreground text-xs md:text-sm leading-relaxed pb-5 pt-1">
+                                        I primarily work on monthly retainers tailored to the scale of the campaign (number of backlinks built, content briefs created, and technical support hours). I also offer fixed-price technical SEO audits and link building packages. Retainers typically start with a 3-month commitment, as SEO results require time to compound.
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         </FadeIn>
                     </div>
                 </div>

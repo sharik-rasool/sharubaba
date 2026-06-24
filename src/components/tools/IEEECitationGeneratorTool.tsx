@@ -277,13 +277,58 @@ export function IEEECitationGeneratorTool() {
                     </Card>
                 )}
 
-                <div className="prose-custom">
-                    <h2 className="text-2xl font-semibold mb-4">About IEEE Citation Format</h2>
-                    <p className="text-muted-foreground">
-                        IEEE (Institute of Electrical and Electronics Engineers) citation format is widely used in
-                        engineering, computer science, and information technology fields. Our generator supports
-                        journal articles, conference papers, books, and websites.
+                <div className="prose-custom mt-12 border-t border-border/50 pt-8 max-w-2xl">
+                    <h2 className="text-2xl font-semibold mb-4">How IEEE Citations Work</h2>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                        The IEEE (Institute of Electrical and Electronics Engineers) style is a widely accepted format for 
+                        writing and citing research in engineering, computer science, and technology. It uses a numerical 
+                        referencing system where sources are cited in-text using bracketed numbers (e.g. <em>[1]</em>, <em>[2]</em>) 
+                        that correspond to a numbered reference list at the end of the document.
                     </p>
+
+                    <h3 className="text-xl font-medium mb-3">Core Citation Rules & Formats</h3>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                        Here are standard templates and manual examples of how different sources are formatted in the bibliography:
+                    </p>
+                    <div className="space-y-4 mb-8 text-sm text-muted-foreground">
+                        <div className="p-3 bg-muted rounded-lg">
+                            <strong className="text-foreground">Journal Article Format:</strong>
+                            <p className="font-mono mt-1 text-xs">J. K. Author, "Name of paper," <em>Journal Title</em>, vol. x, no. x, pp. xxx-xxx, Abbrev. Month, year.</p>
+                            <p className="mt-1 italic">Example: A. Patel and B. Smith, "SaaS Database Scalability," <em>IEEE Trans. Cloud Comput.</em>, vol. 8, no. 3, pp. 201-210, Sept. 2023.</p>
+                        </div>
+                        <div className="p-3 bg-muted rounded-lg">
+                            <strong className="text-foreground">Book Format:</strong>
+                            <p className="font-mono mt-1 text-xs">J. K. Author, <em>Title of Book</em>, xth ed. City of Publisher, Country: Publisher, year.</p>
+                            <p className="mt-1 italic">Example: W. G. Anderson, <em>Fundamentals of Software Systems</em>. New York, USA: Academic Press, 2021.</p>
+                        </div>
+                        <div className="p-3 bg-muted rounded-lg">
+                            <strong className="text-foreground">Website Format:</strong>
+                            <p className="font-mono mt-1 text-xs">J. K. Author, "Title of Webpage," <em>Website Name</em>. URL (accessed Abbrev. Month. Day, Year).</p>
+                            <p className="mt-1 italic">Example: S. Rasool, "Understanding SaaS SEO Structure," <em>Sharik Rasool SEO Blog</em>. https://www.sharikrasool.com/blog/saas-seo (accessed Jan. 12, 2024).</p>
+                        </div>
+                    </div>
+
+                    <h3 className="text-xl font-semibold mb-4">Frequently Asked Questions</h3>
+                    <div className="space-y-4 text-muted-foreground">
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">Should the reference list be alphabetical?</h4>
+                            <p className="text-sm leading-relaxed">
+                                No. Unlike APA or MLA styles, IEEE references are listed in the order they are first cited in the text, not alphabetically. The first source you mention is numbered [1], the second is [2], and so on.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">How do I format multiple authors?</h4>
+                            <p className="text-sm leading-relaxed">
+                                For up to six authors, list all names separated by commas. If a source has seven or more authors, write only the first author's name followed by a comma and "et al." (e.g. <em>J. Doe, et al.</em>).
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground text-base mb-1">How do in-text citations look?</h4>
+                            <p className="text-sm leading-relaxed">
+                                Place bracketed numbers directly within the sentence, before any punctuation, with a space before the bracket (e.g. "...as shown in [3]."). You do not need to repeat the author's name or date in the text.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

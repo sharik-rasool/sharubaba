@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight, Tag, Clock } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
 import type { Metadata } from "next";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import {
     Pagination,
     PaginationContent,
@@ -186,6 +187,79 @@ export default async function BlogPage({
                                 </Pagination>
                             </div>
                         )}
+
+                        {/* Educational / Explanatory Section to boost Text-to-HTML ratio and build SEO topical authority */}
+                        <div className="mt-20 md:mt-28 border-t border-border/50 pt-12 md:pt-16 max-w-4xl mx-auto">
+                            <div className="prose dark:prose-invert max-w-none mb-12 space-y-6">
+                                <h2 className="text-2xl md:text-3xl font-bold">What is The SEO Lab Blog?</h2>
+                                <p className="text-muted-foreground leading-relaxed">
+                                    The SEO Lab is an educational resource dedicated to demystifying modern search engine optimization, 
+                                    organic traffic growth, and editorial-focused link building. We focus on evidence-based, practical strategies 
+                                    that help SaaS brands, developers, and digital publishers scale their rankings on Google safely and sustainably.
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                                    <div className="space-y-2">
+                                        <h3 className="text-base font-semibold text-foreground">SaaS Search Strategies</h3>
+                                        <p className="text-xs text-muted-foreground">
+                                            Learn how to map out search intent, write high-intent product comparison guides, and build landing page models that convert organic traffic.
+                                        </p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-base font-semibold text-foreground">Outreach & Link Building</h3>
+                                        <p className="text-xs text-muted-foreground">
+                                            Discover how to craft high-conversion outreach emails, secure guest contributions on high-DA sites, and earn permanent editorial backlink placements.
+                                        </p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-base font-semibold text-foreground">Technical SEO & Audits</h3>
+                                        <p className="text-xs text-muted-foreground">
+                                            Step-by-step guides on technical indexing, optimizing Core Web Vitals, structuring JSON-LD schema markup, and fixing crawl errors.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                                <Accordion type="single" collapsible className="w-full space-y-4">
+                                    <AccordionItem 
+                                        value="blog-faq-1" 
+                                        className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                    >
+                                        <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
+                                            How frequently do you publish new SEO and growth guides?
+                                        </AccordionTrigger>
+                                        <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
+                                            We publish fresh, data-backed guides twice a week, covering the latest shifts in Google algorithms, technical web optimizations, and content marketing systems.
+                                        </AccordionContent>
+                                    </AccordionItem>
+
+                                    <AccordionItem 
+                                        value="blog-faq-2" 
+                                        className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                    >
+                                        <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
+                                            Can I pitch a guest post for publication on The SEO Lab?
+                                        </AccordionTrigger>
+                                        <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
+                                            I accept high-quality guest contributions from fellow digital marketers, SaaS founders, and developers. Pitches must contain unique case studies, data, or technical walkthroughs that haven't been published elsewhere.
+                                        </AccordionContent>
+                                    </AccordionItem>
+
+                                    <AccordionItem 
+                                        value="blog-faq-3" 
+                                        className="border border-border/60 rounded-xl bg-card px-5 md:px-6 shadow-sm"
+                                    >
+                                        <AccordionTrigger className="text-left font-semibold py-4 hover:no-underline">
+                                            Who is the primary audience for these SEO tutorials?
+                                        </AccordionTrigger>
+                                        <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pt-1 text-sm">
+                                            These articles are written primarily for SaaS founders, product marketing managers, in-house content creators, freelance developers, and agency owners seeking structured roadmaps to grow organic traffic.
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </div>
+                        </div>
                     </>
                 )}
             </div>
