@@ -8,17 +8,20 @@ const cache = <T extends Function>(fn: T): T => {
 };
 
 // A safe unstable_cache wrapper that falls back to the original function if executed outside Next.js runtime (e.g., in scripts).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function safeCache<T extends (...args: any[]) => Promise<any>>(
     fn: T,
     keyParts: string[],
     options?: { revalidate?: number; tags?: string[] }
 ): T {
     const cachedFn = unstable_cache(fn, keyParts, options);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wrapper = (async (...args: any[]) => {
         try {
             return await cachedFn(...args);
-        } catch (e: any) {
-            if (e && (e.message?.includes("incrementalCache") || e.message?.includes("Invariant"))) {
+        } catch (e: unknown) {
+            const err = e as Error;
+            if (err && (err.message?.includes("incrementalCache") || err.message?.includes("Invariant"))) {
                 return await fn(...args);
             }
             throw e;
