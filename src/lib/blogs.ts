@@ -1,8 +1,10 @@
 import React from "react";
 
-// Fallback to no-op if cache is not available (e.g. when running scratch scripts outside Next.js RSC)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const cache = (React as any).cache || (<T extends (...args: any[]) => any>(fn: T): T => fn);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+const cache = <T extends Function>(fn: T): T => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (React as any).cache ? (React as any).cache(fn) : fn;
+};
 import connectDB from "@/lib/db";
 import Blog, { IBlog } from "@/models/Blog";
 
