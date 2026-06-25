@@ -54,6 +54,31 @@ function updateStatus(update: any) {
     }
 }
 
+// Helper to update Google Sheets status via Apps Script Webhook
+async function updateGoogleSheetStatus(keyword: string, status: string, url: string = "") {
+    const webhookUrl = process.env.GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL;
+    if (!webhookUrl) {
+        console.log(`[Google Sheet] GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL is not defined in environment. Skipping status update for "${keyword}".`);
+        return;
+    }
+
+    try {
+        console.log(`[Google Sheet] Sending status update for "${keyword}" to Sheet: Status="${status}", URL="${url}"...`);
+        const res = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ keyword, status, url })
+        });
+        if (!res.ok) {
+            console.warn(`[Google Sheet] Update failed (status ${res.status}).`);
+        } else {
+            console.log(`[Google Sheet] Update succeeded for "${keyword}".`);
+        }
+    } catch (err: any) {
+        console.error(`[Google Sheet] Error updating sheet for "${keyword}":`, err.message || err);
+    }
+}
+
 // Helper to rewrite Google Sheets URLs to direct CSV export URLs
 function getCsvUrl(url: string): string {
     const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
@@ -271,6 +296,11 @@ async function main() {
         const literalCheck = checkKeywordDuplicate(kw, existingPosts);
         if (literalCheck.isDuplicate) {
             console.log(`  - [SKIP] "${kw}" - literal match in database`);
+            if (!dryRun) {
+                await updateGoogleSheetStatus(kw, "duplicate keyword");
+            } else {
+                console.log(`  [DRY-RUN] Would update Sheet for "${kw}": Status="duplicate keyword"`);
+            }
             continue;
         }
 
@@ -288,6 +318,11 @@ async function main() {
         const cannibalResult = await checkCannibalization(kw, existingPosts);
         if (cannibalResult.isCannibal) {
             console.log(`  - [SKIP] "${kw}" - semantic overlap. Reason: ${cannibalResult.reason}`);
+            if (!dryRun) {
+                await updateGoogleSheetStatus(kw, "duplicate keyword");
+            } else {
+                console.log(`  [DRY-RUN] Would update Sheet for "${kw}": Status="duplicate keyword"`);
+            }
             continue;
         }
 
@@ -528,6 +563,7 @@ async function main() {
 
         if (dryRun) {
             console.log(`  [DRY-RUN] Skipped MongoDB save for: "${post.title}" (Scheduled: ${scheduledTime.toISOString()})`);
+            console.log(`  [DRY-RUN] Would update Sheet for "${post.primaryKeyword}": Status="Published", URL="https://www.sharikrasool.com/blog/${post.slug}"`);
         } else {
             try {
                 await Blog.findOneAndUpdate(
@@ -536,6 +572,9 @@ async function main() {
                     { upsert: true, new: true }
                 );
                 console.log(`  Saved: "${post.title}" (Scheduled: ${scheduledTime.toISOString()})`);
+                
+                const liveUrl = `https://www.sharikrasool.com/blog/${post.slug}`;
+                await updateGoogleSheetStatus(post.primaryKeyword, "Published", liveUrl);
             } catch (saveErr: any) {
                 console.error(`  ERROR saving "${post.title}":`, saveErr.message || saveErr);
             }
