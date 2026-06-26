@@ -5,9 +5,6 @@ export const metadata: Metadata = {
     description:
         "Read the official refund and cancellation policy for Sharik Rasool's SEO and link building services. Learn about contract termination and refund eligibility.",
     alternates: { canonical: "https://www.sharikrasool.com/refund-policy" },
-    robots: {
-        index: false,
-    },
 };
 
 export default function RefundPolicyPage() {
