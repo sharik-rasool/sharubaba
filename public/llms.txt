@@ -1,0 +1,20 @@
+# Sharik Rasool
+
+> Sharik Rasool is an experienced SEO Strategist, Link Builder, and Developer. This website hosts his portfolio, professional services, digital marketing blog, and free utility tools.
+
+## Core Pages
+- [Home](https://www.sharikrasool.com/) - Overview of services, results, process, and client testimonials.
+- [About](https://www.sharikrasool.com/about) - Professional background, SEO expertise, and career journey.
+- [Contact](https://www.sharikrasool.com/contact) - Contact form to request a free SEO audit and consulting.
+- [Projects](https://www.sharikrasool.com/projects) - Showcase of case studies and successful SEO campaigns.
+- [Blog](https://www.sharikrasool.com/blog) - Articles and guides on SEO, freelancing, ecommerce, B2B/B2C, and digital trends.
+
+## Free Online Tools & Generators
+Free, private, and client-side utility generators located at `/tools`:
+- [AI Image Prompt Generator](https://www.sharikrasool.com/tools/chatgpt-image-generator) - Creates detailed prompts for Midjourney, DALL-E, and Stable Diffusion.
+- [Elf Name Generator](https://www.sharikrasool.com/tools/elf-name-generator) - Generates mystical elvish names for fantasy characters.
+- [IEEE Citation Generator](https://www.sharikrasool.com/tools/ieee-citation-generator) - Generates properly formatted IEEE bibliography citations.
+- [Japanese Name Generator](https://www.sharikrasool.com/tools/japanese-name-generator) - Generates authentic Japanese names with Kanji characters and meanings.
+- [Random Animal Generator](https://www.sharikrasool.com/tools/random-animal-generator) - Explores random animal facts, habitats, and details.
+- [Random NFL Team Generator](https://www.sharikrasool.com/tools/random-nfl-team-generator) - Randomly picks NFL teams for drafts and fantasy challenges.
+- [Random Pokémon Generator](https://www.sharikrasool.com/tools/random-pokemon-generator) - Generates random Pokémon with base stats, types, and descriptions.
