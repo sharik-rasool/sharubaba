@@ -16,25 +16,36 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export const metadata: Metadata = {
-    title: "Blog & Insights",
-    description:
-        "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
-    alternates: { canonical: "https://www.sharikrasool.com/blog" },
-    openGraph: {
-        title: "Blog & Insights",
-        description:
-            "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
-        url: "https://www.sharikrasool.com/blog",
-        type: "website",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "Blog & Insights",
-        description:
-            "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.",
-    },
-};
+export async function generateMetadata({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+    const { page } = await searchParams;
+    const currentPage = Math.max(1, parseInt(page || "1", 10));
+    const pageSuffix = currentPage > 1 ? ` | Page ${currentPage}` : "";
+
+    const title = `Blog & Insights${pageSuffix}`;
+    const description = "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.";
+    const canonical = `https://www.sharikrasool.com/blog${currentPage > 1 ? `?page=${currentPage}` : ""}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: {
+            title,
+            description,
+            url: canonical,
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
+    };
+}
 
 export const revalidate = 3600;
 
@@ -61,7 +72,7 @@ export default async function BlogPage({
                 <FadeIn>
                     <div className="text-center mb-16 pt-8">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">
-                            Blog & <span className="text-primary italic">Insights</span>
+                            Latest Articles & <span className="text-primary italic">Insights</span>
                         </h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
                             Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.

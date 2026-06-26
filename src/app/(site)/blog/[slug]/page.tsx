@@ -24,7 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         return { title: "Post Not Found" };
     }
 
-    const seoTitle = post.seoTitle || post.title;
+    let seoTitle = post.seoTitle || post.title;
+    // Differentiate title tag from H1 heading if title is relatively short and no custom SEO title is defined
+    if (!post.seoTitle && seoTitle.length <= 45) {
+        seoTitle = `${seoTitle} | Insights`;
+    }
+
     const seoDescription = post.seoDescription || post.excerpt;
     const baseUrl = "https://www.sharikrasool.com";
 
