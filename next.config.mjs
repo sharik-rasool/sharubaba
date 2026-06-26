@@ -19,7 +19,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://www.sharikrasool.com https://*.sharikrasool.com https://images.unsplash.com https://*.supabase.co; connect-src 'self' https://*.supabase.co https://api.emailjs.com; font-src 'self' data: https://cdnjs.cloudflare.com; frame-src https://calendly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://www.sharikrasool.com https://*.sharikrasool.com https://images.unsplash.com https://*.supabase.co; connect-src 'self' https://*.supabase.co https://api.emailjs.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; frame-src https://calendly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
           },
           {
             key: 'X-Frame-Options',
