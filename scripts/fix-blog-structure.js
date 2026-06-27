@@ -155,10 +155,10 @@ function cleanHtmlForPaste(html) {
         return `<${tag}${styleMatch ? ` style="${styleMatch[1]}"` : ""}>`;
     });
 
-    // 6. Remove empty semantic tags recursively
+    // 6. Remove empty semantic tags recursively (p, h1-h6, blockquote, li, ul, ol, a)
     do {
         prev = cleaned;
-        cleaned = cleaned.replace(/<(p|h[1-6]|blockquote|li|ul|ol)[^>]*>(\s*|&nbsp;)*<\/\1>/gi, "");
+        cleaned = cleaned.replace(/<(p|h[1-6]|blockquote|li|ul|ol|a)[^>]*>(\s*|&nbsp;)*<\/\1>/gi, "");
     } while (cleaned !== prev);
 
     return cleaned.trim();
