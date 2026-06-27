@@ -8,6 +8,8 @@ import { RandomAnimalGeneratorTool } from "@/components/tools/RandomAnimalGenera
 import { RandomNFLTeamGeneratorTool } from "@/components/tools/RandomNFLTeamGeneratorTool";
 import { RandomPokemonGeneratorTool } from "@/components/tools/RandomPokemonGeneratorTool";
 import { SquareFaceGeneratorTool } from "@/components/tools/SquareFaceGeneratorTool";
+import { RandomCollegeGeneratorTool } from "@/components/tools/RandomCollegeGeneratorTool";
+import { ArtistNameGeneratorTool } from "@/components/tools/ArtistNameGeneratorTool";
 import { Metadata } from "next";
 
 // Map slugs to components
@@ -20,6 +22,8 @@ const componentMap: Record<string, React.ComponentType> = {
     "random-nfl-team-generator": RandomNFLTeamGeneratorTool,
     "random-pokemon-generator": RandomPokemonGeneratorTool,
     "square-face-generator": SquareFaceGeneratorTool,
+    "random-college-generator": RandomCollegeGeneratorTool,
+    "artist-name-generator": ArtistNameGeneratorTool,
 };
 
 interface ToolPageProps {
@@ -69,6 +73,8 @@ function getToolRating(slug: string) {
         "random-nfl-team-generator": { ratingValue: "4.5", ratingCount: "76" },
         "random-pokemon-generator": { ratingValue: "4.8", ratingCount: "243" },
         "square-face-generator": { ratingValue: "4.8", ratingCount: "135" },
+        "random-college-generator": { ratingValue: "4.7", ratingCount: "128" },
+        "artist-name-generator": { ratingValue: "4.8", ratingCount: "192" },
     };
     return ratings[slug] || { ratingValue: "4.7", ratingCount: "150" };
 }

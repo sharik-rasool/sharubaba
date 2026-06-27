@@ -1,4 +1,4 @@
-import { LucideIcon, Image, Type, Quote, Wand2, Dog, Trophy, Zap, Smile } from "lucide-react";
+import { LucideIcon, Image, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush } from "lucide-react";
 
 export interface Tool {
     slug: string;
@@ -73,5 +73,21 @@ export const toolsData: Tool[] = [
         metaTitle: "Free Square Face Generator",
         metaDescription: "Create retro text-based emoticons, Minecraft-style skins, or draw custom 8-bit square pixel art avatars. Export as downloadable PNG or copyable Unicode blocks.",
         icon: Smile,
+    },
+    {
+        slug: "random-college-generator",
+        title: "Random College Generator",
+        description: "Generate random colleges and universities with locations, mascots, and fun facts.",
+        metaTitle: "Free Random College & University Generator",
+        metaDescription: "Discover random universities and colleges worldwide. Generate institution details, mascots, types, and fun facts. Perfect for students, trivia, and research.",
+        icon: GraduationCap,
+    },
+    {
+        slug: "artist-name-generator",
+        title: "Artist Name Generator",
+        description: "Create unique and cool pen names, DJ names, rap aliases, or painter tags.",
+        metaTitle: "Free Artist Name Generator | Cool Pen Names & Aliases",
+        metaDescription: "Generate unique artist names for painters, musicians, DJs, writers, and rappers. Select your genre and get instantly styled names and backstories.",
+        icon: Paintbrush,
     },
 ];
