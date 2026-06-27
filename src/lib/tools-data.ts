@@ -1,4 +1,4 @@
-import { LucideIcon, Image, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush } from "lucide-react";
+import { LucideIcon, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush } from "lucide-react";
 
 export interface Tool {
     slug: string;
@@ -10,14 +10,6 @@ export interface Tool {
 }
 
 export const toolsData: Tool[] = [
-    {
-        slug: "chatgpt-image-generator",
-        title: "AI Image Prompt Generator",
-        description: "Create detailed prompts for DALL-E, Midjourney, and Stable Diffusion.",
-        metaTitle: "Free AI Image Prompt Generator",
-        metaDescription: "Generate detailed, creative prompts for ChatGPT, Midjourney, DALL-E, and Stable Diffusion. Boost your AI art generation quality with expert prompt templates.",
-        icon: Image,
-    },
     {
         slug: "elf-name-generator",
         title: "Elf Name Generator",

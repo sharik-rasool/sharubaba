@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { toolsData } from "@/lib/tools-data";
-import { ChatGPTImageGeneratorTool } from "@/components/tools/ChatGPTImageGeneratorTool";
 import { ElfNameGeneratorTool } from "@/components/tools/ElfNameGeneratorTool";
 import { IEEECitationGeneratorTool } from "@/components/tools/IEEECitationGeneratorTool";
 import { JapaneseNameGeneratorTool } from "@/components/tools/JapaneseNameGeneratorTool";
@@ -14,7 +13,6 @@ import { Metadata } from "next";
 
 // Map slugs to components
 const componentMap: Record<string, React.ComponentType> = {
-    "chatgpt-image-generator": ChatGPTImageGeneratorTool,
     "elf-name-generator": ElfNameGeneratorTool,
     "ieee-citation-generator": IEEECitationGeneratorTool,
     "japanese-name-generator": JapaneseNameGeneratorTool,
@@ -65,7 +63,6 @@ export function generateStaticParams() {
 
 function getToolRating(slug: string) {
     const ratings: Record<string, { ratingValue: string; ratingCount: string }> = {
-        "chatgpt-image-generator": { ratingValue: "4.8", ratingCount: "312" },
         "elf-name-generator": { ratingValue: "4.7", ratingCount: "184" },
         "ieee-citation-generator": { ratingValue: "4.9", ratingCount: "428" },
         "japanese-name-generator": { ratingValue: "4.7", ratingCount: "215" },
