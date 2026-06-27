@@ -9,6 +9,7 @@ dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
 
 import Blog, { IBlog } from "../src/models/Blog";
+import { toolsData } from "../src/lib/tools-data";
 import {
     generateContentBrief,
     generateOutline,
@@ -76,6 +77,80 @@ async function updateGoogleSheetStatus(keyword: string, status: string, url: str
         }
     } catch (err: any) {
         console.error(`[Google Sheet] Error updating sheet for "${keyword}":`, err.message || err);
+    }
+}
+
+// Helper to sync all live URLs to Google Sheets tab "Live URLs"
+async function syncLiveUrlsToGoogleSheet() {
+    const webhookUrl = process.env.GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL;
+    if (!webhookUrl) {
+        console.log("[Sync] Webhook URL not set; skipping live URLs sync.");
+        return;
+    }
+
+    console.log("[Sync] Gathering live URLs for Google Sheets sync...");
+    const domain = "https://www.sharikrasool.com";
+    const urls: { url: string; category: string }[] = [];
+
+    // 1. Static Pages
+    const staticPages = [
+        { path: "/", category: "Static Page" },
+        { path: "/about", category: "Static Page" },
+        { path: "/projects", category: "Static Page" },
+        { path: "/contact", category: "Static Page" },
+        { path: "/privacy-policy", category: "Static Page" },
+        { path: "/terms", category: "Static Page" },
+        { path: "/refund-policy", category: "Static Page" },
+        { path: "/blog", category: "Static Page" },
+        { path: "/tools", category: "Static Page" },
+    ];
+    staticPages.forEach(p => {
+        urls.push({ url: `${domain}${p.path}`, category: p.category });
+    });
+
+    // 2. Interactive Tools
+    toolsData.forEach(tool => {
+        urls.push({ url: `${domain}/tools/${tool.slug}`, category: "Interactive Tool" });
+    });
+
+    // 3. Published Blog Posts
+    try {
+        const now = new Date();
+        const publishedPosts = await Blog.find({
+            $or: [
+                { scheduledFor: { $lte: now } },
+                { scheduledFor: { $exists: false } },
+                { scheduledFor: null }
+            ]
+        }).sort({ createdAt: -1 }).lean();
+
+        publishedPosts.forEach(post => {
+            urls.push({ url: `${domain}/blog/${post.slug}`, category: "Blog Post" });
+        });
+    } catch (dbErr: any) {
+        console.error("[Sync] Error loading published posts:", dbErr.message || dbErr);
+    }
+
+    console.log(`[Sync] Sending ${urls.length} live URLs to Google Sheets...`);
+    try {
+        const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                type: "live_urls_sync",
+                urls: urls,
+            }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log("[Sync] Sync Succeeded:", result.message || result);
+        } else {
+            const text = await response.text();
+            console.error(`[Sync] Failed. Webhook status ${response.status}:`, text);
+        }
+    } catch (fetchErr: any) {
+        console.error("[Sync] Webhook call error:", fetchErr.message || fetchErr);
     }
 }
 
@@ -590,6 +665,11 @@ async function main() {
         endedAt: new Date().toISOString(),
         currentKeyword: "Finished successfully"
     });
+
+    // Sync live URLs to Sheet automatically on success
+    if (!dryRun) {
+        await syncLiveUrlsToGoogleSheet();
+    }
 
     await mongoose.connection.close();
     process.exit(0);
