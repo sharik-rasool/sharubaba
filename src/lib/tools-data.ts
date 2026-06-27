@@ -1,4 +1,4 @@
-import { LucideIcon, Image, Type, Quote, Wand2, Dog, Trophy, Zap } from "lucide-react";
+import { LucideIcon, Image, Type, Quote, Wand2, Dog, Trophy, Zap, Smile } from "lucide-react";
 
 export interface Tool {
     slug: string;
@@ -65,5 +65,13 @@ export const toolsData: Tool[] = [
         metaTitle: "Free Random Pokémon Generator",
         metaDescription: "Generate random Pokémon instantly with complete base stats, types, and official descriptions. Perfect tool for fantasy drafts, team building, and challenges.",
         icon: Zap,
+    },
+    {
+        slug: "square-face-generator",
+        title: "Square Face Generator",
+        description: "Design retro text-based emoticons or draw customizable 8-bit square avatar faces.",
+        metaTitle: "Free Square Face Generator",
+        metaDescription: "Create retro text-based emoticons, Minecraft-style skins, or draw custom 8-bit square pixel art avatars. Export as downloadable PNG or copyable Unicode blocks.",
+        icon: Smile,
     },
 ];
