@@ -95,28 +95,17 @@ export async function GET(req: NextRequest) {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    width: "48px",
-                                    height: "48px",
-                                    borderRadius: "12px",
+                                    width: "56px",
+                                    height: "56px",
+                                    borderRadius: "14px",
                                     background: "linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)",
-                                    marginRight: "16px",
                                     color: "white",
                                     fontSize: "24px",
                                     fontWeight: "bold",
                                 }}
                             >
-                                S
+                                SR
                             </div>
-                            <span
-                                style={{
-                                    fontSize: "28px",
-                                    fontWeight: "bold",
-                                    color: "white",
-                                    letterSpacing: "-0.5px",
-                                }}
-                            >
-                                SHARUS WEB
-                            </span>
                         </div>
 
                         {/* Category Pill Tag */}
