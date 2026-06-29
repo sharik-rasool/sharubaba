@@ -155,7 +155,7 @@ async function db() {
     if (!conn) throw new Error("No database connection");
 }
 
-export const getPublishedBlogs = safeCache(
+export const getPublishedBlogs = cache(
     async (): Promise<BlogDoc[]> => {
         try {
             await db();
@@ -179,9 +179,7 @@ export const getPublishedBlogs = safeCache(
         } catch {
             return [];
         }
-    },
-    ["published-blogs"],
-    { revalidate: 3600, tags: ["blogs"] }
+    }
 );
 
 export const getAllBlogs = cache(async (): Promise<BlogDoc[]> => {

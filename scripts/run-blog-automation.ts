@@ -315,8 +315,12 @@ async function main() {
                 
                 for (const line of lines) {
                     const columns = parseCSVLine(line);
-                    if (columns[keywordColIdx]) {
-                        rawKeywords.push(columns[keywordColIdx]);
+                    const keyword = columns[keywordColIdx];
+                    const status = columns[1] ? columns[1].trim() : "";
+                    
+                    // Only process keywords that do not have a status yet
+                    if (keyword && status === "") {
+                        rawKeywords.push(keyword);
                     }
                 }
             }
