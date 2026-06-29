@@ -47,9 +47,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             modifiedTime: post.updatedAt,
             authors: ["Sharik Rasool"],
             tags: post.tags,
-            images: post.ogImage || post.coverImage
-                ? [{ url: post.ogImage || post.coverImage, width: 1200, height: 630, alt: post.title }]
-                : [{ url: `${baseUrl}/og-image.jpg`, width: 1200, height: 630 }],
+            images: (() => {
+                let imgUrl = post.ogImage || post.coverImage || `${baseUrl}/og-image.jpg`;
+                if (imgUrl.startsWith("/api/og")) {
+                    imgUrl += "&v=2";
+                }
+                if (imgUrl.startsWith("/")) {
+                    imgUrl = `${baseUrl}${imgUrl}`;
+                }
+                return [{ url: imgUrl, width: 1200, height: 630, alt: post.title }];
+            })(),
         },
         twitter: {
             card: "summary_large_image",
@@ -192,7 +199,10 @@ export default async function BlogPostPage({ params }: Props) {
                 {(() => {
                     const titleEncoded = encodeURIComponent(post.title);
                     const categoryEncoded = encodeURIComponent(post.primaryKeyword || (post.tags && post.tags.length > 0 ? post.tags[0] : "SEO"));
-                    const coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                    let coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                    if (coverSrc.startsWith("/api/og")) {
+                        coverSrc += "&v=2";
+                    }
                     return (
                         <div className="mb-8 overflow-hidden rounded-xl border">
                             <Image

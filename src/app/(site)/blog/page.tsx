@@ -94,7 +94,10 @@ export default async function BlogPage({
                                             {(() => {
                                                 const titleEncoded = encodeURIComponent(post.title);
                                                 const categoryEncoded = encodeURIComponent(post.tags && post.tags.length > 0 ? post.tags[0] : "SEO");
-                                                const coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                                                let coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                                                if (coverSrc.startsWith("/api/og")) {
+                                                    coverSrc += "&v=2";
+                                                }
                                                 return (
                                                     <div className="overflow-hidden aspect-video relative">
                                                         <Image

@@ -593,7 +593,7 @@ async function main() {
 
         const titleEncoded = encodeURIComponent(draft.seoTitle || draft.title);
         const categoryEncoded = encodeURIComponent(draft.primaryKeyword || "SEO");
-        const dynamicImageUrl = `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+        const dynamicImageUrl = `/api/og?title=${titleEncoded}&category=${categoryEncoded}&v=2`;
 
         finalizedPosts.push({
             ...draft,
