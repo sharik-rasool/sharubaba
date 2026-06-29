@@ -91,18 +91,23 @@ export default async function BlogPage({
                                 <StaggerItem key={post._id} className="h-full">
                                     <Link href={`/blog/${post.slug}`} className="block h-full group">
                                         <Card className="hover:shadow-xl transition-all duration-300 h-full flex flex-col border-border/50 group-hover:border-primary/20 overflow-hidden">
-                                            {post.coverImage && (
-                                                <div className="overflow-hidden aspect-video relative">
-                                                    <Image
-                                                        src={post.coverImage}
-                                                        alt={post.title}
-                                                        fill
-                                                        priority={index === 0}
-                                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                    />
-                                                </div>
-                                            )}
+                                            {(() => {
+                                                const titleEncoded = encodeURIComponent(post.title);
+                                                const categoryEncoded = encodeURIComponent(post.tags && post.tags.length > 0 ? post.tags[0] : "SEO");
+                                                const coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                                                return (
+                                                    <div className="overflow-hidden aspect-video relative">
+                                                        <Image
+                                                            src={coverSrc}
+                                                            alt={post.title}
+                                                            fill
+                                                            priority={index === 0}
+                                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                        />
+                                                    </div>
+                                                );
+                                            })()}
                                             <CardContent className="p-6 flex flex-col flex-1">
                                                 <div className="flex-1">
                                                     <div className="flex items-center justify-between mb-4">

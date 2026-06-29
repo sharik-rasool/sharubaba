@@ -189,18 +189,23 @@ export default async function BlogPostPage({ params }: Props) {
                     Back to Blog
                 </Link>
 
-                {post.coverImage && (
-                    <div className="mb-8 overflow-hidden rounded-xl border">
-                        <Image
-                            src={post.coverImage}
-                            alt={post.title}
-                            width={1200}
-                            height={630}
-                            priority
-                            className="w-full h-auto max-h-[500px] object-cover"
-                        />
-                    </div>
-                )}
+                {(() => {
+                    const titleEncoded = encodeURIComponent(post.title);
+                    const categoryEncoded = encodeURIComponent(post.primaryKeyword || (post.tags && post.tags.length > 0 ? post.tags[0] : "SEO"));
+                    const coverSrc = post.coverImage || `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+                    return (
+                        <div className="mb-8 overflow-hidden rounded-xl border">
+                            <Image
+                                src={coverSrc}
+                                alt={post.title}
+                                width={1200}
+                                height={630}
+                                priority
+                                className="w-full h-auto max-h-[500px] object-contain bg-muted/10"
+                            />
+                        </div>
+                    );
+                })()}
 
                 <header className="mb-10">
                     {post.tags.length > 0 && (

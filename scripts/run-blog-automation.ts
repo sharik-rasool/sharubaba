@@ -591,9 +591,15 @@ async function main() {
             }
         }
 
+        const titleEncoded = encodeURIComponent(draft.seoTitle || draft.title);
+        const categoryEncoded = encodeURIComponent(draft.primaryKeyword || "SEO");
+        const dynamicImageUrl = `/api/og?title=${titleEncoded}&category=${categoryEncoded}`;
+
         finalizedPosts.push({
             ...draft,
             content: linkedHtml,
+            coverImage: dynamicImageUrl,
+            ogImage: dynamicImageUrl,
             qaReport: {
                 wordCount: qaReport.wordCount,
                 headingCounts: qaReport.headingCounts,
