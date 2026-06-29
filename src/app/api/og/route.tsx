@@ -197,7 +197,7 @@ export async function GET(req: NextRequest) {
                 fonts: fontOptions,
             }
         );
-    } catch (e: any) {
+    } catch (e) {
         console.error("OG Generator Error:", e);
         return new Response("Failed to generate image", { status: 500 });
     }
