@@ -56,7 +56,7 @@ function updateStatus(update: any) {
 }
 
 // Helper to update Google Sheets status via Apps Script Webhook
-async function updateGoogleSheetStatus(keyword: string, status: string, url: string = "", title: string = "") {
+async function updateGoogleSheetStatus(keyword: string, status: string, url: string = "", title: string = "", publishDate: string = "") {
     const webhookUrl = process.env.GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL;
     if (!webhookUrl) {
         console.log(`[Google Sheet] GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL is not defined in environment. Skipping status update for "${keyword}".`);
@@ -64,11 +64,11 @@ async function updateGoogleSheetStatus(keyword: string, status: string, url: str
     }
 
     try {
-        console.log(`[Google Sheet] Sending status update for "${keyword}" to Sheet: Status="${status}", Title="${title}", URL="${url}"...`);
+        console.log(`[Google Sheet] Sending status update for "${keyword}" to Sheet: Status="${status}", Title="${title}", URL="${url}", PublishDate="${publishDate}"...`);
         const res = await fetch(webhookUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ keyword, status, url, title })
+            body: JSON.stringify({ keyword, status, url, title, publishDate })
         });
         if (!res.ok) {
             console.warn(`[Google Sheet] Update failed (status ${res.status}).`);
@@ -659,7 +659,8 @@ async function main() {
                 console.log(`  Saved: "${post.title}" (Scheduled: ${scheduledTime.toISOString()})`);
                 
                 const liveUrl = `https://www.sharikrasool.com/blog/${post.slug}`;
-                await updateGoogleSheetStatus(post.primaryKeyword, "Published", liveUrl, post.title);
+                const formattedDate = post.scheduledFor ? new Date(post.scheduledFor).toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
+                await updateGoogleSheetStatus(post.primaryKeyword, "Published", liveUrl, post.title, formattedDate);
             } catch (saveErr: any) {
                 console.error(`  ERROR saving "${post.title}":`, saveErr.message || saveErr);
             }

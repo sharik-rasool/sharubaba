@@ -7,9 +7,15 @@ dotenv.config({ path: ".env.local" });
 
 const domain = "https://www.sharikrasool.com";
 
-interface SyncUrlPayload {
+interface CorePageItem {
     url: string;
     category: string;
+}
+
+interface BlogPageItem {
+    url: string;
+    title: string;
+    publishDate: string;
 }
 
 async function main() {
@@ -28,7 +34,8 @@ async function main() {
     console.log("Connecting to MongoDB...");
     await mongoose.connect(mongoUri);
 
-    const urls: SyncUrlPayload[] = [];
+    const corePages: CorePageItem[] = [];
+    const blogPages: BlogPageItem[] = [];
 
     // 1. Static Pages
     const staticPages = [
@@ -44,7 +51,7 @@ async function main() {
     ];
 
     staticPages.forEach(p => {
-        urls.push({
+        corePages.push({
             url: `${domain}${p.path}`,
             category: p.category,
         });
@@ -52,32 +59,41 @@ async function main() {
 
     // 2. Interactive Tools
     toolsData.forEach(tool => {
-        urls.push({
+        corePages.push({
             url: `${domain}/tools/${tool.slug}`,
             category: "Interactive Tool",
         });
     });
 
-    // 3. Published Blog Posts
+    // 3. Published/Live Blog Posts
     const now = new Date();
     const publishedPosts = await Blog.find({
         $or: [
-            { scheduledFor: { $lte: now } },
-            { scheduledFor: { $exists: false } },
-            { scheduledFor: null }
+            {
+                status: "published",
+                $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+            },
+            {
+                status: "draft",
+                scheduledFor: { $lte: now }
+            }
         ]
     }).sort({ createdAt: -1 }).lean();
 
-    publishedPosts.forEach(post => {
-        urls.push({
+    publishedPosts.forEach((post: any) => {
+        const pDate = post.scheduledFor ? new Date(post.scheduledFor) : new Date(post.createdAt || now);
+        const formattedDate = pDate.toISOString().split("T")[0]; // YYYY-MM-DD
+        
+        blogPages.push({
             url: `${domain}/blog/${post.slug}`,
-            category: "Blog Post",
+            title: post.title,
+            publishDate: formattedDate,
         });
     });
 
     await mongoose.connection.close();
 
-    console.log(`Aggregated ${urls.length} live URLs. Sending to Google Sheets Webhook...`);
+    console.log(`Aggregated ${corePages.length} core pages & ${blogPages.length} blog pages. Syncing...`);
 
     const response = await fetch(webhookUrl, {
         method: "POST",
@@ -86,7 +102,8 @@ async function main() {
         },
         body: JSON.stringify({
             type: "live_urls_sync",
-            urls: urls,
+            corePages: corePages,
+            blogPages: blogPages,
         }),
     });
 
