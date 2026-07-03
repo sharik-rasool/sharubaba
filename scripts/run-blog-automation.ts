@@ -90,7 +90,8 @@ async function syncLiveUrlsToGoogleSheet() {
 
     console.log("[Sync] Gathering live URLs for Google Sheets sync...");
     const domain = "https://www.sharikrasool.com";
-    const urls: { url: string; category: string }[] = [];
+    const corePages: { url: string; category: string }[] = [];
+    const blogPages: { url: string; title: string; publishDate: string }[] = [];
 
     // 1. Static Pages
     const staticPages = [
@@ -105,12 +106,12 @@ async function syncLiveUrlsToGoogleSheet() {
         { path: "/tools", category: "Static Page" },
     ];
     staticPages.forEach(p => {
-        urls.push({ url: `${domain}${p.path}`, category: p.category });
+        corePages.push({ url: `${domain}${p.path}`, category: p.category });
     });
 
     // 2. Interactive Tools
     toolsData.forEach(tool => {
-        urls.push({ url: `${domain}/tools/${tool.slug}`, category: "Interactive Tool" });
+        corePages.push({ url: `${domain}/tools/${tool.slug}`, category: "Interactive Tool" });
     });
 
     // 3. Published Blog Posts
@@ -118,27 +119,39 @@ async function syncLiveUrlsToGoogleSheet() {
         const now = new Date();
         const publishedPosts = await Blog.find({
             $or: [
-                { scheduledFor: { $lte: now } },
-                { scheduledFor: { $exists: false } },
-                { scheduledFor: null }
+                {
+                    status: "published",
+                    $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+                },
+                {
+                    status: "draft",
+                    scheduledFor: { $lte: now }
+                }
             ]
         }).sort({ createdAt: -1 }).lean();
 
-        publishedPosts.forEach(post => {
-            urls.push({ url: `${domain}/blog/${post.slug}`, category: "Blog Post" });
+        publishedPosts.forEach((post: any) => {
+            const pDate = post.scheduledFor ? new Date(post.scheduledFor) : new Date(post.createdAt || now);
+            const formattedDate = pDate.toISOString().split("T")[0];
+            blogPages.push({
+                url: `${domain}/blog/${post.slug}`,
+                title: post.title,
+                publishDate: formattedDate,
+            });
         });
     } catch (dbErr: any) {
         console.error("[Sync] Error loading published posts:", dbErr.message || dbErr);
     }
 
-    console.log(`[Sync] Sending ${urls.length} live URLs to Google Sheets...`);
+    console.log(`[Sync] Sending ${corePages.length} core pages & ${blogPages.length} blog pages to Google Sheets...`);
     try {
         const response = await fetch(webhookUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 type: "live_urls_sync",
-                urls: urls,
+                corePages: corePages,
+                blogPages: blogPages,
             }),
         });
 
