@@ -1,6 +1,28 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from '@/components/Providers';
+import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({
+    subsets: ['latin'],
+    weight: ['300', '400', '500', '600', '700'],
+    variable: '--font-space-grotesk',
+    display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700', '800'],
+    variable: '--font-plus-jakarta-sans',
+    display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+    subsets: ['latin'],
+    weight: ['400', '500'],
+    variable: '--font-jetbrains-mono',
+    display: 'swap',
+});
 
 const BASE_URL = "https://www.sharikrasool.com";
 
@@ -46,7 +68,7 @@ export default function RootLayout({
 
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className="antialiased font-sans bg-background text-foreground" suppressHydrationWarning>
+            <body className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`} suppressHydrationWarning>
                 <Providers>
                     {children}
                 </Providers>
