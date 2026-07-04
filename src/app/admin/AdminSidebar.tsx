@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import Image from "next/image";
 
 const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -25,9 +26,15 @@ export default function AdminSidebar({ email }: { email: string }) {
     const sidebar = (
         <div className="flex flex-col h-full">
             <div className="px-6 py-5 border-b border-border">
-                <Link href="/admin" className="flex items-center gap-2">
-                    <PenSquare className="h-5 w-5 text-primary" />
-                    <span className="font-bold text-lg">SR Admin</span>
+                <Link href="/admin" className="flex items-center gap-2.5">
+                    <Image
+                        src="/logo.png"
+                        alt="Admin Logo"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-md object-contain"
+                    />
+                    <span className="font-bold text-lg">Admin</span>
                 </Link>
             </div>
 
@@ -77,9 +84,15 @@ export default function AdminSidebar({ email }: { email: string }) {
 
             {/* Mobile top bar */}
             <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-background border-b border-border sticky top-0 z-30">
-                <Link href="/admin" className="flex items-center gap-2 font-bold">
-                    <PenSquare className="h-5 w-5 text-primary" />
-                    SR Admin
+                <Link href="/admin" className="flex items-center gap-2.5 font-bold">
+                    <Image
+                        src="/logo.png"
+                        alt="Admin Logo"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-md object-contain"
+                    />
+                    Admin
                 </Link>
                 <div className="flex items-center gap-2">
                     <ThemeToggle />

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -27,11 +28,17 @@ export function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-semibold tracking-tight"
+          className="flex items-center gap-2.5 text-xl font-semibold tracking-tight"
           aria-label="Sharik Rasool - Home"
         >
-          <span className="text-primary">SR</span>
-          <span className="hidden sm:inline">Sharik Rasool</span>
+          <Image
+            src="/logo.png"
+            alt="Sharik Rasool Logo"
+            width={32}
+            height={32}
+            className="w-8 h-8 rounded-lg object-contain"
+          />
+          <span className="hidden sm:inline font-bold">Sharik Rasool</span>
         </Link>
 
         {/* Desktop Navigation */}
