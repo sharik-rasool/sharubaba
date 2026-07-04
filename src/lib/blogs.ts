@@ -155,27 +155,37 @@ async function db() {
     if (!conn) throw new Error("No database connection");
 }
 
+const getPublishedBlogsFromDB = async (): Promise<BlogDoc[]> => {
+    await db();
+    const now = new Date();
+    const blogs = await Blog.find({ 
+        $or: [
+            {
+                status: "published",
+                $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
+            },
+            {
+                status: "draft",
+                scheduledFor: { $lte: now }
+            }
+        ]
+    })
+        .select("title slug excerpt coverImage tags readingTime createdAt status scheduledFor updatedAt")
+        .sort({ createdAt: -1 })
+        .lean<IBlog[]>();
+    return blogs.map((b) => serialize(b as unknown as IBlog));
+};
+
+const cachedGetPublishedBlogs = safeCache(
+    getPublishedBlogsFromDB,
+    ["published-blogs"],
+    { revalidate: 600, tags: ["published-blogs", "blogs"] }
+);
+
 export const getPublishedBlogs = cache(
     async (): Promise<BlogDoc[]> => {
         try {
-            await db();
-            const now = new Date();
-            const blogs = await Blog.find({ 
-                $or: [
-                    {
-                        status: "published",
-                        $or: [{ scheduledFor: { $lte: now } }, { scheduledFor: { $exists: false } }, { scheduledFor: null }]
-                    },
-                    {
-                        status: "draft",
-                        scheduledFor: { $lte: now }
-                    }
-                ]
-            })
-                .select("title slug excerpt coverImage tags readingTime createdAt status scheduledFor updatedAt")
-                .sort({ createdAt: -1 })
-                .lean<IBlog[]>();
-            return blogs.map((b) => serialize(b as unknown as IBlog));
+            return await cachedGetPublishedBlogs();
         } catch {
             return [];
         }

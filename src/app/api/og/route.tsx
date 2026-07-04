@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
             }
         ] : undefined;
 
-        return new ImageResponse(
+        const imageResponse = new ImageResponse(
             (
                 <div
                     style={{
@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
                                 letterSpacing: "1px",
                             }}
                         >
-                            {category}
+                                {category}
                         </div>
                     </div>
 
@@ -197,6 +197,12 @@ export async function GET(req: NextRequest) {
                 fonts: fontOptions,
             }
         );
+
+        imageResponse.headers.set(
+            "Cache-Control",
+            "public, max-age=31536000, immutable, s-maxage=31536000"
+        );
+        return imageResponse;
     } catch (e) {
         console.error("OG Generator Error:", e);
         return new Response("Failed to generate image", { status: 500 });
