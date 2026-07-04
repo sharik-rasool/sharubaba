@@ -2,6 +2,7 @@ import { getBlogBySlug, getPublishedBlogs } from "@/lib/blogs";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { auth } from "@/lib/auth";
 import { ArrowLeft, Calendar, Tag, User, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import { parseHtmlForToc } from "@/lib/toc";
@@ -77,6 +78,8 @@ export default async function BlogPostPage({ params }: Props) {
 
     const isLive = post && (post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date()));
     if (!post || !isLive) notFound();
+
+    const session = await auth();
 
     const { toc, html: parsedHtml, headingCount } = parseHtmlForToc(post.content);
     const showToc = headingCount >= 3;
@@ -171,8 +174,29 @@ export default async function BlogPostPage({ params }: Props) {
     });
 
     return (
-        <article className="section">
-            <script
+        <>
+            {session && (
+                <div className="w-full bg-slate-900 text-slate-100 py-2.5 px-4 text-sm sticky top-0 z-50 shadow-md">
+                    <div className="max-w-5xl mx-auto flex items-center justify-between">
+                        <div className="flex items-center gap-2 font-medium">
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>SR Admin Mode</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span className="text-xs text-slate-400 hidden sm:inline">{session.user?.email}</span>
+                            <Link
+                                href={`/admin/blogs/${post._id}/edit`}
+                                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-3.5 py-1.5 rounded-md transition-colors text-xs flex items-center gap-1.5"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                Edit Post
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+            <article className="section">
+                <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}
             />
@@ -338,5 +362,6 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
             </div>
         </article>
+        </>
     );
 }
