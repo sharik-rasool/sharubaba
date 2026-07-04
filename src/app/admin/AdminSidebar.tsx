@@ -7,6 +7,7 @@ import { LayoutDashboard, FileText, LogOut, PenSquare, Menu, X, Activity } from 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -50,7 +51,10 @@ export default function AdminSidebar({ email }: { email: string }) {
             </nav>
 
             <div className="px-4 py-4 border-t border-border space-y-3">
-                <p className="px-3 text-xs text-muted-foreground truncate">{email}</p>
+                <div className="flex items-center justify-between px-3">
+                    <p className="text-xs text-muted-foreground truncate max-w-[150px]">{email}</p>
+                    <ThemeToggle />
+                </div>
                 <Button
                     variant="ghost"
                     size="sm"
@@ -77,9 +81,12 @@ export default function AdminSidebar({ email }: { email: string }) {
                     <PenSquare className="h-5 w-5 text-primary" />
                     SR Admin
                 </Link>
-                <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}>
-                    {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </Button>
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                    <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}>
+                        {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </Button>
+                </div>
             </div>
 
             {/* Mobile drawer */}
