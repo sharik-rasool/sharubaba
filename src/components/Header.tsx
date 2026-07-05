@@ -25,20 +25,27 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container-wide flex h-16 items-center justify-between" aria-label="Main navigation">
-        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 text-xl font-semibold tracking-tight"
+          className="flex items-center tracking-tight"
           aria-label="Sharik Rasool - Home"
         >
           <Image
-            src="/logo.png"
+            src="/wordmark-black.png"
             alt="Sharik Rasool Logo"
-            width={32}
+            width={138}
             height={32}
-            className="w-8 h-8 rounded-lg object-contain"
+            className="h-8 w-auto object-contain dark:hidden"
+            priority
           />
-          <span className="hidden sm:inline font-bold">Sharik Rasool</span>
+          <Image
+            src="/wordmark-white.png"
+            alt="Sharik Rasool Logo"
+            width={138}
+            height={32}
+            className="hidden dark:block h-8 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
