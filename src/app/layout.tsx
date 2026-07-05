@@ -28,6 +28,10 @@ const BASE_URL = "https://www.sharikrasool.com";
 
 export const metadata: Metadata = {
     metadataBase: new URL(BASE_URL),
+    icons: {
+        icon: "/monogram-tile-512.png",
+        apple: "/monogram-tile-512.png",
+    },
     title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
     description:
         "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
