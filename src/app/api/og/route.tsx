@@ -3,6 +3,8 @@ import { NextRequest } from "next/server";
 
 export const runtime = "edge";
 
+let cachedFontData: ArrayBuffer | null = null;
+
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
@@ -11,16 +13,18 @@ export async function GET(req: NextRequest) {
         const title = searchParams.get("title") || "Featured Article";
         const category = searchParams.get("category") || "SEO & Blogging";
         
-        // Fetch Space Grotesk Bold font from Google Fonts CDN for a premium, custom look
-        let fontData: ArrayBuffer | null = null;
-        try {
-            const fontUrl = "https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFsp0R35Qv2bMYSMdcTWC8OB8.ttf";
-            const fontRes = await fetch(fontUrl);
-            if (fontRes.ok) {
-                fontData = await fontRes.arrayBuffer();
+        // Fetch Space Grotesk Bold font from Google Fonts CDN (cached globally across invocations)
+        let fontData = cachedFontData;
+        if (!fontData) {
+            try {
+                const fontUrl = "https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFsp0R35Qv2bMYSMdcTWC8OB8.ttf";
+                const fontRes = await fetch(fontUrl);
+                if (fontRes.ok) {
+                    fontData = cachedFontData = await fontRes.arrayBuffer();
+                }
+            } catch (e) {
+                console.error("Failed to load custom font, falling back to default.", e);
             }
-        } catch (e) {
-            console.error("Failed to load custom font, falling back to default.", e);
         }
 
         const fontOptions = fontData ? [
