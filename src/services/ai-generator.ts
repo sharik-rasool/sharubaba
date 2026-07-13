@@ -133,7 +133,7 @@ The article must be a comprehensive guide targeting 3,000 to 3,500 words. Theref
 Strict Title Formatting Rules:
 1. The title MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). This is mandatory for SEO.
 2. The title must NOT use the phrase "Ultimate Guide" or "The Ultimate Guide to". This is overused and forbidden.
-3. The title must be highly engaging, complete, click-worthy, and make absolute sense. It MUST be less than or equal to 55 characters in length. Do NOT exceed 55 characters under any circumstances.
+3. The title must be highly engaging, complete, click-worthy, and make absolute sense. The length must not exceed 55 characters. If the title is naturally under 55 characters (e.g., 35 to 45 characters), that is perfectly fine; do NOT add unnecessary filler words or padding to artificially lengthen it. If it would naturally exceed 55 characters, shorten and condense it so it is less than or equal to 55 characters.
 4. Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the title under any circumstances.
 5. Try these alternative title patterns (integrating the primary keyword):
    - "Mastering [Primary Keyword]"
@@ -237,7 +237,7 @@ Introduction Content: ${intro.substring(0, 1500)}
 Conclusion Content: ${outro.substring(0, 1500)}
 
 Keep in mind:
-- Meta Title (seoTitle) must be less than or equal to 55 characters and MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). Do NOT exceed 55 characters under any circumstances.
+- Meta Title (seoTitle) must be less than or equal to 55 characters and MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). If it is naturally shorter, that is perfectly fine; do NOT add unnecessary filler words or padding. Do NOT exceed 55 characters under any circumstances.
 - Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the seoTitle under any circumstances.
 - You must NOT use the phrase "Ultimate Guide" or "The Ultimate Guide to" in the "seoTitle". Choose creative and engaging alternatives.
 - Meta Description must be between 140 and 160 characters.
