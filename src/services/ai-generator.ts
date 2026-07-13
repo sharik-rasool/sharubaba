@@ -133,14 +133,14 @@ The article must be a comprehensive guide targeting 3,000 to 3,500 words. Theref
 Strict Title Formatting Rules:
 1. The title MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). This is mandatory for SEO.
 2. The title must NOT use the phrase "Ultimate Guide" or "The Ultimate Guide to". This is overused and forbidden.
-3. The title must be highly engaging, complete, click-worthy, and make absolute sense. It should be between 50 and 65 characters in length. Do NOT generate generic, incomplete, or ultra-short titles (like "Blog Smart" or "Blog Smarter").
-4. Try these alternative title patterns (integrating the primary keyword):
-   - "Mastering [Primary Keyword]: ..."
-   - "[Primary Keyword] Playbook: ..."
-   - "How to [Action with Primary Keyword]: ..."
-   - "A Complete Guide to [Primary Keyword]: ..."
-   - "The Practical Playbook for [Primary Keyword]..."
-   - "[Primary Keyword]: Strategies, Techniques & Best Practices"
+3. The title must be highly engaging, complete, click-worthy, and make absolute sense. It MUST be less than or equal to 55 characters in length. Do NOT exceed 55 characters under any circumstances.
+4. Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the title under any circumstances.
+5. Try these alternative title patterns (integrating the primary keyword):
+   - "Mastering [Primary Keyword]"
+   - "[Primary Keyword] Playbook: Strategies"
+   - "How to [Action with Primary Keyword]"
+   - "A Complete Guide to [Primary Keyword]"
+   - "[Primary Keyword]: Key Strategies & Tips"
 
 Return a JSON object matching this structure exactly (do not output any markdown code blocks, just raw JSON):
 {
@@ -237,14 +237,15 @@ Introduction Content: ${intro.substring(0, 1500)}
 Conclusion Content: ${outro.substring(0, 1500)}
 
 Keep in mind:
-- Meta Title (seoTitle) must be between 50 and 65 characters and MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively).
+- Meta Title (seoTitle) must be less than or equal to 55 characters and MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). Do NOT exceed 55 characters under any circumstances.
+- Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the seoTitle under any circumstances.
 - You must NOT use the phrase "Ultimate Guide" or "The Ultimate Guide to" in the "seoTitle". Choose creative and engaging alternatives.
 - Meta Description must be between 140 and 160 characters.
 - FAQs should directly answer People Also Ask queries or core questions from the content.
 
 Return a JSON object matching this structure exactly (do not output any markdown code blocks or extra text, just raw JSON):
 {
-  "seoTitle": "Optimized title (50-65 chars)",
+  "seoTitle": "Optimized title (max 55 chars)",
   "seoDescription": "Optimized description (140-160 chars)",
   "excerpt": "A short 1-2 sentence hook for the blog index listing (max 120 chars)",
   "tags": ["tag1", "tag2", "tag3"],
