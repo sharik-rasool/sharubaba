@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
 import { ObfuscatedContact } from "./ObfuscatedContact";
 
 const footerLinks = {
@@ -20,6 +20,7 @@ const footerLinks = {
 
 const socialLinks = [
   { name: "LinkedIn", href: "https://www.linkedin.com/in/sharik-rasool-074155174/", icon: Linkedin },
+  { name: "Instagram", href: "https://www.instagram.com/growithsharik", icon: Instagram },
 ];
 
 export function Footer() {
