@@ -132,15 +132,15 @@ The article must be a comprehensive guide targeting 3,000 to 3,500 words. Theref
 
 Strict Title Formatting Rules:
 1. The title MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). This is mandatory for SEO.
-2. The title must NOT use repetitive generic buzzwords or prefixes such as "Mastering", "Ultimate Guide", or "The Ultimate Guide to". These are overused and strictly forbidden.
-3. The title must be highly engaging, complete, click-worthy, and make absolute sense. The length must not exceed 55 characters. If the title is naturally under 55 characters (e.g., 35 to 45 characters), that is perfectly fine; do NOT add unnecessary filler words or padding to artificially lengthen it. If it would naturally exceed 55 characters, shorten and condense it so it is less than or equal to 55 characters.
-4. Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the title under any circumstances.
-5. Create a fresh, creative title using varied structures such as:
-   - "How to [Action with Primary Keyword]"
-   - "[Primary Keyword]: Key Strategies & Tips"
-   - "A Practical Guide to [Primary Keyword]"
-   - "[Primary Keyword] for [Target Audience/Goal]"
-   - "Best Practices for [Primary Keyword]"
+2. The title must NEVER be identical to the raw primary keyword. It must be a complete, engaging, and professional headline that pairs the primary keyword with context, action, or modifiers.
+3. The title must NOT use repetitive generic buzzwords or prefixes such as "Mastering", "Ultimate Guide", or "The Ultimate Guide to". These are overused and strictly forbidden.
+4. The title must be highly engaging, complete, click-worthy, and make absolute sense. The length must not exceed 55 characters. If the title is naturally under 55 characters (e.g., 35 to 45 characters), that is perfectly fine; do NOT add unnecessary filler words or padding to artificially lengthen it. If it would naturally exceed 55 characters, shorten and condense it so it is less than or equal to 55 characters.
+5. Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the title under any circumstances.
+6. Create a fresh, creative title using varied structures. Examples:
+   - Keyword: "earn money blogging" -> Title: "How to Earn Money Blogging: 7 Proven Methods"
+   - Keyword: "blogging for therapists" -> Title: "Blogging for Therapists: Grow Your Practice Online"
+   - Keyword: "b2b blogging" -> Title: "B2B Blogging: Strategies to Generate SaaS Leads"
+   - Keyword: "backlink packages" -> Title: "Backlink Packages: Buying Quality Backlinks Safely"
 
 Return a JSON object matching this structure exactly (do not output any markdown code blocks, just raw JSON):
 {
@@ -238,6 +238,7 @@ Conclusion Content: ${outro.substring(0, 1500)}
 
 Keep in mind:
 - Meta Title (seoTitle) must be less than or equal to 55 characters and MUST include the primary keyword: "${brief.primaryKeyword}" (case-insensitively). If it is naturally shorter, that is perfectly fine; do NOT add unnecessary filler words or padding. Do NOT exceed 55 characters under any circumstances.
+- The seoTitle must NEVER be identical to the raw primary keyword. It must be a complete, engaging headline.
 - Do NOT include the brand name, author name, or website (like "Sharik Rasool", "Sharik Rasool:", or "sharikrasool.com") in the seoTitle under any circumstances.
 - You must NOT use repetitive buzzwords like "Mastering", "Ultimate Guide", or "The Ultimate Guide to" in the "seoTitle". Choose creative and engaging alternatives.
 - Meta Description must be between 140 and 160 characters.
