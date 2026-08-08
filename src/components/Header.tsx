@@ -27,25 +27,20 @@ export function Header() {
       <nav className="container-wide flex h-16 items-center justify-between" aria-label="Main navigation">
         <Link
           href="/"
-          className="flex items-center tracking-tight"
+          className="flex items-center gap-2.5 tracking-tight"
           aria-label="Sharik Rasool - Home"
         >
-          <Image
-            src="/wordmark-black.png"
-            alt="Sharik Rasool Logo"
-            width={138}
-            height={32}
-            className="h-8 w-auto object-contain dark:hidden"
-            priority
-          />
-          <Image
-            src="/wordmark-white.png"
-            alt="Sharik Rasool Logo"
-            width={138}
-            height={32}
-            className="hidden dark:block h-8 w-auto object-contain"
-            priority
-          />
+          <div className="relative h-8 w-8 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-white p-1 shadow-sm flex items-center justify-center">
+            <Image
+              src="/monogram-tile-512.png"
+              alt="Sharik Rasool Logo"
+              fill
+              className="object-contain p-0.5"
+            />
+          </div>
+          <span className="text-xl font-bold text-foreground lowercase">
+            sharikrasool
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
