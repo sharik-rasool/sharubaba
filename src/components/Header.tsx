@@ -39,7 +39,7 @@ export function Header() {
             />
           </div>
           <span className="text-xl font-bold text-foreground lowercase">
-            sharikrasool
+            sharik rasool<span className="text-primary">.</span>
           </span>
         </Link>
 

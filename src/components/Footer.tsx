@@ -42,7 +42,9 @@ export function Footer() {
                   className="object-contain p-0.5"
                 />
               </div>
-              <span className="tracking-tight">Sharik Rasool</span>
+              <span className="tracking-tight lowercase">
+                sharik rasool<span className="text-primary">.</span>
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
               SEO Strategist & Link Builder with 7+ years of experience helping SaaS and tech companies grow organically.
