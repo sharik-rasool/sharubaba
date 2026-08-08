@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
 import { ObfuscatedContact } from "./ObfuscatedContact";
 
@@ -32,8 +33,16 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand & Contact */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block text-xl font-semibold mb-4">
-              <span className="text-primary">SR</span> Sharik Rasool
+            <Link href="/" className="flex items-center gap-2.5 text-xl font-semibold mb-4" aria-label="Sharik Rasool Home">
+              <div className="relative h-8 w-8 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-white p-1 shadow-sm flex items-center justify-center">
+                <Image
+                  src="/monogram-tile-512.png"
+                  alt="Sharik Rasool Logo"
+                  fill
+                  className="object-contain p-0.5"
+                />
+              </div>
+              <span className="tracking-tight">Sharik Rasool</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
               SEO Strategist & Link Builder with 7+ years of experience helping SaaS and tech companies grow organically.
