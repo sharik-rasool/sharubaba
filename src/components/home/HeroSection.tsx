@@ -160,6 +160,7 @@ export function HeroSection() {
                     src={sharikPortrait}
                     alt="Sharik Rasool - SEO Strategist & Link Builder"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102"
+                    sizes="(max-width: 640px) 340px, (max-width: 1024px) 380px, 480px"
                     priority
                   />
                   {/* Bottom Fade gradient overlay */}

@@ -2,12 +2,12 @@ import { getBlogBySlug, getPublishedBlogs } from "@/lib/blogs";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { auth } from "@/lib/auth";
 import { ArrowLeft, Calendar, Tag, User, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import { parseHtmlForToc } from "@/lib/toc";
 import TableOfContents from "@/components/blog/TableOfContents";
 import ViewCounter from "@/components/blog/ViewCounter";
+import { AdminEditBanner } from "@/components/blog/AdminEditBanner";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 export const revalidate = 3600;
@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const seoDescription = post.seoDescription || post.excerpt;
     const baseUrl = "https://www.sharikrasool.com";
+    const fallbackOgImage = `/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.primaryKeyword || (post.tags && post.tags.length > 0 ? post.tags[0] : "SEO"))}&v=2`;
 
     return {
         title: seoTitle,
@@ -49,10 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             authors: ["Sharik Rasool"],
             tags: post.tags,
             images: (() => {
-                let imgUrl = post.ogImage || post.coverImage || `${baseUrl}/og-image.jpg`;
-                if (imgUrl.startsWith("/api/og")) {
-                    imgUrl += "&v=2";
-                }
+                let imgUrl = post.ogImage || post.coverImage || fallbackOgImage;
                 if (imgUrl.startsWith("/")) {
                     imgUrl = `${baseUrl}${imgUrl}`;
                 }
@@ -79,13 +77,13 @@ export default async function BlogPostPage({ params }: Props) {
     const isLive = post && (post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date()));
     if (!post || !isLive) notFound();
 
-    const session = await auth();
-
     const { toc, html: parsedHtml, headingCount } = parseHtmlForToc(post.content);
     const showToc = headingCount >= 3;
 
     const baseUrl = "https://www.sharikrasool.com";
     const postUrl = `${baseUrl}/blog/${post.slug}`;
+    const articleImage = post.ogImage || post.coverImage
+        || `${baseUrl}/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.primaryKeyword || (post.tags && post.tags.length > 0 ? post.tags[0] : "SEO"))}&v=2`;
 
     const schemas: Record<string, unknown>[] = [];
 
@@ -95,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
         "@type": "Article",
         headline: post.seoTitle || post.title,
         description: post.seoDescription || post.excerpt,
-        image: post.coverImage ? [post.coverImage] : [`${baseUrl}/og-image.jpg`],
+        image: [articleImage],
         datePublished: post.createdAt,
         dateModified: post.updatedAt,
         author: {
@@ -175,26 +173,7 @@ export default async function BlogPostPage({ params }: Props) {
 
     return (
         <>
-            {session && (
-                <div className="w-full bg-slate-900 text-slate-100 py-2.5 px-4 text-sm sticky top-0 z-50 shadow-md">
-                    <div className="max-w-5xl mx-auto flex items-center justify-between">
-                        <div className="flex items-center gap-2 font-medium">
-                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>SR Admin Mode</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className="text-xs text-slate-400 hidden sm:inline">{session.user?.email}</span>
-                            <Link
-                                href={`/admin/blogs/${post._id}/edit`}
-                                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-3.5 py-1.5 rounded-md transition-colors text-xs flex items-center gap-1.5"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                                Edit Post
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <AdminEditBanner postId={post._id} />
             <article className="section">
                 <script
                 type="application/ld+json"

@@ -46,14 +46,14 @@ export const metadata: Metadata = {
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
             "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
-        images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
+        images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
             "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
-        images: ["/og-image.jpg"],
+        images: ["/opengraph-image"],
     },
     robots: {
         index: true,

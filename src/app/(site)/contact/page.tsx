@@ -33,12 +33,14 @@ export const metadata: Metadata = {
             "Get in touch with Sharik Rasool for SEO strategy and link building services. Free initial consultation. Based in Srinagar, J&K, serving clients worldwide.",
         url: "https://www.sharikrasool.com/contact",
         type: "website",
+        images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary",
         title: "Contact | Free SEO Consultation",
         description:
             "Get in touch with Sharik Rasool for SEO strategy and link building services. Free initial consultation. Based in Srinagar, J&K, serving clients worldwide.",
+        images: ["/opengraph-image"],
     },
 };
 

@@ -15,12 +15,14 @@ export const metadata: Metadata = {
             "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
         url: "https://www.sharikrasool.com/tools",
         type: "website",
+        images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "Free Online Tools & Generators",
         description:
             "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+        images: ["/opengraph-image"],
     },
 };
 

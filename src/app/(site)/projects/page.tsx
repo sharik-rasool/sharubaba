@@ -25,12 +25,14 @@ export const metadata: Metadata = {
             "Explore successful SEO and link building case studies. See how strategic campaign optimization drives domain authority, traffic growth, and search rankings.",
         url: "https://www.sharikrasool.com/projects",
         type: "website",
+        images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "SEO Projects & Case Studies",
         description:
             "Explore successful SEO and link building case studies. See how strategic campaign optimization drives domain authority, traffic growth, and search rankings.",
+        images: ["/opengraph-image"],
     },
 };
 

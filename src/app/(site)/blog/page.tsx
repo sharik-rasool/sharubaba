@@ -26,7 +26,9 @@ export async function generateMetadata({
     const pageSuffix = currentPage > 1 ? ` | Page ${currentPage}` : "";
 
     const title = `Blog & Insights${pageSuffix}`;
-    const description = "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.";
+    const description = currentPage > 1
+        ? `Page ${currentPage} of our SEO blog: insights on link building, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.`
+        : "Insights on SEO, freelancing, blogging, B2B/B2C trends, ecommerce, and the latest internet happenings.";
     const canonical = `https://www.sharikrasool.com/blog${currentPage > 1 ? `?page=${currentPage}` : ""}`;
 
     return {
@@ -38,11 +40,13 @@ export async function generateMetadata({
             description,
             url: canonical,
             type: "website",
+            images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
         },
         twitter: {
             card: "summary_large_image",
             title,
             description,
+            images: ["/opengraph-image"],
         },
     };
 }

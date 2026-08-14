@@ -26,12 +26,14 @@ export const metadata: Metadata = {
             "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
         url: "https://www.sharikrasool.com/about",
         type: "profile",
+        images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "About Me | SEO Strategist",
         description:
             "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+        images: ["/opengraph-image"],
     },
 };
 
