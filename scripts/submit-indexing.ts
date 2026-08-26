@@ -46,7 +46,7 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
 
 async function submitToIndexingApi(url: string, accessToken: string): Promise<any> {
     console.log(`[Indexing API] Submitting URL: ${url}`);
-    const res = await fetch("https://indexing.googleapis.com/v1/urlNotifications:publish", {
+    const res = await fetch("https://indexing.googleapis.com/v3/urlNotifications:publish", {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${accessToken}`,
@@ -58,9 +58,16 @@ async function submitToIndexingApi(url: string, accessToken: string): Promise<an
         })
     });
 
-    const data = await res.json();
+    const text = await res.text();
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        data = { error: { message: text } };
+    }
+
     if (!res.ok) {
-        console.error(`[Indexing API] Error submitting ${url}:`, data);
+        console.error(`[Indexing API] Error submitting ${url}:`, data.error?.message || data);
         return { success: false, url, error: data };
     }
 
