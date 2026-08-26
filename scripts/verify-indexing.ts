@@ -19,7 +19,7 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
     const pkcs8Key = await jose.importPKCS8(privateKey, "RS256");
 
     const jwt = await new jose.SignJWT({
-        scope: "https://www.googleapis.com/auth/webmasters.readonly"
+        scope: "https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets"
     })
         .setProtectedHeader({ alg: "RS256", typ: "JWT" })
         .setIssuer(clientEmail)
@@ -80,6 +80,29 @@ async function inspectUrl(url: string, siteUrl: string, accessToken: string, ret
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
+}
+
+async function writeToGoogleSheet(spreadsheetId: string, values: any[][], accessToken: string): Promise<any> {
+    console.log(`Writing verification results to Google Sheet ID: ${spreadsheetId}...`);
+    const range = "indexing status!A1:G";
+    const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?valueInputOption=USER_ENTERED`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            range: range,
+            majorDimension: "ROWS",
+            values: values
+        })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(`Google Sheets API Error: ${data.error?.message || JSON.stringify(data)}`);
+    }
+    console.log("Successfully updated Google Sheet tab 'indexing status'!");
 }
 
 async function main() {
@@ -193,6 +216,14 @@ async function main() {
     console.log("\nQuerying Google Search Console Index Status...");
     console.log("Note: Inspecting URLs takes a few seconds per request due to GSC limits.\n");
 
+    const sheetUrl = process.env.GOOGLE_KEYWORDS_SHEET_URL || "";
+    const match = sheetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+    const spreadsheetId = match ? match[1] : "";
+
+    const sheetRows = [
+        ["URL", "Title", "Index Verdict", "Indexed Status", "Last Crawl Time", "Coverage State", "Last Checked At"]
+    ];
+
     const results = [];
     let indexedCount = 0;
     let pendingCount = 0;
@@ -213,11 +244,22 @@ async function main() {
 
             console.log(`  -> Verdict: ${verdict} | Last Crawl: ${lastCrawl}`);
 
-            if (verdict === "GOOD" || verdict === "INDEXED" || verdict === "PASS") {
+            const isIndexed = (verdict === "GOOD" || verdict === "INDEXED" || verdict === "PASS");
+            if (isIndexed) {
                 indexedCount++;
             } else {
                 pendingCount++;
             }
+
+            sheetRows.push([
+                url,
+                blog.title,
+                verdict,
+                isIndexed ? "INDEXED" : "PENDING",
+                lastCrawl,
+                coverage,
+                now.toISOString()
+            ]);
 
             results.push({
                 title: blog.title,
@@ -229,6 +271,17 @@ async function main() {
         } else {
             console.error(`  -> Failed to inspect URL:`, res.error?.error?.message || res.error);
             failedCount++;
+            
+            sheetRows.push([
+                url,
+                blog.title,
+                "API_ERROR",
+                "FAILED TO CHECK",
+                "N/A",
+                res.error?.error?.message || "Unknown GSC API Error",
+                now.toISOString()
+            ]);
+
             results.push({
                 title: blog.title,
                 url,
@@ -253,6 +306,16 @@ async function main() {
         console.log(`- Inspection Failed: ${failedCount} ❌ (See error output)`);
     }
     console.log("=========================================\n");
+
+    if (spreadsheetId) {
+        try {
+            await writeToGoogleSheet(spreadsheetId, sheetRows, accessToken);
+        } catch (sheetErr: any) {
+            console.error("ERROR: Failed to write to Google Sheets:", sheetErr.message || sheetErr);
+        }
+    } else {
+        console.log("No GOOGLE_KEYWORDS_SHEET_URL defined in environment. Skipping Google Sheets update.");
+    }
 
     await mongoose.disconnect();
 }
