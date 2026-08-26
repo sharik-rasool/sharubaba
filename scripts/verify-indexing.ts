@@ -13,7 +13,7 @@ const serviceAccountPath = path.join(process.cwd(), "service-account.json");
 const mongoUri = process.env.MONGODB_URI || "";
 const domain = "https://www.sharikrasool.com";
 // GSC siteUrl property (must match the property exactly in Search Console)
-const siteUrl = "https://www.sharikrasool.com/"; 
+const siteUrl = "sc-domain:sharikrasool.com"; 
 
 async function getAccessToken(clientEmail: string, privateKey: string): Promise<string> {
     const pkcs8Key = await jose.importPKCS8(privateKey, "RS256");
@@ -46,25 +46,40 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
     return data.access_token;
 }
 
-async function inspectUrl(url: string, siteUrl: string, accessToken: string): Promise<any> {
-    const res = await fetch("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            inspectionUrl: url,
-            siteUrl: siteUrl
-        })
-    });
+async function inspectUrl(url: string, siteUrl: string, accessToken: string, retries: number = 3): Promise<any> {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const res = await fetch("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    inspectionUrl: url,
+                    siteUrl: siteUrl
+                })
+            });
 
-    const data = await res.json();
-    if (!res.ok) {
-        return { success: false, error: data };
+            const data = await res.json();
+            if (!res.ok) {
+                if (res.status === 429) {
+                    console.warn(`  [GSC API] Rate limit (429) hit. Waiting 5s before attempt ${attempt + 1}/${retries}...`);
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    continue;
+                }
+                return { success: false, error: data };
+            }
+
+            return { success: true, result: data.inspectionResult };
+        } catch (err: any) {
+            console.warn(`  [GSC API] Network/Fetch failed: ${err.message || err}. Attempt ${attempt}/${retries}...`);
+            if (attempt >= retries) {
+                return { success: false, error: { error: { message: err.message || String(err) } } };
+            }
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
     }
-
-    return { success: true, result: data.inspectionResult };
 }
 
 async function main() {
@@ -223,8 +238,8 @@ async function main() {
             });
         }
         
-        // Sleep slightly to avoid hitting Search Console API rate limits (120 RPM limit)
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Sleep 1 second to avoid hitting Search Console API rate limits (120 RPM limit)
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     // 6. Output Summary Report
