@@ -41,3 +41,17 @@ jobs:
           else
             npx tsx scripts/run-blog-automation.ts --limit 1
           fi
+
+      - name: Run Google GSC Indexing
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -n "$GOOGLE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
+            npx tsx scripts/submit-indexing.ts
+            rm -f service-account.json
+          else
+            echo "GOOGLE_SERVICE_ACCOUNT_JSON secret is not set. Skipping automatic GSC indexing."
+          fi
+
