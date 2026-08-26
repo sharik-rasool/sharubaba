@@ -84,7 +84,7 @@ async function inspectUrl(url: string, siteUrl: string, accessToken: string, ret
 
 async function writeToGoogleSheet(spreadsheetId: string, values: any[][], accessToken: string): Promise<any> {
     console.log(`Writing verification results to Google Sheet ID: ${spreadsheetId}...`);
-    const range = "indexing status!A1:G";
+    const range = "indexing status!A1:J";
     const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?valueInputOption=USER_ENTERED`, {
         method: "PUT",
         headers: {
@@ -220,8 +220,8 @@ async function main() {
     const match = sheetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
     const spreadsheetId = match ? match[1] : "";
 
-    const sheetRows = [
-        ["URL", "Title", "Index Verdict", "Indexed Status", "Last Crawl Time", "Coverage State", "Last Checked At"]
+    const sheetRows: any[][] = [
+        ["URL", "Title", "Index Verdict", "Indexed Status", "Last Crawl Time", "Coverage State", "Last Checked At", "", "Summary Metrics", "Value"]
     ];
 
     const results = [];
@@ -251,7 +251,7 @@ async function main() {
                 pendingCount++;
             }
 
-            sheetRows.push([
+            const rowData = [
                 url,
                 blog.title,
                 verdict,
@@ -259,7 +259,17 @@ async function main() {
                 lastCrawl,
                 coverage,
                 now.toISOString()
-            ]);
+            ];
+
+            if (i === 0) {
+                sheetRows.push([...rowData, "", "Total Blogs:", "=COUNTA(A2:A)"]);
+            } else if (i === 1) {
+                sheetRows.push([...rowData, "", "Indexed Blogs:", "=COUNTIF(D2:D, \"INDEXED\")"]);
+            } else if (i === 2) {
+                sheetRows.push([...rowData, "", "Pending Indexing:", "=COUNTIF(D2:D, \"PENDING\")"]);
+            } else {
+                sheetRows.push([...rowData, "", "", ""]);
+            }
 
             results.push({
                 title: blog.title,
@@ -272,7 +282,7 @@ async function main() {
             console.error(`  -> Failed to inspect URL:`, res.error?.error?.message || res.error);
             failedCount++;
             
-            sheetRows.push([
+            const rowData = [
                 url,
                 blog.title,
                 "API_ERROR",
@@ -280,7 +290,17 @@ async function main() {
                 "N/A",
                 res.error?.error?.message || "Unknown GSC API Error",
                 now.toISOString()
-            ]);
+            ];
+
+            if (i === 0) {
+                sheetRows.push([...rowData, "", "Total Blogs:", "=COUNTA(A2:A)"]);
+            } else if (i === 1) {
+                sheetRows.push([...rowData, "", "Indexed Blogs:", "=COUNTIF(D2:D, \"INDEXED\")"]);
+            } else if (i === 2) {
+                sheetRows.push([...rowData, "", "Pending Indexing:", "=COUNTIF(D2:D, \"PENDING\")"]);
+            } else {
+                sheetRows.push([...rowData, "", "", ""]);
+            }
 
             results.push({
                 title: blog.title,
