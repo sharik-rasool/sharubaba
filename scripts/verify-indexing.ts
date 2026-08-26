@@ -213,7 +213,7 @@ async function main() {
 
             console.log(`  -> Verdict: ${verdict} | Last Crawl: ${lastCrawl}`);
 
-            if (verdict === "GOOD" || verdict === "INDEXED") {
+            if (verdict === "GOOD" || verdict === "INDEXED" || verdict === "PASS") {
                 indexedCount++;
             } else {
                 pendingCount++;
