@@ -55,3 +55,17 @@ jobs:
             echo "GOOGLE_SERVICE_ACCOUNT_JSON secret is not set. Skipping automatic GSC indexing."
           fi
 
+      - name: Verify GSC Indexing & Sync to Google Sheets
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_KEYWORDS_SHEET_URL: ${{ secrets.GOOGLE_KEYWORDS_SHEET_URL }}
+        run: |
+          if [ -n "$GOOGLE_SERVICE_ACCOUNT_JSON" ] && [ -n "$GOOGLE_KEYWORDS_SHEET_URL" ]; then
+            echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > service-account.json
+            npx tsx scripts/verify-indexing.ts --all
+            rm -f service-account.json
+          else
+            echo "GOOGLE_SERVICE_ACCOUNT_JSON or GOOGLE_KEYWORDS_SHEET_URL is not set. Skipping daily verification check."
+          fi
+
