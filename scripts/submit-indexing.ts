@@ -110,29 +110,52 @@ async function main() {
         process.exit(1);
     }
 
-    // 3. Find published blogs in the last 3 days
+    // 3. Find published blogs (last 3 days by default, or all if --all is specified)
+    const args = process.argv.slice(2);
+    const indexAll = args.includes("--all");
+
     const now = new Date();
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
-    console.log(`Scanning for published blogs since ${threeDaysAgo.toISOString()}...`);
-
-    const query = {
-        $or: [
-            {
-                status: "published",
-                $or: [
-                    { scheduledFor: { $gte: threeDaysAgo, $lte: now } },
-                    { scheduledFor: { $exists: false } },
-                    { scheduledFor: null, createdAt: { $gte: threeDaysAgo } }
-                ]
-            },
-            {
-                status: "draft",
-                scheduledFor: { $gte: threeDaysAgo, $lte: now }
-            }
-        ]
-    };
+    let query = {};
+    if (indexAll) {
+        console.log("Flag --all detected. Scanning for ALL published and scheduled blogs...");
+        query = {
+            $or: [
+                {
+                    status: "published",
+                    $or: [
+                        { scheduledFor: { $lte: now } },
+                        { scheduledFor: { $exists: false } },
+                        { scheduledFor: null }
+                    ]
+                },
+                {
+                    status: "draft",
+                    scheduledFor: { $lte: now }
+                }
+            ]
+        };
+    } else {
+        console.log(`Scanning for published blogs since ${threeDaysAgo.toISOString()}...`);
+        query = {
+            $or: [
+                {
+                    status: "published",
+                    $or: [
+                        { scheduledFor: { $gte: threeDaysAgo, $lte: now } },
+                        { scheduledFor: { $exists: false } },
+                        { scheduledFor: null, createdAt: { $gte: threeDaysAgo } }
+                    ]
+                },
+                {
+                    status: "draft",
+                    scheduledFor: { $gte: threeDaysAgo, $lte: now }
+                }
+            ]
+        };
+    }
 
     const eligibleBlogs = await Blog.find(query).lean<any[]>();
     console.log(`Found ${eligibleBlogs.length} eligible blog(s) to index.`);
