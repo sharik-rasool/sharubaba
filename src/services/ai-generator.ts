@@ -115,8 +115,8 @@ Return a JSON object matching this structure exactly (do not output any markdown
   "entities": ["entity 1", "entity 2", "entity 3"]
 }`;
 
-    // Use llama-3.3-70b-versatile
-    const rawJson = await callGroqWithRetry("llama-3.3-70b-versatile", prompt, true);
+    // Use openai/gpt-oss-120b
+    const rawJson = await callGroqWithRetry("openai/gpt-oss-120b", prompt, true);
     return JSON.parse(rawJson) as ContentBrief;
 }
 
@@ -158,7 +158,7 @@ Return a JSON object matching this structure exactly (do not output any markdown
   ]
 }`;
 
-    const rawJson = await callGroqWithRetry("llama-3.3-70b-versatile", prompt, true);
+    const rawJson = await callGroqWithRetry("openai/gpt-oss-120b", prompt, true);
     return JSON.parse(rawJson) as Outline;
 }
 
@@ -197,7 +197,7 @@ ${previousContentSnippet}
 
 Write the content for this section now. Start directly with the H${headingLevel} heading and its body text. Do not output markdown code blocks. Return clean HTML only:`;
 
-    return await callGroqWithRetry("llama-3.3-70b-versatile", prompt, false);
+    return await callGroqWithRetry("openai/gpt-oss-120b", prompt, false);
 }
 
 /**
@@ -215,8 +215,8 @@ ${sectionContent}
 
 Return the edited HTML content directly:`;
 
-    // Use llama-3.3-70b-versatile for completions
-    return await callGroqWithRetry("llama-3.3-70b-versatile", prompt, false);
+    // Use openai/gpt-oss-120b for completions
+    return await callGroqWithRetry("openai/gpt-oss-120b", prompt, false);
 }
 
 /**
@@ -258,6 +258,6 @@ Return a JSON object matching this structure exactly (do not output any markdown
 People Also Ask Questions for Context:
 ${(brief.paaQuestions || []).join("\n")}`;
 
-    const rawJson = await callGroqWithRetry("llama-3.3-70b-versatile", prompt, true);
+    const rawJson = await callGroqWithRetry("openai/gpt-oss-120b", prompt, true);
     return JSON.parse(rawJson) as SeoMetadata;
 }

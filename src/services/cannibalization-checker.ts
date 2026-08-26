@@ -90,7 +90,7 @@ Return a JSON object matching this structure exactly (do not output any markdown
 }`;
 
     try {
-        const text = await callGroqWithRetry("llama-3.3-70b-versatile", prompt, true);
+        const text = await callGroqWithRetry("openai/gpt-oss-120b", prompt, true);
         return JSON.parse(text) as CannibalCheckResult;
     } catch (err: unknown) {
         console.error("[CANNIBALIZATION CHECKER] Error running Groq check permanently:", (err as Error).message || err);

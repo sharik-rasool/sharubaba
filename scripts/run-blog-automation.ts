@@ -230,7 +230,7 @@ Return a JSON object matching this structure exactly (do not output any markdown
 }`;
     
     try {
-        const text = await callGroqWithRetry("llama-3.3-70b-versatile", repairPrompt, true);
+        const text = await callGroqWithRetry("openai/gpt-oss-120b", repairPrompt, true);
         return JSON.parse(text);
     } catch (err: any) {
         console.error("[SEO QA] Self-repair failed:", err.message || err);
