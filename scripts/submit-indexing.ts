@@ -186,12 +186,42 @@ async function main() {
     }
 
     // 5. Submit URLs to Google Indexing API
+    const submittedBlogs = [];
     for (const blog of eligibleBlogs) {
         const url = `${domain}/blog/${blog.slug}`;
         try {
-            await submitToIndexingApi(url, accessToken);
+            const res = await submitToIndexingApi(url, accessToken);
+            if (res && res.success) {
+                submittedBlogs.push({
+                    title: blog.title,
+                    url: url
+                });
+            }
         } catch (submitErr: any) {
             console.error(`Failed to submit URL ${url}:`, submitErr.message || submitErr);
+        }
+    }
+
+    // 6. Send email notification via Google Sheets Webhook
+    const webhookUrl = process.env.GOOGLE_KEYWORDS_SHEET_WEBHOOK_URL;
+    if (webhookUrl && submittedBlogs.length > 0) {
+        console.log(`Sending indexing notification to webhook for ${submittedBlogs.length} blog(s)...`);
+        try {
+            const response = await fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    type: "indexing_notification",
+                    blogs: submittedBlogs
+                })
+            });
+            if (response.ok) {
+                console.log("Indexing notification sent successfully!");
+            } else {
+                console.warn(`Webhook notification failed with status ${response.status}`);
+            }
+        } catch (err: any) {
+            console.error("Error sending webhook notification:", err.message || err);
         }
     }
 
