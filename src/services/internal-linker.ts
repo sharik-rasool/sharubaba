@@ -94,7 +94,10 @@ function traverse(node: HTMLNode, ctx: LinkerContext) {
                     if (beforeNode) replacements.push(beforeNode);
                 }
                 
-                const linkNode = parse(`<a href="/blog/${item.slug}">${matchedText}</a>`).childNodes[0] as unknown as HTMLNode;
+                const targetHref = (!item.slug || item.slug === "/") 
+                    ? "https://www.sharikrasool.com" 
+                    : `/blog/${item.slug.replace(/^\/+/, "")}`;
+                const linkNode = parse(`<a href="${targetHref}">${matchedText}</a>`).childNodes[0] as unknown as HTMLNode;
                 if (linkNode) replacements.push(linkNode);
                 
                 if (afterText) {
