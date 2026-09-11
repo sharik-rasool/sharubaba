@@ -11,6 +11,7 @@ import { AdminEditBanner } from "@/components/blog/AdminEditBanner";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 export const revalidate = 3600;
+export const dynamicParams = true;
 
 interface Props {
     params: Promise<{ slug: string }>;
