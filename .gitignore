@@ -37,3 +37,6 @@ public/uploads/
 CLIENT_MANUAL.txt
 
 eslint.config.js
+scratch/
+service-account.json
+*.code-workspace

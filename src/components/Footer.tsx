@@ -12,6 +12,12 @@ const footerLinks = {
     { name: "Tools", href: "/tools" },
     { name: "Contact", href: "/contact" },
   ],
+  services: [
+    { name: "Link Builder in UK", href: "/link-builder-uk" },
+    { name: "SEO Specialist in UK", href: "/seo-specialist-uk" },
+    { name: "SaaS SEO Strategy", href: "/projects" },
+    { name: "SEO Audit Tools", href: "/tools" },
+  ],
   legal: [
     { name: "Privacy Policy", href: "/privacy-policy" },
     { name: "Terms & Conditions", href: "/terms" },
@@ -82,7 +88,22 @@ export function Footer() {
             </ul>
           </nav>
 
-
+          {/* Services & Specialisms */}
+          <nav aria-label="Services navigation">
+            <h3 className="text-sm font-semibold mb-4">Specialisms</h3>
+            <ul className="space-y-2">
+              {footerLinks.services.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           {/* Legal & Social */}
           <div>
