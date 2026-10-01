@@ -4,10 +4,30 @@ import { FileText, Eye, FilePen, Plus, Link2, ExternalLink, Calendar } from "luc
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import connectDB from "@/lib/db";
+import EngineSetting from "@/models/EngineSetting";
+import EngineControlCard from "@/components/admin/EngineControlCard";
 
 export const revalidate = 0;
 
 export default async function AdminDashboard() {
+    await connectDB();
+    const dbSetting = await EngineSetting.findOne({ key: "blog_generator" }).lean<{
+        key: string;
+        isPaused: boolean;
+        pausedAt?: Date;
+        pausedBy?: string;
+        reason?: string;
+    }>();
+    
+    const engineSetting = dbSetting ?? {
+        key: "blog_generator",
+        isPaused: true,
+        pausedAt: new Date(),
+        pausedBy: "Admin",
+        reason: "Paused to focus on existing content review & optimization"
+    };
+
     const blogs = await getAllBlogs();
     const linkStats = await getBlogLinkStats();
     
@@ -26,15 +46,28 @@ export default async function AdminDashboard() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold">Dashboard</h1>
-                    <p className="text-muted-foreground text-sm mt-1">Manage your blog content</p>
+                    <p className="text-muted-foreground text-sm mt-1">Manage your blog content and generation pipeline</p>
                 </div>
-                <Link href="/admin/blogs/new">
-                    <Button className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        New Post
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-3">
+                    <Link href="/admin/blogs/diagnostics">
+                        <Button variant="outline" className="gap-2">
+                            Diagnostics & Repair
+                        </Button>
+                    </Link>
+                    <Link href="/admin/blogs/new">
+                        <Button className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            New Post
+                        </Button>
+                    </Link>
+                </div>
             </div>
+
+            {/* Engine Pause / Play Control Card */}
+            <EngineControlCard
+                initialSetting={engineSetting ? JSON.parse(JSON.stringify(engineSetting)) : undefined}
+                totalBlogs={blogs.length}
+            />
 
             {/* Stats */}
             <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">

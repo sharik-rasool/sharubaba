@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { 
     Activity, CheckCircle2, AlertTriangle, AlertCircle, 
     ArrowLeft, ExternalLink, PenSquare, ChevronDown, ChevronUp, 
-    Wrench, Sparkles, RefreshCw, Loader2, Search, Check, Terminal, Link2
+    Wrench, Sparkles, RefreshCw, Loader2, Search, Check, Terminal, Link2,
+    Pause, Play, ShieldAlert
 } from "lucide-react";
 import Link from "next/link";
 import { scanContentHealth, type ContentHealth } from "@/lib/content-audit";
@@ -123,6 +124,8 @@ export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }:
     const [triggering, setTriggering] = useState(false);
     const [cancelling, setCancelling] = useState(false);
     const [isLogsExpanded, setIsLogsExpanded] = useState(false);
+    const [engineSetting, setEngineSetting] = useState<{ isPaused: boolean; pausedAt?: string; pausedBy?: string; reason?: string } | null>(null);
+    const [togglingPause, setTogglingPause] = useState(false);
 
     // Fetch automation background status
     const fetchStatus = async () => {
@@ -132,12 +135,46 @@ export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }:
                 const data = await res.json();
                 setAutomationStatus(data.status || { status: "idle" });
                 setLogs(data.logs || "");
+                if (data.engineSetting) {
+                    setEngineSetting(data.engineSetting);
+                }
                 return data.status?.status || "idle";
             }
         } catch (err) {
             console.error("Failed to fetch automation status:", err);
         }
         return "idle";
+    };
+
+    const handleToggleEnginePause = async () => {
+        setTogglingPause(true);
+        setActionMessage(null);
+        try {
+            const nextState = !engineSetting?.isPaused;
+            const res = await fetch("/api/automation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: nextState ? "pause" : "resume",
+                    reason: nextState ? "Paused by admin to focus on content review & repair." : ""
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setEngineSetting(data.engineSetting);
+                setActionMessage({
+                    type: "success",
+                    text: data.message || (nextState ? "Generation engine paused." : "Generation engine resumed.")
+                });
+                fetchStatus();
+            } else {
+                throw new Error(data.error || "Failed to update engine status.");
+            }
+        } catch (err: unknown) {
+            setActionMessage({ type: "error", text: (err as Error).message || "Failed to update engine pause state." });
+        } finally {
+            setTogglingPause(false);
+        }
     };
 
     // Poll status when running
@@ -460,16 +497,42 @@ export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }:
             {/* Blogging Automation Control Center */}
             <Card className="shadow-md border-violet-200 dark:border-violet-900/60 bg-gradient-to-br from-violet-50/20 via-background to-indigo-50/10">
                 <CardHeader className="pb-3 border-b border-violet-100 dark:border-violet-900/40">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex items-center gap-2">
                             <Sparkles className="h-5 w-5 text-violet-600 dark:text-violet-400 animate-pulse" />
                             <CardTitle className="text-base font-bold">Blogging Automation Control Center</CardTitle>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <Button
+                                variant={engineSetting?.isPaused ? "default" : "outline"}
+                                size="sm"
+                                onClick={handleToggleEnginePause}
+                                disabled={togglingPause}
+                                className={cn(
+                                    "h-8 text-xs font-bold gap-1.5 shadow-sm transition-all",
+                                    engineSetting?.isPaused 
+                                        ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+                                        : "bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 hover:bg-amber-100"
+                                )}
+                            >
+                                {togglingPause ? (
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                ) : engineSetting?.isPaused ? (
+                                    <Play className="h-3.5 w-3.5 fill-current" />
+                                ) : (
+                                    <Pause className="h-3.5 w-3.5 fill-current" />
+                                )}
+                                {engineSetting?.isPaused ? "Resume / Play Engine" : "Pause Generation Engine"}
+                            </Button>
+
                             {automationStatus.status === "running" ? (
                                 <Badge className="bg-violet-600 hover:bg-violet-600 text-white animate-pulse">
                                     <Loader2 className="h-3 w-3 animate-spin mr-1 inline" />
                                     Running...
+                                </Badge>
+                            ) : engineSetting?.isPaused ? (
+                                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40">
+                                    ⏸️ Engine Paused
                                 </Badge>
                             ) : (
                                 <Badge variant="secondary" className="capitalize text-xs font-semibold">
@@ -482,6 +545,26 @@ export default function DiagnosticsTable({ initialBlogs, defaultSheetUrl = "" }:
                         Auto-generate detailed 3000-word humanized blogs from research keywords, run dynamic cross-linking and validate on autopilot.
                     </CardDescription>
                 </CardHeader>
+
+                {engineSetting?.isPaused && (
+                    <div className="mx-5 mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                            <ShieldAlert className="h-4 w-4 text-amber-600 shrink-0" />
+                            <span>
+                                <strong>Content Review & Repair Mode Active:</strong> Generation is paused in the CMS. No automated articles will be published until resumed.
+                            </span>
+                        </div>
+                        <Button
+                            size="sm"
+                            onClick={handleToggleEnginePause}
+                            disabled={togglingPause}
+                            className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold shrink-0 gap-1.5"
+                        >
+                            <Play className="h-3 w-3 fill-current" />
+                            Resume Engine
+                        </Button>
+                    </div>
+                )}
                 <CardContent className="p-5 space-y-4">
                     {/* Input controls */}
                     <div className="grid gap-4 md:grid-cols-3 items-end">

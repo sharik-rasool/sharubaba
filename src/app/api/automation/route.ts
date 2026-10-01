@@ -97,6 +97,8 @@ function parseCSVLine(line: string): string[] {
     return result.map(v => v.replace(/^"|"$/g, '').trim());
 }
 
+import EngineSetting from "@/models/EngineSetting";
+
 export async function GET() {
     const session = await auth();
     if (!session) {
@@ -125,7 +127,24 @@ export async function GET() {
         }
     }
 
-    return NextResponse.json({ status, logs });
+    // Fetch engine setting
+    let engineSetting: { isPaused: boolean; reason?: string; pausedAt?: Date; pausedBy?: string } = { isPaused: false, reason: "" };
+    try {
+        await connectDB();
+        const dbSetting = await EngineSetting.findOne({ key: "blog_generator" }).lean<{
+            isPaused: boolean;
+            reason?: string;
+            pausedAt?: Date;
+            pausedBy?: string;
+        }>();
+        if (dbSetting) {
+            engineSetting = dbSetting;
+        }
+    } catch (dbErr) {
+        console.error("Failed to load EngineSetting in GET /api/automation:", dbErr);
+    }
+
+    return NextResponse.json({ status, logs, engineSetting });
 }
 
 export async function POST(request: Request) {
@@ -136,7 +155,42 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const { action, sheetUrl, dryRun, content, seoTitle, seoDescription, primaryKeyword, limit } = body;
+        const { action, sheetUrl, dryRun, content, seoTitle, seoDescription, primaryKeyword, limit, reason } = body;
+
+        // Action: Toggle Pause / Resume
+        if (action === "toggle_pause" || action === "pause" || action === "resume") {
+            await connectDB();
+            let setting = await EngineSetting.findOne({ key: "blog_generator" });
+            if (!setting) {
+                setting = new EngineSetting({ key: "blog_generator", isPaused: false });
+            }
+
+            const shouldPause = action === "toggle_pause" ? !setting.isPaused : action === "pause";
+            setting.isPaused = shouldPause;
+            if (shouldPause) {
+                setting.pausedAt = new Date();
+                setting.pausedBy = session.user?.email || "Admin";
+                setting.reason = reason || "Paused to focus on existing content review & optimization";
+                updateStatusFile({
+                    status: "paused",
+                    currentKeyword: "Generation engine is PAUSED in CMS."
+                });
+            } else {
+                setting.reason = "";
+                updateStatusFile({
+                    status: "idle",
+                    currentKeyword: "Ready"
+                });
+            }
+            await setting.save();
+
+            return NextResponse.json({
+                success: true,
+                isPaused: setting.isPaused,
+                message: setting.isPaused ? "Blog generation engine paused." : "Blog generation engine resumed.",
+                engineSetting: setting
+            });
+        }
 
         // Action 0: On-Demand SEO QA Validation
         if (action === "validate") {

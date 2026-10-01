@@ -1,3 +1,6 @@
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import * as fs from "fs";
@@ -9,6 +12,7 @@ dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
 
 import Blog, { IBlog } from "../src/models/Blog";
+import EngineSetting from "../src/models/EngineSetting";
 import { toolsData } from "../src/lib/tools-data";
 import {
     generateContentBrief,
@@ -295,6 +299,33 @@ async function main() {
         console.error(msg);
         updateStatus({ status: "failed", error: msg, endedAt: new Date().toISOString() });
         process.exit(1);
+    }
+
+    // Check if the generation engine is paused in CMS
+    const force = args.includes("--force");
+    try {
+        const engineSetting = await EngineSetting.findOne({ key: "blog_generator" }).lean();
+        if (engineSetting && engineSetting.isPaused && !force) {
+            console.log("\n=======================================================");
+            console.log("       AUTOMATION ENGINE IS CURRENTLY PAUSED IN CMS    ");
+            console.log("=======================================================");
+            console.log(`[PAUSED] Blog generation is paused by the administrator.`);
+            console.log(`Paused By: ${engineSetting.pausedBy || "Admin"}`);
+            console.log(`Paused At: ${engineSetting.pausedAt ? new Date(engineSetting.pausedAt).toLocaleString() : "N/A"}`);
+            console.log(`Reason:    ${engineSetting.reason || "Paused to focus on existing content review & optimization"}`);
+            console.log("No new blogs will be generated. Exiting cleanly.\n");
+
+            updateStatus({
+                status: "paused",
+                currentKeyword: "Generation Engine is Paused in CMS.",
+                endedAt: new Date().toISOString()
+            });
+
+            await mongoose.connection.close();
+            process.exit(0);
+        }
+    } catch (settingErr: any) {
+        console.warn("Warning: Could not check EngineSetting from DB:", settingErr.message || settingErr);
     }
 
     // 1. Fetch Keywords list
