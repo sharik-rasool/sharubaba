@@ -48,6 +48,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/blog/effective-link-building-strategies-2021-boost-your-seo',
+        destination: '/blog/effective-link-building-strategies-boost-your-seo',
+        permanent: true,
+      },
+      {
         source: '/blog/pinterest-blogging',
         destination: '/blog/how-to-use-pinterest-for-blogging-traffic-and-success',
         permanent: true,
