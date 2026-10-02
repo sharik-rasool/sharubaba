@@ -53,6 +53,31 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/link-building-checklist-steps-for-2024-seo-success',
+        destination: '/blog/link-building-checklist-steps-for-seo-success',
+        permanent: true,
+      },
+      {
+        source: '/blog/manual-outreach-link-building-proven-strategies-2024',
+        destination: '/blog/manual-outreach-link-building-proven-strategies',
+        permanent: true,
+      },
+      {
+        source: '/blog/b2b-link-building-proven-strategies-for-2024-success',
+        destination: '/blog/b2b-link-building-proven-strategies-for-success',
+        permanent: true,
+      },
+      {
+        source: '/blog/link-building-off-page-seo-proven-strategies-for-2024',
+        destination: '/blog/link-building-off-page-seo-proven-strategies',
+        permanent: true,
+      },
+      {
+        source: '/blog/best-link-building-services-guest-post-opportunities-2026',
+        destination: '/blog/best-link-building-services-guest-post-opportunities',
+        permanent: true,
+      },
+      {
         source: '/blog/pinterest-blogging',
         destination: '/blog/how-to-use-pinterest-for-blogging-traffic-and-success',
         permanent: true,
