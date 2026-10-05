@@ -1,3 +1,6 @@
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import * as fs from "fs";
@@ -187,6 +190,27 @@ async function main() {
 
     // 5. Submit URLs to Google Indexing API
     const submittedBlogs = [];
+    
+    // Core landing pages to ensure freshness
+    const priorityUrls = [
+        { title: "UK Link Building Specialist", url: `${domain}/link-builder-uk` },
+        { title: "UK SEO Specialist", url: `${domain}/seo-specialist-uk` },
+        { title: "Blog Catalog", url: `${domain}/blog` }
+    ];
+
+    if (indexAll) {
+        for (const item of priorityUrls) {
+            try {
+                const res = await submitToIndexingApi(item.url, accessToken);
+                if (res && res.success) {
+                    submittedBlogs.push(item);
+                }
+            } catch (err: any) {
+                console.error(`Failed to submit priority URL ${item.url}:`, err.message || err);
+            }
+        }
+    }
+
     for (const blog of eligibleBlogs) {
         const url = `${domain}/blog/${blog.slug}`;
         try {
