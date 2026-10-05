@@ -28,7 +28,7 @@ export default function TableOfContents({ toc }: { toc: TocItem[] }) {
     if (!toc || toc.length === 0) return null;
 
     return (
-        <div className="bg-muted/30 border border-border rounded-xl p-6 sticky top-24">
+        <div className="bg-muted/30 border border-border rounded-xl p-6">
             <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
                 <List className="h-5 w-5" />
                 Table of Contents

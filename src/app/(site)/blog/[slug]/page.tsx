@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, Tag, User, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import { parseHtmlForToc } from "@/lib/toc";
 import TableOfContents from "@/components/blog/TableOfContents";
+import BlogSidebarCta from "@/components/blog/BlogSidebarCta";
 import ViewCounter from "@/components/blog/ViewCounter";
 import { AdminEditBanner } from "@/components/blog/AdminEditBanner";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
@@ -291,12 +292,11 @@ export default async function BlogPostPage({ params }: Props) {
                         )}
                     </div>
 
-                    {/* Sidebar / TOC */}
-                    {showToc && (
-                        <aside className="hidden lg:block sticky top-24">
-                            <TableOfContents toc={toc} />
-                        </aside>
-                    )}
+                    {/* Sidebar / TOC & Conversion CTA */}
+                    <aside className="hidden lg:block sticky top-24 space-y-6">
+                        {showToc && <TableOfContents toc={toc} />}
+                        <BlogSidebarCta />
+                    </aside>
                 </div>
 
                 {post.tags.length > 0 && (
