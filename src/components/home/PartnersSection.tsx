@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FadeIn } from "@/components/animations";
 
 // Partner logos - new versions with white backgrounds
@@ -32,7 +33,7 @@ export function PartnersSection() {
         <FadeIn>
           <div className="text-center mb-8">
             <h2 id="partners-heading" className="text-xl md:text-2xl font-semibold text-muted-foreground">
-              Trusted by Leading Brands & Partners
+              Trusted by Leading Brands &amp; Partners
             </h2>
           </div>
         </FadeIn>
@@ -59,10 +60,13 @@ export function PartnersSection() {
                       background: 'radial-gradient(ellipse 80% 100% at center, hsl(var(--background) / 0.9) 30%, transparent 70%)'
                     }}
                   />
-                  <img
-                    src={partner.logo.src}
+                  <Image
+                    src={partner.logo}
                     alt={`${partner.name} logo`}
+                    width={140}
+                    height={56}
                     className="relative h-full w-auto max-w-[100px] md:max-w-[140px] object-contain rounded-md"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -83,10 +87,13 @@ export function PartnersSection() {
                       background: 'radial-gradient(ellipse 80% 100% at center, hsl(var(--background) / 0.9) 30%, transparent 70%)'
                     }}
                   />
-                  <img
-                    src={partner.logo.src}
+                  <Image
+                    src={partner.logo}
                     alt={`${partner.name} logo`}
+                    width={140}
+                    height={56}
                     className="relative h-full w-auto max-w-[100px] md:max-w-[140px] object-contain rounded-md"
+                    loading="lazy"
                   />
                 </div>
               </div>

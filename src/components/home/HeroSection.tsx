@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, TrendingUp, Link2, Star, Globe, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FadeIn } from "@/components/animations";
 import sharikPortrait from "@/assets/sharik-portrait-1.jpeg";
 
 // Tool Logo Imports
@@ -29,18 +28,20 @@ export function HeroSection() {
           -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
         }
         @keyframes float-slow {
-          0%, 100% { transform: translateY(0px) rotate(-0.5deg); }
-          50% { transform: translateY(-8px) rotate(0.5deg); }
+          0%, 100% { transform: translate3d(0, 0px, 0) rotate(-0.5deg); }
+          50% { transform: translate3d(0, -8px, 0) rotate(0.5deg); }
         }
         @keyframes float-slower {
-          0%, 100% { transform: translateY(0px) rotate(0.5deg); }
-          50% { transform: translateY(8px) rotate(-0.2deg); }
+          0%, 100% { transform: translate3d(0, 0px, 0) rotate(0.5deg); }
+          50% { transform: translate3d(0, 8px, 0) rotate(-0.2deg); }
         }
         .animate-float-slow {
           animation: float-slow 6s ease-in-out infinite;
+          will-change: transform;
         }
         .animate-float-slower {
           animation: float-slower 7s ease-in-out infinite;
+          will-change: transform;
         }
       `}</style>
       
@@ -57,52 +58,44 @@ export function HeroSection() {
           <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
             
             {/* Top Badge */}
-            <FadeIn delay={0}>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs md:text-sm font-semibold uppercase tracking-wider mb-6">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                7+ Years of Proven SEO Results
-              </div>
-            </FadeIn>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs md:text-sm font-semibold uppercase tracking-wider mb-6">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              7+ Years of Proven SEO Results
+            </div>
 
             {/* Main Heading */}
-            <FadeIn delay={0.1}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-bold tracking-tight leading-[1.15] mb-6 text-foreground max-w-2xl lg:max-w-none">
-                SEO Strategist & Link Builder{" "}
-                <span className="relative inline-block text-primary">
-                  Driving Organic Growth.
-                  <span className="absolute -bottom-1 left-0 w-full h-[6px] bg-primary/20 rounded-full -z-10" />
-                </span>
-              </h1>
-            </FadeIn>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-bold tracking-tight leading-[1.15] mb-6 text-foreground max-w-2xl lg:max-w-none">
+              SEO Strategist &amp; Link Builder{" "}
+              <span className="relative inline-block text-primary">
+                Driving Organic Growth.
+                <span className="absolute -bottom-1 left-0 w-full h-[6px] bg-primary/20 rounded-full -z-10" />
+              </span>
+            </h1>
 
             {/* Subheading */}
-            <FadeIn delay={0.2}>
-              <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
-                I help SaaS and tech companies increase their domain authority, organic traffic,
-                and search rankings through strategic link building and data-driven SEO.
-              </p>
-            </FadeIn>
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
+              I help SaaS and tech companies increase their domain authority, organic traffic,
+              and search rankings through strategic link building and data-driven SEO.
+            </p>
 
             {/* CTA Buttons */}
-            <FadeIn delay={0.3} className="w-full">
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
-                <Link href="/projects" className="w-full sm:w-auto">
-                  <Button size="lg" className="rounded-full px-8 font-semibold gap-2 w-full sm:w-auto shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all">
-                    View My Work
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/contact" className="w-full sm:w-auto">
-                  <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300">
-                    Get in Touch
-                    <ArrowRight className="h-4 w-4 ml-1 opacity-70" />
-                  </Button>
-                </Link>
-              </div>
-            </FadeIn>
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
+              <Link href="/projects" className="w-full sm:w-auto">
+                <Button size="lg" className="rounded-full px-8 font-semibold gap-2 w-full sm:w-auto shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all">
+                  View My Work
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/contact" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300">
+                  Get in Touch
+                  <ArrowRight className="h-4 w-4 ml-1 opacity-70" />
+                </Button>
+              </Link>
+            </div>
 
             {/* Technical Skills App Squircles */}
-            <FadeIn delay={0.35} className="mt-10 w-full text-center lg:text-left">
+            <div className="mt-10 w-full text-center lg:text-left">
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
                 Tools I Work With
               </p>
@@ -143,13 +136,13 @@ export function HeroSection() {
                 </div>
                 <span>Trusted by 50+ SaaS companies</span>
               </div>
-            </FadeIn>
+            </div>
 
           </div>
 
           {/* Right Column: Image */}
           <div className="lg:col-span-5 relative w-full flex flex-col items-center px-8 sm:px-12 lg:px-0 py-6 lg:py-0">
-            <FadeIn delay={0.4} className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none relative">
+            <div className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none relative">
               
               {/* Image & Float Cards Wrapper */}
               <div className="relative mx-auto w-full aspect-[5/6]">
@@ -216,7 +209,7 @@ export function HeroSection() {
                 </div>
               </div>
               
-            </FadeIn>
+            </div>
           </div>
 
         </div>

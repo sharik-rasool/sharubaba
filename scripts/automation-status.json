@@ -1,0 +1,21 @@
+{
+  "status": "paused",
+  "startedAt": "2026-10-01T19:15:21.490Z",
+  "pid": 39510,
+  "progress": {
+    "current": 0,
+    "total": 0
+  },
+  "currentKeyword": "Generation Engine is Paused in CMS.",
+  "error": "",
+  "dryRun": false,
+  "endedAt": "2026-10-01T19:15:22.713Z",
+  "summary": {
+    "keywordsSelected": 1,
+    "estimatedCost": 0,
+    "successCount": 0,
+    "failedCount": 0
+  },
+  "summary.successCount": 1,
+  "summary.failedCount": 0
+}

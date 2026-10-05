@@ -13,17 +13,17 @@ interface FadeInProps {
 }
 
 const directions = {
-  up: { y: 40, x: 0 },
-  down: { y: -40, x: 0 },
-  left: { x: 40, y: 0 },
-  right: { x: -40, y: 0 },
+  up: { y: 20, x: 0 },
+  down: { y: -20, x: 0 },
+  left: { x: 20, y: 0 },
+  right: { x: -20, y: 0 },
   none: { x: 0, y: 0 },
 };
 
 export function FadeIn({
   children,
   delay = 0,
-  duration = 0.5,
+  duration = 0.4,
   direction = "up",
   className = "",
   once = true,
@@ -34,7 +34,7 @@ export function FadeIn({
     <motion.div
       initial={{ opacity: 0, ...initialDirection }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once, margin: "-100px" }}
+      viewport={{ once, margin: "0px" }}
       transition={{
         duration,
         delay,

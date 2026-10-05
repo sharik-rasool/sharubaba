@@ -5,23 +5,26 @@ import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/goog
 
 const spaceGrotesk = Space_Grotesk({
     subsets: ['latin'],
-    weight: ['300', '400', '500', '600', '700'],
+    weight: ['500', '600', '700'],
     variable: '--font-space-grotesk',
     display: 'swap',
+    preload: true,
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
     subsets: ['latin'],
-    weight: ['400', '500', '600', '700', '800'],
+    weight: ['400', '500', '600', '700'],
     variable: '--font-plus-jakarta-sans',
     display: 'swap',
+    preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
     subsets: ['latin'],
-    weight: ['400', '500'],
+    weight: ['400'],
     variable: '--font-jetbrains-mono',
     display: 'swap',
+    preload: false,
 });
 
 const BASE_URL = "https://www.sharikrasool.com";
