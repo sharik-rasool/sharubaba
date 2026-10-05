@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, TrendingUp, Link2, Star, Globe, Shield } from "lucide-react";
@@ -17,7 +19,7 @@ import antigravityLogo from "@/assets/logos/antigravity.png";
 export function HeroSection() {
   return (
     <section className="section relative overflow-hidden pt-12 sm:pt-20 lg:pt-28 pb-16">
-      {/* Background decorations */}
+      {/* Background decorations & Smooth entrance animations */}
       <style>{`
         .hero-grid-bg {
           background-image: 
@@ -27,6 +29,84 @@ export function HeroSection() {
           mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
           -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
         }
+        
+        /* Smooth GPU-composited entrance animations for first visit */
+        @keyframes hero-fade-up {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 24px, 0);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
+        }
+        @keyframes hero-image-slide-up {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 36px, 0) scale(0.96);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+          }
+        }
+        @keyframes hero-card-pop-1 {
+          0% {
+            opacity: 0;
+            transform: translate3d(-30px, 15px, 0) scale(0.9);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+          }
+        }
+        @keyframes hero-card-pop-2 {
+          0% {
+            opacity: 0;
+            transform: translate3d(30px, 15px, 0) scale(0.9);
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+          }
+        }
+
+        .animate-hero-badge {
+          animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.05s;
+        }
+        .animate-hero-heading {
+          animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.12s;
+        }
+        .animate-hero-subtitle {
+          animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.2s;
+        }
+        .animate-hero-cta {
+          animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.28s;
+        }
+        .animate-hero-tools {
+          animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.35s;
+        }
+        .animate-hero-image-wrap {
+          animation: hero-image-slide-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.18s;
+          will-change: transform, opacity;
+        }
+        .animate-hero-card-1 {
+          animation: hero-card-pop-1 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.4s;
+        }
+        .animate-hero-card-2 {
+          animation: hero-card-pop-2 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.55s;
+        }
+
+        /* Ambient floating keyframes */
         @keyframes float-slow {
           0%, 100% { transform: translate3d(0, 0px, 0) rotate(-0.5deg); }
           50% { transform: translate3d(0, -8px, 0) rotate(0.5deg); }
@@ -58,13 +138,13 @@ export function HeroSection() {
           <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
             
             {/* Top Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs md:text-sm font-semibold uppercase tracking-wider mb-6">
+            <div className="animate-hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs md:text-sm font-semibold uppercase tracking-wider mb-6">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               7+ Years of Proven SEO Results
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-bold tracking-tight leading-[1.15] mb-6 text-foreground max-w-2xl lg:max-w-none">
+            <h1 className="animate-hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-bold tracking-tight leading-[1.15] mb-6 text-foreground max-w-2xl lg:max-w-none">
               SEO Strategist &amp; Link Builder{" "}
               <span className="relative inline-block text-primary">
                 Driving Organic Growth.
@@ -73,29 +153,38 @@ export function HeroSection() {
             </h1>
 
             {/* Subheading */}
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
+            <p className="animate-hero-subtitle text-sm sm:text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
               I help SaaS and tech companies increase their domain authority, organic traffic,
               and search rankings through strategic link building and data-driven SEO.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
+            <div className="animate-hero-cta flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
               <Link href="/projects" className="w-full sm:w-auto">
                 <Button size="lg" className="rounded-full px-8 font-semibold gap-2 w-full sm:w-auto shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all">
                   View My Work
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/contact" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300">
-                  Get in Touch
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-sample-sheet-modal"));
+                  }
+                }}
+                className="w-full sm:w-auto"
+              >
+                <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300 gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  View Sample Sheet
                   <ArrowRight className="h-4 w-4 ml-1 opacity-70" />
                 </Button>
-              </Link>
+              </button>
             </div>
 
             {/* Technical Skills App Squircles */}
-            <div className="mt-10 w-full text-center lg:text-left">
+            <div className="animate-hero-tools mt-10 w-full text-center lg:text-left">
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
                 Tools I Work With
               </p>
@@ -142,7 +231,7 @@ export function HeroSection() {
 
           {/* Right Column: Image */}
           <div className="lg:col-span-5 relative w-full flex flex-col items-center px-8 sm:px-12 lg:px-0 py-6 lg:py-0">
-            <div className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none relative">
+            <div className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none relative animate-hero-image-wrap">
               
               {/* Image & Float Cards Wrapper */}
               <div className="relative mx-auto w-full aspect-[5/6]">
@@ -161,31 +250,35 @@ export function HeroSection() {
                 </div>
 
                 {/* Floating Card 1: Backlinks (Left Edge - Lower Middle) - Desktop Only */}
-                <div className="hidden lg:flex absolute top-[68%] lg:left-[-120px] xl:left-[-150px] 2xl:left-[-175px] z-20 animate-float-slow bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
-                    <Link2 className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Backlinks</span>
-                    <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">500+ High-Quality</span>
+                <div className="hidden lg:block absolute top-[68%] lg:left-[-120px] xl:left-[-150px] 2xl:left-[-175px] z-20 animate-hero-card-1">
+                  <div className="flex animate-float-slow bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                      <Link2 className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Backlinks</span>
+                      <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">500+ High-Quality</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Floating Card 2: Traffic Growth (Right Edge - Upper Middle) - Desktop Only */}
-                <div className="hidden lg:flex absolute top-[14%] lg:right-[-30px] xl:right-[-60px] 2xl:right-[-120px] z-20 animate-float-slower bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
-                    <TrendingUp className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Traffic Growth</span>
-                    <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">300% Avg Growth</span>
+                <div className="hidden lg:block absolute top-[14%] lg:right-[-30px] xl:right-[-60px] 2xl:right-[-120px] z-20 animate-hero-card-2">
+                  <div className="flex animate-float-slower bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Traffic Growth</span>
+                      <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">300% Avg Growth</span>
+                    </div>
                   </div>
                 </div>
 
               </div>
 
               {/* Mobile Stats Cards (Displayed below the image on mobile/tablet, hidden on desktop) */}
-              <div className="lg:hidden mt-6 flex flex-col gap-3.5 w-full">
+              <div className="lg:hidden mt-6 flex flex-col gap-3.5 w-full animate-hero-cta">
                 {/* Mobile Card 1: Backlinks */}
                 <div className="bg-secondary/40 border border-border/30 shadow-md rounded-2xl py-3 px-4 flex items-center gap-3 w-full transition-all duration-300 hover:scale-102 active:scale-98 group select-none">
                   <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0">

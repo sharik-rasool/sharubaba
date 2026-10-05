@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -73,20 +75,29 @@ export function CTASection() {
                   </Button>
                 </a>
                 
-                <Link href="/projects" className="w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("open-sample-sheet-modal"));
+                    }
+                  }}
+                  className="w-full sm:w-auto"
+                >
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="h-[52px] sm:h-[56px] px-8 rounded-2xl text-base font-bold border-border/80 hover:bg-primary/10 hover:text-primary hover:border-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 w-full sm:w-auto"
+                    className="h-[52px] sm:h-[56px] px-8 rounded-2xl text-base font-bold border-border/80 hover:bg-primary/10 hover:text-primary hover:border-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 w-full sm:w-auto gap-2"
                   >
-                    View Case Studies
+                    <span>View 50+ Sample Links</span>
+                    <ArrowRight className="h-4 w-4 opacity-70" />
                   </Button>
-                </Link>
+                </button>
               </div>
 
               {/* Trust Subtext */}
               <p className="mt-8 text-xs font-semibold text-neutral-500 dark:text-neutral-400 select-none">
-                No commitment required • 30-minute custom strategy session
+                No commitment required • 30-minute custom strategy session • Verified DR50–85+ Samples
               </p>
 
             </div>

@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { FileSpreadsheet, Download, Check, Shield, ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { FileSpreadsheet, Download, Check, Shield, ArrowRight, Loader2, Sparkles, ExternalLink, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/animations";
+
+const SAMPLE_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1LmzE6gmTJzksvlvwWsCGbqxu_RTEZL-afjAbx6KixRY/edit?gid=0#gid=0";
 
 export function LinkSampleSheetLeadMagnet() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [copied, setCopied] = useState(false);
 
   const sampleRows = [
     { domain: "b2b-***tech.co.uk", dr: 78, traffic: "142,000 /mo", niche: "UK Tech & Enterprise", type: "Contextual In-Content" },
@@ -20,7 +24,7 @@ export function LinkSampleSheetLeadMagnet() {
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !name) return;
 
     setStatus("loading");
     try {
@@ -28,16 +32,25 @@ export function LinkSampleSheetLeadMagnet() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name || "Lead Magnet - Sample Sheet",
+          name: name,
           email: email,
           subject: "Sample Sheet Request: 50+ UK & SaaS Live Backlinks",
           message: `User requested the live 50+ backlink sample spreadsheet.\nName: ${name}\nEmail: ${email}`,
         }),
       });
-      setStatus("success");
     } catch {
+      // Graceful fallback
+    } finally {
+      localStorage.setItem("sharik_sample_sheet_unlocked", "true");
       setStatus("success");
+      window.open(SAMPLE_SHEET_URL, "_blank", "noopener,noreferrer");
     }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(SAMPLE_SHEET_URL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   return (
@@ -52,28 +65,49 @@ export function LinkSampleSheetLeadMagnet() {
                 Free Lead Magnet
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                Download Our 50+ Live UK & SaaS Backlink Sample Sheet
+                Download Our 50+ Live UK &amp; SaaS Backlink Sample Sheet
               </h2>
               <p className="text-muted-foreground text-sm sm:text-base mb-6 leading-relaxed">
                 See the exact quality of sites we build links on. Browse 50+ real, unmasked editorial domains with verified Ahrefs DR, real organic traffic curves, and niche categorizations.
               </p>
 
               {status === "success" ? (
-                <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-left space-y-2">
+                <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-left space-y-4 shadow-lg">
                   <div className="flex items-center gap-2 text-emerald-500 font-bold">
-                    <Check className="w-5 h-5" />
-                    Sample Sheet Sent!
+                    <Check className="w-5 h-5 stroke-[2.5]" />
+                    <span>Access Unlocked!</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Check your inbox at <strong>{email}</strong> for the direct Google Sheets & CSV download link.
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    The live spreadsheet was opened in a new tab. You can also re-open or copy the link directly below:
                   </p>
+                  <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+                    <a
+                      href={SAMPLE_SHEET_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-md hover:bg-primary/90 transition-all"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" />
+                      <span>Open Google Spreadsheet</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleCopyLink}
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-background border border-border/80 text-foreground font-medium text-xs hover:bg-secondary transition-colors"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>{copied ? "Copied!" : "Copy Link"}</span>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleDownload} className="space-y-3.5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"
-                      placeholder="Your Name"
+                      required
+                      placeholder="Your Name *"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="px-4 py-3 rounded-xl bg-card border border-border/80 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -81,7 +115,7 @@ export function LinkSampleSheetLeadMagnet() {
                     <input
                       type="email"
                       required
-                      placeholder="Your Work Email"
+                      placeholder="Your Work Email *"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="px-4 py-3 rounded-xl bg-card border border-border/80 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -95,12 +129,13 @@ export function LinkSampleSheetLeadMagnet() {
                     {status === "loading" ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Sending Sample Sheet...
+                        Unlocking Sample Sheet...
                       </>
                     ) : (
                       <>
-                        <Download className="w-4 h-4" />
-                        Download Live Sample Sheet (.CSV / Sheets)
+                        <FileSpreadsheet className="w-4 h-4" />
+                        Unlock 50+ Live Sample Sheet (Google Sheets)
+                        <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </Button>

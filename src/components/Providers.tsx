@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { SampleSheetModal } from "@/components/leads/SampleSheetModal";
 import { useState } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <QueryClientProvider client={queryClient}>
                     <TooltipProvider>
                         <ScrollToTop />
+                        <SampleSheetModal />
                         {children}
                         <Toaster />
                         <Sonner />
