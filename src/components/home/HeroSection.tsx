@@ -229,15 +229,15 @@ export function HeroSection() {
 
           </div>
 
-          {/* Right Column: Image with Inspiration-Style Overlapping Stat Boxes */}
-          <div className="lg:col-span-5 relative w-full flex flex-col items-center px-6 sm:px-10 lg:px-0 py-6 lg:py-0">
-            <div className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[440px] relative animate-hero-image-wrap">
+          {/* Right Column: Image */}
+          <div className="lg:col-span-5 relative w-full flex flex-col items-center px-8 sm:px-12 lg:px-0 py-6 lg:py-0">
+            <div className="w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none relative animate-hero-image-wrap">
               
-              {/* Image & Overlapping Stat Boxes Wrapper */}
+              {/* Image & Float Cards Wrapper */}
               <div className="relative mx-auto w-full aspect-[5/6]">
                 
                 {/* Main Portrait Frame */}
-                <div className="relative w-full h-full rounded-[32px] sm:rounded-[40px] shadow-2xl border-4 border-background overflow-hidden bg-muted group">
+                <div className="relative w-full h-full rounded-[36px] shadow-2xl border-4 border-background overflow-hidden bg-muted group">
                   <Image
                     src={sharikPortrait}
                     alt="Sharik Rasool - SEO Strategist & Link Builder"
@@ -246,33 +246,60 @@ export function HeroSection() {
                     priority
                   />
                   {/* Bottom Fade gradient overlay */}
-                  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none z-10" />
+                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/70 to-transparent pointer-events-none z-10" />
                 </div>
 
-                {/* Top-Left Box: 500+ High-Quality Backlinks */}
-                <div className="absolute -top-4 -left-4 sm:-top-7 sm:-left-7 z-20 animate-hero-card-1">
-                  <div className="flex flex-col items-center justify-center w-24 h-24 sm:w-32 sm:h-32 rounded-2xl sm:rounded-[24px] bg-primary text-primary-foreground shadow-2xl shadow-primary/35 border-[3.5px] sm:border-4 border-background p-2.5 sm:p-3 text-center transition-all duration-300 hover:scale-105 select-none animate-float-slow">
-                    <span className="text-xl sm:text-3xl font-black tracking-tight text-white leading-none">
-                      500+
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-bold text-white/95 leading-tight mt-1 sm:mt-1.5 text-center">
-                      High-Quality<br />Backlinks
-                    </span>
+                {/* Floating Card 1: Backlinks (Left Edge - Lower Middle) - Desktop Only */}
+                <div className="hidden lg:block absolute top-[68%] lg:left-[-120px] xl:left-[-150px] 2xl:left-[-175px] z-20 animate-hero-card-1">
+                  <div className="flex animate-float-slow bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                      <Link2 className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Backlinks</span>
+                      <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">500+ High-Quality</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Edge Box: 300% Avg Traffic Growth */}
-                <div className="absolute top-[52%] -right-4 sm:-right-7 -translate-y-1/2 z-20 animate-hero-card-2">
-                  <div className="flex flex-col items-center justify-center w-24 h-24 sm:w-32 sm:h-32 rounded-2xl sm:rounded-[24px] bg-primary text-primary-foreground shadow-2xl shadow-primary/35 border-[3.5px] sm:border-4 border-background p-2.5 sm:p-3 text-center transition-all duration-300 hover:scale-105 select-none animate-float-slower">
-                    <span className="text-xl sm:text-3xl font-black tracking-tight text-white leading-none">
-                      300%
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-bold text-white/95 leading-tight mt-1 sm:mt-1.5 text-center">
-                      Avg. Traffic<br />Growth
-                    </span>
+                {/* Floating Card 2: Traffic Growth (Right Edge - Upper Middle) - Desktop Only */}
+                <div className="hidden lg:block absolute top-[14%] lg:right-[-30px] xl:right-[-60px] 2xl:right-[-120px] z-20 animate-hero-card-2">
+                  <div className="flex animate-float-slower bg-white/35 dark:bg-black/35 backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-lg rounded-2xl py-2 px-3.5 items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 group select-none">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-0.5">Traffic Growth</span>
+                      <span className="text-xs sm:text-sm font-extrabold text-neutral-800 dark:text-neutral-100 leading-none">300% Avg Growth</span>
+                    </div>
                   </div>
                 </div>
 
+              </div>
+
+              {/* Mobile Stats Cards (Displayed below the image on mobile/tablet, hidden on desktop) */}
+              <div className="lg:hidden mt-6 flex flex-col gap-3.5 w-full animate-hero-cta">
+                {/* Mobile Card 1: Backlinks */}
+                <div className="bg-secondary/40 border border-border/30 shadow-md rounded-2xl py-3 px-4 flex items-center gap-3 w-full transition-all duration-300 hover:scale-102 active:scale-98 group select-none">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0">
+                    <Link2 className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-1">Backlinks</span>
+                    <span className="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-neutral-100 leading-none">500+ High-Quality</span>
+                  </div>
+                </div>
+
+                {/* Mobile Card 2: Traffic Growth */}
+                <div className="bg-secondary/40 border border-border/30 shadow-md rounded-2xl py-3 px-4 flex items-center gap-3 w-full transition-all duration-300 hover:scale-102 active:scale-98 group select-none">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center border border-primary/20 shadow-sm shrink-0">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200 leading-none mb-1">Traffic Growth</span>
+                    <span className="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-neutral-100 leading-none">300% Avg Growth</span>
+                  </div>
+                </div>
               </div>
               
             </div>
