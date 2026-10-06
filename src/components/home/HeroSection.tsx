@@ -138,49 +138,40 @@ export function HeroSection() {
           <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
             
             {/* Top Badge */}
-            <div className="animate-hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs md:text-sm font-semibold uppercase tracking-wider mb-6">
+            <div className="animate-hero-badge inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              7+ Years of Proven SEO Results
+              7+ Years Proven SEO Results
             </div>
 
             {/* Main Heading */}
-            <h1 className="animate-hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-bold tracking-tight leading-[1.15] mb-6 text-foreground max-w-2xl lg:max-w-none">
-              SEO Strategist &amp; Link Builder{" "}
+            <h1 className="animate-hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[50px] font-extrabold tracking-tight leading-[1.12] mb-4 text-foreground max-w-xl">
+              SEO Strategist &amp; <br className="hidden sm:inline" />
               <span className="relative inline-block text-primary">
-                Driving Organic Growth.
+                Link Builder for SaaS.
                 <span className="absolute -bottom-1 left-0 w-full h-[6px] bg-primary/20 rounded-full -z-10" />
               </span>
             </h1>
 
             {/* Subheading */}
-            <p className="animate-hero-subtitle text-sm sm:text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
-              I help SaaS and tech companies increase their domain authority, organic traffic,
-              and search rankings through strategic link building and data-driven SEO.
+            <p className="animate-hero-subtitle text-sm sm:text-base text-muted-foreground mb-6 leading-relaxed max-w-lg">
+              I help tech brands acquire high-DR editorial backlinks, outrank competitors, and scale organic pipeline.
             </p>
 
             {/* CTA Buttons */}
-            <div className="animate-hero-cta flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
-              <Link href="/projects" className="w-full sm:w-auto">
-                <Button size="lg" className="rounded-full px-8 font-semibold gap-2 w-full sm:w-auto shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all">
-                  View My Work
+            <div className="animate-hero-cta flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-2 w-full max-w-sm sm:max-w-none mx-auto lg:mx-0">
+              <Link href="/seo-audit" className="w-full sm:w-auto">
+                <Button size="lg" className="rounded-full px-7 font-bold gap-2 w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                  Get $15 SEO Audit
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    window.dispatchEvent(new CustomEvent("open-sample-sheet-modal"));
-                  }
-                }}
-                className="w-full sm:w-auto"
-              >
-                <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300 gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  View Sample Sheet
-                  <ArrowRight className="h-4 w-4 ml-1 opacity-70" />
+              
+              <Link href="/projects" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="rounded-full px-7 font-semibold w-full sm:w-auto bg-background/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300 gap-1.5">
+                  View Case Studies
+                  <ArrowRight className="h-4 w-4 opacity-70" />
                 </Button>
-              </button>
+              </Link>
             </div>
 
             {/* Technical Skills App Squircles */}
