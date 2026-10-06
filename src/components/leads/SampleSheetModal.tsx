@@ -52,8 +52,8 @@ export function SampleSheetModal() {
           name,
           email,
           website: website || "Not provided",
-          subject: "Sample Sheet Access Unlocked: 10 Link Sample (UK & SaaS Live Backlinks)",
-          message: `User unlocked the 10 Link Backlink Sample Spreadsheet.\nName: ${name}\nEmail: ${email}\nWebsite: ${website || "N/A"}`,
+          subject: "Sample Sheet Access Unlocked: 10+ Link Sample (UK & SaaS Live Backlinks)",
+          message: `User unlocked the 10+ Link Backlink Sample Spreadsheet.\nName: ${name}\nEmail: ${email}\nWebsite: ${website || "N/A"}`,
         }),
       });
     } catch (err) {
@@ -106,7 +106,7 @@ export function SampleSheetModal() {
                 Access Unlocked
               </div>
               <h3 className="text-2xl font-bold text-foreground">
-                10 Link Live Sample Placements
+                10+ Live Backlink Sample Placements
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Your spreadsheet access is ready. Browse unmasked DR50–85+ UK & SaaS publishers with verified traffic curves and live sample articles.
@@ -150,10 +150,10 @@ export function SampleSheetModal() {
                 Gated Sample Sheet
               </div>
               <h3 className="text-2xl font-bold text-foreground tracking-tight">
-                Unlock 10 Link Live Backlink Sample
+                Unlock 10+ Live Backlink Sample Sheet
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Enter your details below to get instant access to our curated Google Sheet containing 10 real UK & SaaS guest posts and editorial placements with live DR & organic traffic.
+                Enter your details below to get instant access to our curated Google Sheet containing 10+ real UK & SaaS guest posts and editorial placements with live DR & organic traffic.
               </p>
             </div>
 
@@ -212,7 +212,7 @@ export function SampleSheetModal() {
                 ) : (
                   <>
                     <FileSpreadsheet className="w-4 h-4" />
-                    <span>Get Instant Access to Sample Sheet</span>
+                    <span>Get Instant Access to 10+ Link Sample Sheet</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

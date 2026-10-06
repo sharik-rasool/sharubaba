@@ -89,7 +89,7 @@ export function CTASection() {
                     size="lg" 
                     className="h-[52px] sm:h-[56px] px-8 rounded-2xl text-base font-bold border-border/80 hover:bg-primary/10 hover:text-primary hover:border-primary/30 hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 w-full sm:w-auto gap-2"
                   >
-                    <span>10 Link Sample</span>
+                    <span>10+ Links Sample Sheet</span>
                     <ArrowRight className="h-4 w-4 opacity-70" />
                   </Button>
                 </button>

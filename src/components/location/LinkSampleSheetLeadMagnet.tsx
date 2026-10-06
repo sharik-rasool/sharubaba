@@ -34,8 +34,8 @@ export function LinkSampleSheetLeadMagnet() {
         body: JSON.stringify({
           name: name,
           email: email,
-          subject: "Sample Sheet Request: 10 Link Sample (UK & SaaS)",
-          message: `User requested the live 10 link sample spreadsheet.\nName: ${name}\nEmail: ${email}`,
+          subject: "Sample Sheet Request: 10+ Link Sample (UK & SaaS)",
+          message: `User requested the live 10+ link sample spreadsheet.\nName: ${name}\nEmail: ${email}`,
         }),
       });
     } catch {
@@ -65,10 +65,10 @@ export function LinkSampleSheetLeadMagnet() {
                 Free Lead Magnet
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                Download Our 10 Link Live UK &amp; SaaS Backlink Sample Sheet
+                Download Our 10+ Live UK &amp; SaaS Backlink Sample Sheet
               </h2>
               <p className="text-muted-foreground text-sm sm:text-base mb-6 leading-relaxed">
-                See the exact quality of sites we build links on. Browse 10 real, unmasked editorial domains with verified Ahrefs DR, real organic traffic curves, and niche categorizations.
+                See the exact quality of sites we build links on. Browse 10+ real, unmasked editorial domains with verified Ahrefs DR, real organic traffic curves, and niche categorizations.
               </p>
 
               {status === "success" ? (
@@ -134,7 +134,7 @@ export function LinkSampleSheetLeadMagnet() {
                     ) : (
                       <>
                         <FileSpreadsheet className="w-4 h-4" />
-                        Unlock 10 Link Live Sample Sheet (Google Sheets)
+                        Unlock 10+ Live Sample Sheet (Google Sheets)
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
@@ -157,10 +157,10 @@ export function LinkSampleSheetLeadMagnet() {
                     <div className="w-3 h-3 rounded-full bg-rose-500/80" />
                     <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                     <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                    <span className="text-xs font-bold text-foreground ml-2">UK_SaaS_Live_Backlink_10_Link_Sample_2026.xlsx</span>
+                    <span className="text-xs font-bold text-foreground ml-2">UK_SaaS_Live_Backlink_10_Plus_Sample_2026.xlsx</span>
                   </div>
                   <span className="text-[11px] font-extrabold text-primary px-2.5 py-0.5 rounded-full bg-primary/10">
-                    10 Link Sample
+                    10+ Link Sample
                   </span>
                 </div>
 

@@ -210,7 +210,7 @@ export default function LinkBuilderUKPage() {
                 <Link href="#sample-sheet" className="w-full sm:w-auto">
                   <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold w-full sm:w-auto bg-background/60 backdrop-blur-sm hover:bg-primary/10 hover:text-primary transition-all text-base py-6 gap-2">
                     <FileSpreadsheet className="w-4 h-4 text-primary" />
-                    View Live Sample Placements
+                    View 10+ Live Sample Placements
                   </Button>
                 </Link>
               </div>
