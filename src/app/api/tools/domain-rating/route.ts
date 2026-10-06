@@ -182,19 +182,19 @@ export async function POST(request: Request) {
           Accept: 'application/json',
         };
 
-        // Call Ahrefs v3 endpoints in parallel
+        // Call Ahrefs v3 endpoints in parallel with 6s timeout
         const [drRes, metricsRes, backlinksRes] = await Promise.allSettled([
           fetch(
             `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${encodeURIComponent(domain)}&date=${today}`,
-            { headers, next: { revalidate: 86400 } }
+            { headers, next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000) }
           ),
           fetch(
             `https://api.ahrefs.com/v3/site-explorer/metrics?target=${encodeURIComponent(domain)}&date=${today}`,
-            { headers, next: { revalidate: 86400 } }
+            { headers, next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000) }
           ),
           fetch(
             `https://api.ahrefs.com/v3/site-explorer/backlinks-stats?target=${encodeURIComponent(domain)}&date=${today}`,
-            { headers, next: { revalidate: 86400 } }
+            { headers, next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000) }
           ),
         ]);
 
