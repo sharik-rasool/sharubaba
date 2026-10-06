@@ -1,4 +1,4 @@
-import { LucideIcon, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush } from "lucide-react";
+import { LucideIcon, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush, Activity, Globe } from "lucide-react";
 
 export interface Tool {
     slug: string;
@@ -10,6 +10,14 @@ export interface Tool {
 }
 
 export const toolsData: Tool[] = [
+    {
+        slug: "website-authority-checker",
+        title: "Website Authority & Traffic Checker",
+        description: "Check live Ahrefs Domain Rating (DR), estimated monthly organic search traffic, and backlink strength for any website.",
+        metaTitle: "Free Website Authority & Traffic Checker | Ahrefs DR & Search Volume",
+        metaDescription: "Check live Ahrefs Domain Rating (DR), estimated monthly organic search traffic, and backlink profile strength for any website. Free SEO tool by Sharik Rasool.",
+        icon: Activity,
+    },
     {
         slug: "elf-name-generator",
         title: "Elf Name Generator",
