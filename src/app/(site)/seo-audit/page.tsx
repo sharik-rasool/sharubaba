@@ -105,7 +105,7 @@ const auditProductSchema = {
 
 export default function SeoAuditPage() {
   return (
-    <div className="min-h-screen py-12 sm:py-20 space-y-24">
+    <div className="min-h-screen pt-4 pb-16 sm:pt-6 sm:pb-20 space-y-16 sm:space-y-20">
       {/* Schema Injection */}
       <script
         type="application/ld+json"
@@ -114,28 +114,28 @@ export default function SeoAuditPage() {
 
       {/* 1. HERO SECTION (2-Column with 3D Animated Book) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Left Column: Headline & Value Prop */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+          <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/25 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              Data-Backed Productized Service • $15 Flat
+              Productized SEO Audit • $15 Flat
             </div>
 
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-foreground tracking-tight leading-[1.12]">
-              Uncover Why Competitors Outrank You. <br />
-              <span className="text-primary">Get a Custom $15 SEO Audit.</span>
+            <h1 className="text-3xl sm:text-5xl font-black text-foreground tracking-tight leading-[1.15]">
+              Actionable <span className="text-primary">$15 SEO Audit</span> <br className="hidden sm:inline" />
+              &amp; Backlink Roadmap
             </h1>
 
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Stop guessing your website&apos;s SEO weaknesses. Get an executive PDF report and Excel action sheet with your exact backlink gaps, traffic distribution, and a prioritized 90-day growth roadmap.
+            <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              Stop guessing why competitors outrank you. Get a custom executive PDF report and Excel action sheet with your exact link gaps, toxic backlinks, and a 90-day fix roadmap.
             </p>
 
             {/* Hero CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
               <a
                 href="#order-audit-section"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all active:scale-98"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all active:scale-98"
               >
                 <span>Order Your $15 Audit</span>
                 <ArrowRight className="w-4 h-4" />
@@ -143,7 +143,7 @@ export default function SeoAuditPage() {
 
               <a
                 href="#preview-section"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-semibold text-sm border border-border/80 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-semibold text-sm border border-border/80 transition-colors"
               >
                 <span>Free Baseline Scan</span>
                 <Zap className="w-4 h-4 text-primary" />
@@ -151,18 +151,18 @@ export default function SeoAuditPage() {
             </div>
 
             {/* Feature Badges */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-4 text-xs font-semibold text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-2 text-xs font-semibold text-muted-foreground">
               <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-primary" />
+                <Clock className="w-3.5 h-3.5 text-primary" />
                 <span>24–48h Turnaround</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Powered by Ahrefs API</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Verified Ahrefs Data</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>100% Credited to Link Building</span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>100% Credited to Sprints</span>
               </div>
             </div>
           </div>
