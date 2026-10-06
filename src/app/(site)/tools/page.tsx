@@ -1,27 +1,25 @@
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { toolsData } from "@/lib/tools-data";
 import { Metadata } from "next";
+import { ToolsHubDirectory } from "@/components/tools/ToolsHubDirectory";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 export const metadata: Metadata = {
-    title: "Free Online Tools & Generators",
+    title: "Free SEO, Productivity & Creative Online Tools",
     description:
-        "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+        "Explore a curated collection of free SEO utilities, website authority checkers, academic generators, and creative tools. Fast, free, and built for founders, marketers, and creators.",
     alternates: { canonical: "https://www.sharikrasool.com/tools" },
     openGraph: {
-        title: "Free Online Tools & Generators",
+        title: "Free SEO, Productivity & Creative Online Tools",
         description:
-            "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+            "Explore a curated collection of free SEO utilities, website authority checkers, academic generators, and creative tools.",
         url: "https://www.sharikrasool.com/tools",
         type: "website",
         images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Free Online Tools & Generators",
+        title: "Free SEO, Productivity & Creative Online Tools",
         description:
-            "Explore a curated collection of free online tools and web calculators. Fast generators, text formatters, and utilities for developers, writers, and creators.",
+            "Explore a curated collection of free SEO utilities, website authority checkers, academic generators, and creative tools.",
         images: ["/opengraph-image"],
     },
 };
@@ -29,33 +27,20 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
     return (
         <div className="container-wide py-12 md:py-16">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight">Free Online Tools</h1>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                    A collection of helpful utilities and generators to boost your productivity and creativity.
+            <div className="text-center mb-12 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+                    Free Web Utilities Hub
+                </div>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-tight tracking-tight">
+                    Free Online Tools &amp; Generators
+                </h1>
+                <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                    A suite of professional SEO checkers, writing helpers, and creative tools built to streamline your workflow and drive organic growth.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {toolsData.map((tool) => {
-                    const Icon = tool.icon;
-                    return (
-                        <Link key={tool.slug} href={`/tools/${tool.slug}`} className="block h-full group">
-                            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:border-primary/50 group-hover:-translate-y-1">
-                                <CardHeader>
-                                    <div className="mb-4 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                                        <Icon className="w-6 h-6" />
-                                    </div>
-                                    <CardTitle className="group-hover:text-primary transition-colors">{tool.title}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <CardDescription>{tool.description}</CardDescription>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    );
-                })}
-            </div>
+            {/* Interactive Categorized Directory with Spotlight on Top */}
+            <ToolsHubDirectory />
 
             {/* Explanatory Content Section to increase Text-to-HTML ratio and build SEO value */}
             <div className="mt-20 md:mt-28 border-t border-border/50 pt-12 md:pt-16 max-w-4xl mx-auto">
