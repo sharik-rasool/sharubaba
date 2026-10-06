@@ -23,6 +23,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { FadeIn } from "@/components/animations";
 import { SeoAuditOrderForm } from "@/components/audit/SeoAuditOrderForm";
 import { SeoAuditPreviewWidget } from "@/components/audit/SeoAuditPreviewWidget";
+import { SeoAuditHeroVisual } from "@/components/audit/SeoAuditHeroVisual";
 
 export const metadata: Metadata = {
   title: "In-Depth SEO & Backlink Audit ($15) | Data-Backed Growth Roadmap",
@@ -104,61 +105,71 @@ const auditProductSchema = {
 
 export default function SeoAuditPage() {
   return (
-    <div className="min-h-screen py-16 sm:py-24 space-y-24">
+    <div className="min-h-screen py-12 sm:py-20 space-y-24">
       {/* Schema Injection */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(auditProductSchema) }}
       />
 
-      {/* 1. HERO SECTION */}
-      <section className="text-center max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5" />
-          Data-Backed Productized Service • $15 Flat
-        </div>
+      {/* 1. HERO SECTION (2-Column with 3D Animated Book) */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Headline & Value Prop */}
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              Data-Backed Productized Service • $15 Flat
+            </div>
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-foreground tracking-tight leading-[1.12]">
-          Uncover Why Competitors Outrank You. <br />
-          <span className="text-primary">Get a Custom $15 SEO Audit.</span>
-        </h1>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-foreground tracking-tight leading-[1.12]">
+              Uncover Why Competitors Outrank You. <br />
+              <span className="text-primary">Get a Custom $15 SEO Audit.</span>
+            </h1>
 
-        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Stop guessing your website&apos;s SEO weaknesses. Get an executive PDF report and Excel action sheet with your exact backlink gaps, traffic distribution, and a prioritized 90-day growth roadmap.
-        </p>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              Stop guessing your website&apos;s SEO weaknesses. Get an executive PDF report and Excel action sheet with your exact backlink gaps, traffic distribution, and a prioritized 90-day growth roadmap.
+            </p>
 
-        {/* Hero CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <a
-            href="#order-audit-section"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all active:scale-98"
-          >
-            <span>Order Your $15 Audit</span>
-            <ArrowRight className="w-4 h-4" />
-          </a>
+            {/* Hero CTAs */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+              <a
+                href="#order-audit-section"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all active:scale-98"
+              >
+                <span>Order Your $15 Audit</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
 
-          <a
-            href="#preview-section"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-semibold text-sm border border-border/80 transition-colors"
-          >
-            <span>Free Baseline Scan</span>
-            <Zap className="w-4 h-4 text-primary" />
-          </a>
-        </div>
+              <a
+                href="#preview-section"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-semibold text-sm border border-border/80 transition-colors"
+              >
+                <span>Free Baseline Scan</span>
+                <Zap className="w-4 h-4 text-primary" />
+              </a>
+            </div>
 
-        {/* Feature Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-4 text-xs font-semibold text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-primary" />
-            <span>24–48h Turnaround</span>
+            {/* Feature Badges */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-4 text-xs font-semibold text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-primary" />
+                <span>24–48h Turnaround</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Powered by Ahrefs API</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>100% Credited to Link Building</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Powered by Ahrefs API</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>100% Credited to Link Building</span>
+
+          {/* Right Column: 3D Animated Audit Book Visual */}
+          <div className="lg:col-span-5 flex justify-center">
+            <SeoAuditHeroVisual />
           </div>
         </div>
       </section>
