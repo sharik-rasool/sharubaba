@@ -177,42 +177,55 @@ export async function POST(request: Request) {
     if (ahrefsApiKey) {
       try {
         const today = new Date().toISOString().split('T')[0];
-        
-        // 1. Fetch Domain Rating
-        const drRes = await fetch(
-          `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${encodeURIComponent(domain)}&date=${today}`,
-          {
-            headers: {
-              Authorization: `Bearer ${ahrefsApiKey}`,
-              Accept: 'application/json',
-            },
-            next: { revalidate: 86400 },
-          }
-        );
+        const headers = {
+          Authorization: `Bearer ${ahrefsApiKey}`,
+          Accept: 'application/json',
+        };
 
-        // 2. Fetch Metrics / Overview
-        const metricsRes = await fetch(
-          `https://api.ahrefs.com/v3/site-explorer/overview?target=${encodeURIComponent(domain)}&date=${today}`,
-          {
-            headers: {
-              Authorization: `Bearer ${ahrefsApiKey}`,
-              Accept: 'application/json',
-            },
-            next: { revalidate: 86400 },
-          }
-        );
+        // Call Ahrefs v3 endpoints in parallel
+        const [drRes, metricsRes, backlinksRes] = await Promise.allSettled([
+          fetch(
+            `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${encodeURIComponent(domain)}&date=${today}`,
+            { headers, next: { revalidate: 86400 } }
+          ),
+          fetch(
+            `https://api.ahrefs.com/v3/site-explorer/metrics?target=${encodeURIComponent(domain)}&date=${today}`,
+            { headers, next: { revalidate: 86400 } }
+          ),
+          fetch(
+            `https://api.ahrefs.com/v3/site-explorer/backlinks-stats?target=${encodeURIComponent(domain)}&date=${today}`,
+            { headers, next: { revalidate: 86400 } }
+          ),
+        ]);
 
-        if (drRes.ok && metricsRes.ok) {
-          const drData = await drRes.json();
-          const metricsData = await metricsRes.json();
+        let dr = 0;
+        let ahrefsRank = 0;
+        let traffic = 0;
+        let keywords = 0;
+        let refDomains = 0;
+        let backlinks = 0;
+        let hasLiveDr = false;
 
-          const dr = drData.domain_rating?.domain_rating ?? 0;
-          const ahrefsRank = drData.domain_rating?.ahrefs_rank ?? 0;
-          const traffic = metricsData.metrics?.org_traffic ?? 0;
-          const refDomains = metricsData.metrics?.refdomain_count ?? 0;
-          const backlinks = metricsData.metrics?.backlink_count ?? 0;
-          const keywords = metricsData.metrics?.org_keywords ?? 0;
+        if (drRes.status === 'fulfilled' && drRes.value.ok) {
+          const drData = await drRes.value.json();
+          dr = Math.round(drData.domain_rating?.domain_rating ?? 0);
+          ahrefsRank = drData.domain_rating?.ahrefs_rank ?? 0;
+          hasLiveDr = true;
+        }
 
+        if (metricsRes.status === 'fulfilled' && metricsRes.value.ok) {
+          const metricsData = await metricsRes.value.json();
+          traffic = metricsData.metrics?.org_traffic ?? 0;
+          keywords = metricsData.metrics?.org_keywords ?? 0;
+        }
+
+        if (backlinksRes.status === 'fulfilled' && backlinksRes.value.ok) {
+          const backlinksData = await backlinksRes.value.json();
+          refDomains = backlinksData.metrics?.live_refdomains ?? backlinksData.metrics?.all_time_refdomains ?? 0;
+          backlinks = backlinksData.metrics?.live ?? backlinksData.metrics?.all_time ?? 0;
+        }
+
+        if (hasLiveDr) {
           const { tier, healthScore, verdict, recommendation } = getTierAndRecommendations(dr, traffic);
 
           const result: AuthorityData = {
