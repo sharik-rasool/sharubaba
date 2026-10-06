@@ -7,17 +7,16 @@ interface ObfuscatedContactProps {
   className?: string;
 }
 
-// Store obfuscated (reversed) values to prevent basic scraping
+// Store obfuscated (reversed) email to prevent basic scraping
 const REVERSED_EMAIL = "moc.loosarkirahs@ih".split("").reverse().join("");
-const REVERSED_PHONE = "1490056007 19+".split("").reverse().join(""); // +91 7006500941
 
-export function ObfuscatedContact({ type, className }: ObfuscatedContactProps) {
+export function ObfuscatedContact({ type = "email", className }: ObfuscatedContactProps) {
   const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState("");
 
   useEffect(() => {
     setMounted(true);
-    setValue(type === "email" ? REVERSED_EMAIL : REVERSED_PHONE);
+    setValue(REVERSED_EMAIL);
   }, [type]);
 
   if (!mounted) {
@@ -26,16 +25,8 @@ export function ObfuscatedContact({ type, className }: ObfuscatedContactProps) {
     return <span className={className}>[Protected]</span>;
   }
 
-  if (type === "email") {
-    return (
-      <a href={`mailto:${value}`} className={className}>
-        {value}
-      </a>
-    );
-  }
-
   return (
-    <a href={`tel:${value.replace(/\s+/g, '')}`} className={className}>
+    <a href={`mailto:${value}`} className={className}>
       {value}
     </a>
   );

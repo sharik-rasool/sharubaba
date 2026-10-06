@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Linkedin, Instagram, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Linkedin, Instagram, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 import { ObfuscatedContact } from "./ObfuscatedContact";
 
 const footerLinks = {
@@ -93,20 +93,12 @@ export function Footer() {
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
               Senior SEO Strategist &amp; Link Builder helping SaaS and tech companies scale domain authority, organic traffic, and customer pipeline through white-hat manual outreach.
             </p>
-            <address className="not-italic space-y-2 text-sm text-muted-foreground pt-1">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary shrink-0" />
-                <span>Srinagar, J&amp;K, India (Serving Global &amp; UK Clients)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-primary shrink-0" />
-                <ObfuscatedContact type="phone" className="hover:text-foreground transition-colors" />
-              </div>
+            <div className="space-y-2 text-sm text-muted-foreground pt-1">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary shrink-0" />
                 <ObfuscatedContact type="email" className="hover:text-foreground transition-colors" />
               </div>
-            </address>
+            </div>
 
             <div className="pt-2 flex gap-3">
               {socialLinks.map((social) => (

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, GraduationCap, Briefcase, MapPin, Mail, PenTool, Calendar, Users, Target, Building, Link2, Shield, TrendingUp, Flag, Handshake, Rocket } from "lucide-react";
+import { ArrowRight, GraduationCap, Briefcase, Mail, PenTool, Calendar, Users, Target, Building, Link2, Shield, TrendingUp, Flag, Handshake, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations";
@@ -108,12 +108,6 @@ const aboutSchema = {
             "name": "MBA in Digital Marketing",
         },
         "knowsAbout": skills,
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Srinagar",
-            "addressRegion": "Jammu & Kashmir",
-            "addressCountry": "India",
-        },
     },
 };
 

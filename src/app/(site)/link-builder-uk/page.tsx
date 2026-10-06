@@ -92,7 +92,6 @@ const serviceSchema = {
   description:
     "Bespoke white-hat link building, manual editorial outreach, and high-DR backlink acquisition for UK SaaS, B2B, and technology companies.",
   url: "https://www.sharikrasool.com/link-builder-uk",
-  telephone: "+91-XXXXXXXXXX",
   priceRange: "£££",
   currenciesAccepted: "GBP, USD, EUR",
   paymentAccepted: "Bank Transfer, Stripe, Wise",

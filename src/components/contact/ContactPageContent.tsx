@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { Mail, Calendar, Linkedin, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -95,18 +95,7 @@ export function ContactPageContent() {
                                 <Card>
                                     <CardContent className="p-4 md:p-6">
                                         <h2 className="text-base md:text-lg font-semibold mb-3 md:mb-4">Contact Information</h2>
-                                        <address className="not-italic space-y-3 md:space-y-4">
-                                            <div className="flex items-start gap-3">
-                                                <div className="p-1.5 md:p-2 rounded-lg bg-primary/10 text-primary">
-                                                    <MapPin className="h-4 w-4 md:h-5 md:w-5" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-medium text-sm md:text-base">Location</p>
-                                                    <p className="text-xs md:text-sm text-muted-foreground">
-                                                        Srinagar, Jammu & Kashmir<br />India
-                                                    </p>
-                                                </div>
-                                            </div>
+                                        <div className="space-y-3 md:space-y-4">
                                             <div className="flex items-start gap-3">
                                                 <div className="p-1.5 md:p-2 rounded-lg bg-primary/10 text-primary">
                                                     <Mail className="h-4 w-4 md:h-5 md:w-5" />
@@ -118,14 +107,37 @@ export function ContactPageContent() {
                                             </div>
                                             <div className="flex items-start gap-3">
                                                 <div className="p-1.5 md:p-2 rounded-lg bg-primary/10 text-primary">
-                                                    <Phone className="h-4 w-4 md:h-5 md:w-5" />
+                                                    <Calendar className="h-4 w-4 md:h-5 md:w-5" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-sm md:text-base">Phone</p>
-                                                    <ObfuscatedContact type="phone" className="text-xs md:text-sm text-primary hover:underline" />
+                                                    <p className="font-medium text-sm md:text-base">Free Consultation</p>
+                                                    <a 
+                                                        href="https://calendly.com/sharikkashmiri" 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer"
+                                                        className="text-xs md:text-sm text-primary hover:underline font-semibold"
+                                                    >
+                                                        Book a 30-min Zoom Call
+                                                    </a>
                                                 </div>
                                             </div>
-                                        </address>
+                                            <div className="flex items-start gap-3">
+                                                <div className="p-1.5 md:p-2 rounded-lg bg-primary/10 text-primary">
+                                                    <Linkedin className="h-4 w-4 md:h-5 md:w-5" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-sm md:text-base">LinkedIn</p>
+                                                    <a 
+                                                        href="https://www.linkedin.com/in/sharik-rasool-074155174/" 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer"
+                                                        className="text-xs md:text-sm text-primary hover:underline"
+                                                    >
+                                                        Connect on LinkedIn
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </CardContent>
                                 </Card>
                             </StaggerItem>

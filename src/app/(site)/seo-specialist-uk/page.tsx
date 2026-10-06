@@ -86,7 +86,6 @@ const serviceSchema = {
   description:
     "Senior freelance SEO specialist and organic search strategist helping UK SaaS and tech companies increase organic revenue through technical audits, content architecture, and authority building.",
   url: "https://www.sharikrasool.com/seo-specialist-uk",
-  telephone: "+91-XXXXXXXXXX",
   priceRange: "£££",
   currenciesAccepted: "GBP, USD, EUR",
   paymentAccepted: "Bank Transfer, Stripe, Wise",
