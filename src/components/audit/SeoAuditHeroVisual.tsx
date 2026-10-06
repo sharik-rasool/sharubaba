@@ -77,47 +77,47 @@ export function SeoAuditHeroVisual() {
             <div className="flex items-center justify-between">
               {/* Logo / Monogram */}
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-black/80 border border-emerald-500/40 flex items-center justify-center shadow-inner">
-                  <span className="font-mono text-xs font-black tracking-tighter text-foreground">
-                    sr<span className="text-primary">.</span>
+                <div className="w-8 h-8 rounded-lg bg-black/90 border border-emerald-500/50 flex items-center justify-center shadow-inner">
+                  <span className="font-mono text-xs font-black tracking-tighter text-white">
+                    sr<span className="text-emerald-400">.</span>
                   </span>
                 </div>
                 <div className="text-left">
-                  <div className="text-[11px] font-bold text-foreground tracking-tight leading-none">
-                    sharik rasool<span className="text-primary">.</span>
+                  <div className="text-[11px] font-bold text-white tracking-tight leading-none">
+                    sharik rasool<span className="text-emerald-400">.</span>
                   </div>
-                  <div className="text-[8px] text-muted-foreground font-semibold tracking-wider uppercase mt-0.5">
+                  <div className="text-[8px] text-slate-400 font-semibold tracking-wider uppercase mt-0.5">
                     sharikrasool.com
                   </div>
                 </div>
               </div>
 
               {/* Gold Executive Badge */}
-              <div className="px-2 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[8px] font-extrabold uppercase tracking-widest shadow-sm">
+              <div className="px-2 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-[8px] font-extrabold uppercase tracking-widest shadow-sm">
                 Executive Edition
               </div>
             </div>
 
             {/* Subtle Divider */}
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
           </div>
 
           {/* BOOK CENTER: Big Bold Typography */}
           <div className="relative pl-3 text-left space-y-2.5 my-auto py-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-primary/15 border border-primary/30 text-primary text-[9px] font-black uppercase tracking-wider">
-              <Sparkles className="w-2.5 h-2.5" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[9px] font-black uppercase tracking-wider">
+              <Sparkles className="w-2.5 h-2.5 text-emerald-300" />
               Comprehensive Audit
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-[1.08] drop-shadow-md">
+            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-[1.08] drop-shadow-md">
               SEO &amp; <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-primary to-teal-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 bg-clip-text text-transparent">
                 BACKLINK
               </span> <br />
               AUDIT REPORT
             </h3>
 
-            <p className="text-[10px] sm:text-[11px] text-muted-foreground font-medium leading-relaxed max-w-[200px]">
+            <p className="text-[10px] sm:text-[11px] text-slate-300 font-medium leading-relaxed max-w-[210px]">
               Competitor Link Gap Matrix &amp; Tailored 90-Day Authority Growth Blueprint
             </p>
           </div>
@@ -125,17 +125,17 @@ export function SeoAuditHeroVisual() {
           {/* BOOK FOOTER: Verification Seals & Author info */}
           <div className="relative pl-3 pb-1 space-y-3">
             {/* Metric Preview Pill inside cover */}
-            <div className="p-2.5 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md flex items-center justify-between text-[10px]">
-              <div className="flex items-center gap-1.5 text-foreground font-bold">
+            <div className="p-2.5 rounded-xl bg-black/70 border border-white/15 backdrop-blur-md flex items-center justify-between text-[10px]">
+              <div className="flex items-center gap-1.5 text-white font-bold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Ahrefs Verified Data</span>
               </div>
-              <span className="font-extrabold text-primary">$15 Deliverable</span>
+              <span className="font-extrabold text-emerald-400">$15 Deliverable</span>
             </div>
 
-            <div className="flex items-center justify-between text-[9px] text-muted-foreground border-t border-white/5 pt-2">
+            <div className="flex items-center justify-between text-[9px] text-slate-400 border-t border-white/10 pt-2">
               <span>PDF Deck + Excel Sheets</span>
-              <span className="font-semibold text-foreground/80">24–48h Turnaround</span>
+              <span className="font-semibold text-slate-200">24–48h Turnaround</span>
             </div>
           </div>
 
@@ -147,28 +147,6 @@ export function SeoAuditHeroVisual() {
                 "repeating-linear-gradient(0deg, #f3f4f6 0px, #f3f4f6 2px, #d1d5db 3px, #d1d5db 4px)",
             }}
           />
-        </div>
-      </div>
-
-      {/* Floating Badge 1: Top Right */}
-      <div className="absolute -top-1 -right-2 sm:-right-4 p-2.5 sm:p-3 rounded-2xl bg-card/95 backdrop-blur-md border border-emerald-500/40 shadow-2xl flex items-center gap-2.5 animate-bounce [animation-duration:5s]">
-        <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
-          <TrendingUp className="w-4 h-4" />
-        </div>
-        <div className="text-left pr-1.5">
-          <div className="text-[9px] uppercase font-bold text-muted-foreground">Traffic Analysis</div>
-          <div className="text-xs font-black text-foreground">+350% Scale</div>
-        </div>
-      </div>
-
-      {/* Floating Badge 2: Bottom Left */}
-      <div className="absolute -bottom-2 -left-2 sm:-left-4 p-2.5 sm:p-3 rounded-2xl bg-card/95 backdrop-blur-md border border-primary/40 shadow-2xl flex items-center gap-2.5 animate-bounce [animation-duration:6s] [animation-delay:1.5s]">
-        <div className="w-8 h-8 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
-          <Target className="w-4 h-4" />
-        </div>
-        <div className="text-left pr-1.5">
-          <div className="text-[9px] uppercase font-bold text-muted-foreground">Competitor Gaps</div>
-          <div className="text-xs font-black text-foreground">10+ Targets Found</div>
         </div>
       </div>
     </div>
