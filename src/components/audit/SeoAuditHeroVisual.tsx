@@ -25,7 +25,7 @@ export function SeoAuditHeroVisual() {
 
   return (
     <div
-      className="relative w-full max-w-[380px] sm:max-w-[420px] lg:max-w-[440px] mx-auto py-8 flex items-center justify-center select-none"
+      className="relative w-full max-w-[380px] sm:max-w-[420px] lg:max-w-[440px] mx-auto py-2 sm:py-3 flex items-center justify-center select-none"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}

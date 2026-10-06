@@ -105,7 +105,7 @@ const auditProductSchema = {
 
 export default function SeoAuditPage() {
   return (
-    <div className="min-h-screen pt-4 pb-16 sm:pt-8 sm:pb-24 space-y-20 sm:space-y-24">
+    <div className="min-h-screen pt-2 sm:pt-4 pb-16 sm:pb-20 space-y-16 sm:space-y-20">
       {/* Schema Injection */}
       <script
         type="application/ld+json"
@@ -113,10 +113,10 @@ export default function SeoAuditPage() {
       />
 
       {/* 1. HERO SECTION (2-Column with 3D Animated Book) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-8 sm:py-12 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-2 pb-6 sm:pt-4 sm:pb-8 lg:pt-6 lg:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Left Column: Headline & Value Prop */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/25 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               Productized SEO Audit • $15 Flat
