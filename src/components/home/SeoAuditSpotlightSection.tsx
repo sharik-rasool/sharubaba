@@ -84,12 +84,16 @@ export function SeoAuditSpotlightSection() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
-              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                <Clock className="w-4 h-4 text-primary" />
-                <span>Delivered in 24–48 Hours</span>
-                <span className="text-border">•</span>
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                <span>100% Credited on Retainers</span>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-semibold text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-primary shrink-0" />
+                  <span>24–48h Turnaround</span>
+                </div>
+                <span className="text-border hidden sm:inline">•</span>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
+                  <span>100% Credited on Retainers</span>
+                </div>
               </div>
             </div>
           </div>

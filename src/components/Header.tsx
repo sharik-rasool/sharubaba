@@ -13,6 +13,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
+  { name: "SEO Audit", href: "/seo-audit", badge: "$15" },
   { name: "Blog", href: "/blog" },
   { name: "Tools", href: "/tools" },
   { name: "Contact", href: "/contact" },
@@ -50,14 +51,19 @@ export function Header() {
               key={item.name}
               href={item.href}
               className={cn(
-                "px-3 py-2 text-sm font-medium transition-colors rounded-md",
+                "px-3 py-2 text-sm font-medium transition-colors rounded-md inline-flex items-center gap-1.5",
                 pathname === item.href
                   ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
               aria-current={pathname === item.href ? "page" : undefined}
             >
-              {item.name}
+              <span>{item.name}</span>
+              {item.badge && (
+                <span className="px-1.5 py-0.2 text-[10px] font-black rounded-full bg-primary/20 text-primary border border-primary/30 leading-none">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </div>
@@ -104,15 +110,20 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "block px-3 py-2 text-base font-medium rounded-md transition-colors",
+                  "flex items-center justify-between px-3 py-2.5 text-base font-medium rounded-md transition-colors",
                   pathname === item.href
-                    ? "text-primary bg-primary/10"
+                    ? "text-primary bg-primary/10 font-bold"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
                 onClick={() => setMobileMenuOpen(false)}
                 aria-current={pathname === item.href ? "page" : undefined}
               >
-                {item.name}
+                <span>{item.name}</span>
+                {item.badge && (
+                  <span className="px-2 py-0.5 text-xs font-black rounded-full bg-primary/20 text-primary border border-primary/30">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             ))}
             <div className="pt-4">

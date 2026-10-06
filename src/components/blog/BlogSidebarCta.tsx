@@ -44,14 +44,14 @@ export default function BlogSidebarCta() {
                     <span>Free Live Lead Magnet</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-tight">
-                    Get access to 50+ live unmasked UK &amp; SaaS link building placements with real Ahrefs DR.
+                    Get access to 10 live unmasked UK &amp; SaaS link building placements with real Ahrefs DR.
                 </p>
                 <button
                     type="button"
                     onClick={handleOpenSampleSheet}
                     className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-md hover:bg-primary/90 transition-all shadow-sm active:scale-98"
                 >
-                    <span>Get 50+ Sample Sheet</span>
+                    <span>Get 10 Link Sample</span>
                     <ArrowRight className="h-3 w-3" />
                 </button>
             </div>

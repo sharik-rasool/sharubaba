@@ -81,7 +81,7 @@ export function AgencyComparisonSection() {
                   className="grid grid-cols-1 md:grid-cols-12 transition-colors hover:bg-muted/30 text-xs sm:text-sm"
                 >
                   {/* Feature Label */}
-                  <div className="p-4 md:p-5 md:col-span-4 font-semibold text-foreground flex items-center">
+                  <div className="p-4 md:p-5 md:col-span-4 font-bold text-foreground flex items-center bg-muted/20 md:bg-transparent">
                     {row.feature}
                   </div>
 
@@ -90,7 +90,12 @@ export function AgencyComparisonSection() {
                     <div className="w-5 h-5 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0 mt-0.5">
                       <X className="w-3 h-3" />
                     </div>
-                    <span>{row.agency}</span>
+                    <div>
+                      <span className="md:hidden text-[10px] font-extrabold uppercase tracking-wider text-destructive block mb-0.5">
+                        Agency Reseller:
+                      </span>
+                      <span>{row.agency}</span>
+                    </div>
                   </div>
 
                   {/* Specialist Approach */}
@@ -98,7 +103,12 @@ export function AgencyComparisonSection() {
                     <div className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 mt-0.5">
                       <Check className="w-3.5 h-3.5" />
                     </div>
-                    <span>{row.specialist}</span>
+                    <div>
+                      <span className="md:hidden text-[10px] font-extrabold uppercase tracking-wider text-primary block mb-0.5">
+                        Sharik Rasool:
+                      </span>
+                      <span>{row.specialist}</span>
+                    </div>
                   </div>
                 </div>
               ))}

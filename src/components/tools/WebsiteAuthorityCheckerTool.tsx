@@ -482,7 +482,7 @@ export function WebsiteAuthorityCheckerTool() {
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-98"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
-                  <span>View 50+ Live Backlink Sample Sheet</span>
+                  <span>View 10 Link Sample</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
