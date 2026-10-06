@@ -9,7 +9,15 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 
-const navigation = [
+const desktopNav = [
+  { name: "About", href: "/about" },
+  { name: "Projects", href: "/projects" },
+  { name: "SEO Audit", href: "/seo-audit", badge: "$15" },
+  { name: "Blog", href: "/blog" },
+  { name: "Tools", href: "/tools" },
+];
+
+const mobileNav = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
@@ -26,12 +34,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container-wide flex h-16 items-center justify-between" aria-label="Main navigation">
+        {/* Brand Monogram & Name */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 tracking-tight"
+          className="flex items-center gap-2.5 tracking-tight group"
           aria-label="Sharik Rasool - Home"
         >
-          <div className="relative h-8 w-8 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-white p-1 shadow-sm flex items-center justify-center">
+          <div className="relative h-8 w-8 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-white p-1 shadow-sm flex items-center justify-center transition-transform group-hover:scale-105">
             <Image
               src="/monogram-tile-512.png"
               alt="Sharik Rasool Logo"
@@ -39,28 +48,28 @@ export function Header() {
               className="object-contain p-0.5"
             />
           </div>
-          <span className="text-xl font-bold text-foreground lowercase">
+          <span className="text-lg sm:text-xl font-bold text-foreground lowercase">
             sharik rasool<span className="text-primary">.</span>
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex md:items-center md:gap-1">
-          {navigation.map((item) => (
+        <div className="hidden md:flex md:items-center md:gap-1 lg:gap-1.5">
+          {desktopNav.map((item) => (
             <Link
               key={item.name}
               href={item.href}
               className={cn(
-                "px-3 py-2 text-sm font-medium transition-colors rounded-md inline-flex items-center gap-1.5",
+                "px-3 py-1.5 text-sm font-medium transition-all rounded-lg inline-flex items-center gap-1.5",
                 pathname === item.href
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "text-primary bg-primary/10 font-semibold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
               )}
               aria-current={pathname === item.href ? "page" : undefined}
             >
               <span>{item.name}</span>
               {item.badge && (
-                <span className="px-1.5 py-0.2 text-[10px] font-black rounded-full bg-primary/20 text-primary border border-primary/30 leading-none">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-primary/15 text-primary border border-primary/25 leading-none">
                   {item.badge}
                 </span>
               )}
@@ -69,12 +78,12 @@ export function Header() {
         </div>
 
         {/* Right side actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <ThemeToggle />
 
           {/* CTA Button - Desktop */}
           <Link href="/contact" className="hidden md:block">
-            <Button size="sm" className="font-medium">
+            <Button size="sm" className="font-semibold px-4 rounded-xl shadow-sm">
               Get in Touch
             </Button>
           </Link>
@@ -102,18 +111,18 @@ export function Header() {
       {mobileMenuOpen && (
         <div
           id="mobile-menu"
-          className="md:hidden border-t border-border bg-background"
+          className="md:hidden border-t border-border bg-background/95 backdrop-blur-md"
         >
           <div className="container-wide py-4 space-y-1">
-            {navigation.map((item) => (
+            {mobileNav.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "flex items-center justify-between px-3 py-2.5 text-base font-medium rounded-md transition-colors",
+                  "flex items-center justify-between px-3.5 py-2.5 text-base font-medium rounded-xl transition-colors",
                   pathname === item.href
                     ? "text-primary bg-primary/10 font-bold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
                 )}
                 onClick={() => setMobileMenuOpen(false)}
                 aria-current={pathname === item.href ? "page" : undefined}
@@ -126,9 +135,9 @@ export function Header() {
                 )}
               </Link>
             ))}
-            <div className="pt-4">
+            <div className="pt-3">
               <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full font-medium">
+                <Button className="w-full font-bold rounded-xl py-2.5">
                   Get in Touch
                 </Button>
               </Link>

@@ -105,7 +105,7 @@ const auditProductSchema = {
 
 export default function SeoAuditPage() {
   return (
-    <div className="min-h-screen pt-4 pb-16 sm:pt-6 sm:pb-20 space-y-16 sm:space-y-20">
+    <div className="min-h-screen pt-4 pb-16 sm:pt-8 sm:pb-24 space-y-20 sm:space-y-24">
       {/* Schema Injection */}
       <script
         type="application/ld+json"
@@ -113,10 +113,10 @@ export default function SeoAuditPage() {
       />
 
       {/* 1. HERO SECTION (2-Column with 3D Animated Book) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-8 sm:py-12 lg:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Headline & Value Prop */}
-          <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/25 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               Productized SEO Audit • $15 Flat
@@ -132,7 +132,7 @@ export default function SeoAuditPage() {
             </p>
 
             {/* Hero CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
               <a
                 href="#order-audit-section"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all active:scale-98"
@@ -174,12 +174,7 @@ export default function SeoAuditPage() {
         </div>
       </section>
 
-      {/* 2. FREE LIVE PREVIEW WIDGET */}
-      <section id="preview-section" className="max-w-4xl mx-auto px-4 sm:px-6">
-        <SeoAuditPreviewWidget />
-      </section>
-
-      {/* 3. WHAT YOU GET INSIDE THE $15 AUDIT */}
+      {/* 2. WHAT YOU GET INSIDE THE $15 AUDIT */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground">
@@ -301,7 +296,7 @@ export default function SeoAuditPage() {
         </div>
       </section>
 
-      {/* 4. DELIVERABLES PREVIEW CARDS */}
+      {/* 3. DELIVERABLES PREVIEW CARDS */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
         <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-secondary/40 via-card to-card border border-border/80 space-y-8">
           <div className="text-center max-w-xl mx-auto space-y-2">
@@ -356,8 +351,13 @@ export default function SeoAuditPage() {
         </div>
       </section>
 
+      {/* 4. FREE LIVE PREVIEW WIDGET */}
+      <section id="preview-section" className="max-w-4xl mx-auto px-4 sm:px-6">
+        <SeoAuditPreviewWidget />
+      </section>
+
       {/* 5. ORDER INTAKE FORM */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6">
+      <section id="order-audit-section" className="max-w-3xl mx-auto px-4 sm:px-6">
         <SeoAuditOrderForm />
       </section>
 
