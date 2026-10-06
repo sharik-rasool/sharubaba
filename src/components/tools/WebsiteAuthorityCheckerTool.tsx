@@ -16,10 +16,21 @@ import {
   ExternalLink,
   Layers,
   FileSpreadsheet,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { FadeIn } from "@/components/animations";
+
+export interface CountryTrafficData {
+  countryCode: string;
+  countryName: string;
+  flagEmoji: string;
+  traffic: number;
+  trafficFormatted: string;
+  percentage: number;
+  keywords: number;
+}
 
 interface AuthorityData {
   domain: string;
@@ -35,7 +46,10 @@ interface AuthorityData {
   verdict: string;
   recommendation: string;
   source: 'live' | 'simulation';
+  topCountries?: CountryTrafficData[];
   analyzedAt: string;
+  cached?: boolean;
+  cacheExpiresInDays?: number;
 }
 
 const SAMPLE_DOMAINS = [
@@ -52,7 +66,7 @@ export function WebsiteAuthorityCheckerTool() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AuthorityData | null>(null);
 
-  const handleAnalyze = async (targetDomain?: string) => {
+  const handleAnalyze = async (targetDomain?: string, forceRefresh: boolean = false) => {
     const domainToTest = (targetDomain || domainInput).trim();
     if (!domainToTest) {
       setError("Please enter a domain or URL to analyze.");
@@ -66,7 +80,7 @@ export function WebsiteAuthorityCheckerTool() {
       const res = await fetch("/api/tools/domain-rating", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain: domainToTest }),
+        body: JSON.stringify({ domain: domainToTest, refresh: forceRefresh }),
       });
 
       const json = await res.json();
@@ -193,8 +207,15 @@ export function WebsiteAuthorityCheckerTool() {
             {/* Top Bar: Target Domain & Source */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/60 pb-6">
               <div>
-                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                  Domain Overview
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Domain Overview
+                  </span>
+                  {result.cached && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-semibold">
+                      ⚡ 15-Day Cache ({result.cacheExpiresInDays ?? 15}d left)
+                    </span>
+                  )}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground flex items-center gap-2">
                   <span>{result.domain}</span>
@@ -209,9 +230,24 @@ export function WebsiteAuthorityCheckerTool() {
                 </h2>
               </div>
 
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{result.authorityTier}</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleAnalyze(result.domain, true)}
+                  disabled={loading}
+                  className="rounded-xl text-xs font-semibold gap-1.5 border-border/80 hover:border-primary/50"
+                  title="Bypass cache and re-check latest live metrics from Ahrefs"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+                  Refresh Live
+                </Button>
+
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>{result.authorityTier}</span>
+                </div>
               </div>
             </div>
 
@@ -333,6 +369,57 @@ export function WebsiteAuthorityCheckerTool() {
                 </div>
               </div>
             </div>
+
+            {/* Top 5 Countries Breakdown */}
+            {result.topCountries && result.topCountries.length > 0 && (
+              <div className="p-6 sm:p-7 rounded-2xl bg-secondary/20 border border-border/60 space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-primary" />
+                    <h3 className="text-sm font-bold text-foreground">
+                      Top 5 Countries by Organic Traffic
+                    </h3>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground font-medium">
+                    Geographic organic traffic &amp; keyword distribution
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                  {result.topCountries.map((country, idx) => (
+                    <div
+                      key={country.countryCode || idx}
+                      className="p-3.5 rounded-xl bg-card border border-border/60 hover:border-primary/40 transition-all space-y-2.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="text-lg shrink-0">{country.flagEmoji}</span>
+                          <span className="text-xs font-bold text-foreground truncate" title={country.countryName}>
+                            {country.countryName}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-primary/10 text-primary shrink-0">
+                          {country.percentage}%
+                        </span>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className="bg-primary h-full rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(100, Math.max(8, country.percentage))}%` }}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-0.5">
+                        <span className="font-bold text-foreground">{country.trafficFormatted}</span>
+                        <span>{country.keywords.toLocaleString()} kw</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Strategic Analysis & Growth Recommendation */}
             <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/5 via-muted/40 to-muted/20 border border-primary/20 space-y-4">
