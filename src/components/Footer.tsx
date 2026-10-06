@@ -30,12 +30,6 @@ const footerLinks = {
     { name: "Random College Generator", href: "/tools/random-college-generator" },
     { name: "Square Face Generator", href: "/tools/square-face-generator" },
   ],
-  legal: [
-    { name: "Privacy Policy", href: "/privacy-policy" },
-    { name: "Terms & Conditions", href: "/terms" },
-    { name: "Refund Policy", href: "/refund-policy" },
-    { name: "XML Sitemap", href: "/sitemap.xml", external: true },
-  ],
 };
 
 const socialLinks = [
@@ -195,12 +189,12 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* Tools & Legal (Column 4) */}
+          {/* Free SEO Tools (Column 4) */}
           <div>
             <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-4">
               Free SEO Tools
             </h3>
-            <ul className="space-y-2.5 mb-6">
+            <ul className="space-y-2.5">
               {footerLinks.tools.map((link) => (
                 <li key={link.name}>
                   <Link
@@ -214,33 +208,6 @@ export function Footer() {
                       </span>
                     )}
                   </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h4 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
-              Legal &amp; Trust
-            </h4>
-            <ul className="space-y-1.5">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  )}
                 </li>
               ))}
             </ul>
