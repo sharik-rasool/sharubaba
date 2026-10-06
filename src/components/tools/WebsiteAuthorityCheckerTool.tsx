@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import {
   Globe,
@@ -16,6 +17,7 @@ import {
   ExternalLink,
   Layers,
   FileSpreadsheet,
+  FileText,
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -433,6 +435,33 @@ export function WebsiteAuthorityCheckerTool() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 <strong>Next Link Building Step:</strong> {result.recommendation}
               </p>
+            </div>
+
+            {/* $15 SEO Audit Feature Card */}
+            <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-primary/15 via-primary/5 to-card border border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3" />
+                  Productized Audit Service • $15 Flat
+                </div>
+                <h4 className="text-lg sm:text-xl font-extrabold text-foreground">
+                  Want the Full Executive Backlink &amp; Competitor Gap Audit?
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Get an in-depth custom PDF deck + interactive Excel action sheet with your competitor link gaps, toxic backlinks, and a 90-day fix roadmap for <strong>{result.domain}</strong>.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full md:w-auto">
+                <Link
+                  href="/seo-audit"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-98 text-center"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Get $15 Custom Audit</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
 
             {/* Conversion CTA Block */}
