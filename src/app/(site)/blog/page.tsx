@@ -141,14 +141,14 @@ export default async function BlogPage({
                                                     )}
                                                 </div>
                                                 <div className="flex items-center justify-between pt-4 border-t border-border/50 mt-auto">
-                                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    <time dateTime={new Date(post.createdAt).toISOString()} className="flex items-center gap-2 text-xs text-muted-foreground">
                                                         <Calendar className="h-3.5 w-3.5" />
                                                         {new Date(post.createdAt).toLocaleDateString("en-US", {
                                                             month: "short",
                                                             day: "numeric",
                                                             year: "numeric"
                                                         })}
-                                                    </div>
+                                                    </time>
                                                     <div className="flex items-center gap-1 text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                                                         READ POST <ArrowRight className="h-3.5 w-3.5" />
                                                     </div>
