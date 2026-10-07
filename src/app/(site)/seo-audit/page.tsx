@@ -28,14 +28,14 @@ import { SeoAuditHeroVisual } from "@/components/audit/SeoAuditHeroVisual";
 export const metadata: Metadata = {
   title: "In-Depth SEO & Backlink Audit ($15) | Data-Backed Growth Roadmap",
   description:
-    "Get an executive-ready SEO & backlink audit for just $15. Includes Ahrefs domain health metrics, competitor link gap analysis, top countries breakdown, and a custom 90-day action plan.",
+    "Get an executive-ready SEO & backlink audit for $15. Includes Ahrefs health metrics, competitor link gap matrix, and a custom 90-day action plan.",
   alternates: {
     canonical: "https://www.sharikrasool.com/seo-audit",
   },
   openGraph: {
     title: "In-Depth SEO & Backlink Audit ($15) | Sharik Rasool",
     description:
-      "Get an executive-ready SEO & backlink audit for just $15. Delivered in 24–48 hours in PDF & Excel format with prioritized growth recommendations.",
+      "Get an executive-ready SEO & backlink audit for $15. Delivered in 24–48 hours in PDF & Excel format with prioritized growth recommendations.",
     url: "https://www.sharikrasool.com/seo-audit",
     type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "$15 SEO & Backlink Audit - Sharik Rasool" }],
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "In-Depth SEO & Backlink Audit ($15) | Sharik Rasool",
     description:
-      "Get an executive-ready SEO & backlink audit for just $15. Delivered in 24–48 hours in PDF & Excel format.",
+      "Get an executive-ready SEO & backlink audit for $15. Delivered in 24–48 hours in PDF & Excel format.",
     images: ["/opengraph-image"],
   },
 };

@@ -25,14 +25,14 @@ import { SeoAuditLeadMagnet } from "@/components/location/SeoAuditLeadMagnet";
 export const metadata: Metadata = {
   title: "SEO Specialist in UK | Freelance SEO Strategist & Consultant",
   description:
-    "Senior freelance SEO specialist in the UK helping SaaS and tech companies scale organic MRR through technical SEO, content clusters, and high-impact search strategy.",
+    "Senior freelance SEO specialist in the UK helping SaaS & tech brands scale organic MRR with technical SEO, content clusters, and search strategy.",
   alternates: {
     canonical: "https://www.sharikrasool.com/seo-specialist-uk",
   },
   openGraph: {
     title: "SEO Specialist in UK | Freelance SEO Strategist & Consultant",
     description:
-      "Senior freelance SEO specialist in the UK helping SaaS and tech companies scale organic MRR through technical SEO, content clusters, and high-impact search strategy.",
+      "Senior freelance SEO specialist in the UK helping SaaS & tech brands scale organic MRR with technical SEO, content clusters, and search strategy.",
     url: "https://www.sharikrasool.com/seo-specialist-uk",
     type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "UK SEO Specialist - Sharik Rasool" }],
@@ -144,16 +144,6 @@ export default function SeoSpecialistUKPage() {
 
       {/* 1. HERO SECTION */}
       <section className="section relative overflow-hidden pt-12 sm:pt-20 lg:pt-28 pb-12">
-        <style>{`
-          .geo-hero-grid {
-            background-image: 
-              linear-gradient(to right, hsl(var(--border) / 0.5) 1px, transparent 1px),
-              linear-gradient(to bottom, hsl(var(--border) / 0.5) 1px, transparent 1px);
-            background-size: 32px 32px;
-            mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
-            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
-          }
-        `}</style>
         <div className="absolute inset-0 geo-hero-grid opacity-70 pointer-events-none -z-10" />
         <div className="absolute top-1/4 left-10 w-[240px] h-[240px] bg-primary/10 rounded-full blur-3xl -z-20 pointer-events-none" />
         <div className="absolute bottom-1/4 right-10 w-[300px] h-[300px] bg-primary/5 rounded-full blur-3xl -z-20 pointer-events-none" />

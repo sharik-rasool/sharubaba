@@ -34,7 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         seoTitle = `${seoTitle} | Insights`;
     }
 
-    const seoDescription = post.seoDescription || post.excerpt;
+    let rawDescription = post.seoDescription || post.excerpt || "";
+    rawDescription = rawDescription.replace(/\s+/g, " ").trim();
+    let seoDescription = rawDescription;
+    if (seoDescription.length > 155) {
+        seoDescription = seoDescription.slice(0, 152).trim().replace(/[,\.\s]+$/, "") + "...";
+    }
+
     const baseUrl = "https://www.sharikrasool.com";
     const fallbackOgImage = `/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.primaryKeyword || (post.tags && post.tags.length > 0 ? post.tags[0] : "SEO"))}&v=2`;
 
@@ -252,6 +258,9 @@ export default async function BlogPostPage({ params }: Props) {
                                     width={1200}
                                     height={630}
                                     priority
+                                    loading="eager"
+                                    fetchPriority="high"
+                                    sizes="(max-width: 768px) 100vw, 800px"
                                     className="w-full h-auto max-h-[500px] object-contain bg-muted/10"
                                 />
                             </div>

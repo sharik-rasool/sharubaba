@@ -8,17 +8,6 @@ import { FadeIn } from "@/components/animations";
 export function CTASection() {
   return (
     <section className="section relative overflow-hidden" aria-labelledby="cta-heading">
-      <style>{`
-        .cta-grid-bg {
-          background-image: 
-            linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
-            linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
-          background-size: 32px 32px;
-          mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
-          -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
-        }
-      `}</style>
-      
       {/* Background glowing decorations */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -z-10 pointer-events-none" />
       

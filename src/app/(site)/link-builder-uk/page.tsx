@@ -31,14 +31,14 @@ import { LinkSampleSheetLeadMagnet } from "@/components/location/LinkSampleSheet
 export const metadata: Metadata = {
   title: "Link Building Specialist in UK | Freelance Link Builder",
   description:
-    "Hire a senior freelance link building specialist in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global sites to scale your organic search rankings.",
+    "Hire a senior freelance link builder in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global sites to scale search rankings.",
   alternates: {
     canonical: "https://www.sharikrasool.com/link-builder-uk",
   },
   openGraph: {
     title: "Link Building Specialist in UK | Freelance Link Builder",
     description:
-      "Hire a senior freelance link building specialist in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global sites to scale your organic search rankings.",
+      "Hire a senior freelance link builder in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global sites to scale search rankings.",
     url: "https://www.sharikrasool.com/link-builder-uk",
     type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "UK Link Building Specialist - Sharik Rasool" }],
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Link Building Specialist in UK | Freelance Link Builder",
     description:
-      "Hire a senior freelance link building specialist in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global publications.",
+      "Hire a senior freelance link builder in the UK. Secure high-authority DR50+ editorial backlinks on real UK & global publications.",
     images: ["/opengraph-image"],
   },
 };
@@ -154,16 +154,6 @@ export default function LinkBuilderUKPage() {
 
       {/* 1. HERO SECTION */}
       <section className="section relative overflow-hidden pt-12 sm:pt-20 lg:pt-28 pb-12">
-        <style>{`
-          .geo-hero-grid {
-            background-image: 
-              linear-gradient(to right, hsl(var(--border) / 0.5) 1px, transparent 1px),
-              linear-gradient(to bottom, hsl(var(--border) / 0.5) 1px, transparent 1px);
-            background-size: 32px 32px;
-            mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
-            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
-          }
-        `}</style>
         <div className="absolute inset-0 geo-hero-grid opacity-70 pointer-events-none -z-10" />
         <div className="absolute top-1/4 left-10 w-[240px] h-[240px] bg-primary/10 rounded-full blur-3xl -z-20 pointer-events-none" />
         <div className="absolute bottom-1/4 right-10 w-[300px] h-[300px] bg-primary/5 rounded-full blur-3xl -z-20 pointer-events-none" />

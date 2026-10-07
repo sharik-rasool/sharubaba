@@ -45,6 +45,8 @@ export function Header() {
               src="/monogram-tile-512.png"
               alt="Sharik Rasool Logo"
               fill
+              priority
+              sizes="32px"
               className="object-contain p-0.5"
             />
           </div>
