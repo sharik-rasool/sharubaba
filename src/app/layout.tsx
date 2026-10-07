@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     },
     title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
     description:
-        "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
+        "Senior SEO strategist and link builder. Helping SaaS and tech brands scale domain authority and organic rankings through white-hat manual outreach.",
     keywords: ["SEO strategist", "link builder", "SaaS SEO", "organic traffic", "domain authority", "backlinks"],
     authors: [{ name: "Sharik Rasool", url: BASE_URL }],
     creator: "Sharik Rasool",
@@ -48,14 +48,14 @@ export const metadata: Metadata = {
         siteName: "Sharik Rasool",
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
+            "Senior SEO strategist and link builder. Helping SaaS and tech brands scale domain authority and organic rankings through white-hat manual outreach.",
         images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Expert SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies grow organically. Boost domain authority and traffic.",
+            "Senior SEO strategist and link builder. Helping SaaS and tech brands scale domain authority and organic rankings through white-hat manual outreach.",
         images: ["/opengraph-image"],
     },
     robots: {
@@ -64,6 +64,34 @@ export const metadata: Metadata = {
         googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
     alternates: { canonical: BASE_URL },
+};
+
+const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Sharik Rasool",
+    "jobTitle": "Senior SEO Strategist & Link Building Specialist",
+    "url": BASE_URL,
+    "image": `${BASE_URL}/assets/sharik-portrait-2.jpeg`,
+    "description": "Senior SEO strategist and manual outreach link builder with 8+ years experience scaling organic search rankings and domain rating for SaaS and tech brands.",
+    "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Jain University",
+        "description": "MBA in Digital Marketing"
+    },
+    "sameAs": [
+        "https://www.linkedin.com/in/sharik-rasool-074155174/",
+        "https://www.instagram.com/growithsharik"
+    ],
+    "knowsAbout": [
+        "Search Engine Optimization (SEO)",
+        "Link Building & Manual Outreach",
+        "Technical SEO Audits",
+        "SaaS Organic Traffic Strategy",
+        "Digital PR",
+        "Core Web Vitals Optimization",
+        "Ahrefs & Semrush Analysis"
+    ]
 };
 
 export default function RootLayout({
@@ -75,6 +103,12 @@ export default function RootLayout({
 
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+                />
+            </head>
             <body className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`} suppressHydrationWarning>
                 <Providers>
                     {children}

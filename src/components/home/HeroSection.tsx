@@ -76,28 +76,28 @@ export function HeroSection() {
               
               <div className="flex flex-wrap gap-2.5 justify-center lg:justify-start items-center select-none">
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Google Analytics">
-                  <Image src={googleAnalyticsLogo} alt="Google Analytics" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={googleAnalyticsLogo} alt="Google Analytics" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Ahrefs">
-                  <Image src={ahrefsLogo} alt="Ahrefs" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={ahrefsLogo} alt="Ahrefs" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Google Search Console">
-                  <Image src={googleSearchConsoleLogo} alt="Google Search Console" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={googleSearchConsoleLogo} alt="Google Search Console" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Screaming Frog">
-                  <Image src={screamingFrogLogo} alt="Screaming Frog" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={screamingFrogLogo} alt="Screaming Frog" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Claude AI">
-                  <Image src={claudeLogo} alt="Claude AI" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={claudeLogo} alt="Claude AI" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[48px] h-[48px] rounded-2xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Antigravity AI">
-                  <Image src={antigravityLogo} alt="Antigravity AI" className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={antigravityLogo} alt="Antigravity AI" priority className="w-[36px] h-[36px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[110px] h-[32px] rounded-xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="Moz">
-                  <Image src={mozLogo} alt="Moz" className="w-[90px] h-[22px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Image src={mozLogo} alt="Moz" priority className="w-[90px] h-[22px] object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="w-[110px] h-[32px] rounded-xl bg-secondary/40 border border-border/30 shadow-sm flex items-center justify-center transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md active:scale-95 duration-300 group relative" title="SEMRUSH">
-                  <Image src={semrushLogo} alt="SEMRUSH" className="w-[90px] h-[22px] object-contain opacity-80 group-hover:opacity-100 dark:brightness-0 dark:invert transition-all duration-300" />
+                  <Image src={semrushLogo} alt="SEMRUSH" priority className="w-[90px] h-[22px] object-contain opacity-80 group-hover:opacity-100 dark:brightness-0 dark:invert transition-all duration-300" />
                 </div>
               </div>
 

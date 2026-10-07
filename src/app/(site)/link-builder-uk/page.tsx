@@ -174,7 +174,7 @@ export default function LinkBuilderUKPage() {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] mb-6 text-foreground">
                 Senior Link Building Specialist &{" "}
                 <span className="relative inline-block text-primary">
-                  Freelance Link Builder
+                  Authority Outreach Strategist
                   <span className="absolute -bottom-1 left-0 w-full h-[6px] bg-primary/20 rounded-full -z-10" />
                 </span>{" "}
                 in the UK
@@ -194,7 +194,7 @@ export default function LinkBuilderUKPage() {
                 <Link href="#cost-estimator" className="w-full sm:w-auto">
                   <Button size="lg" className="rounded-full px-8 font-semibold gap-2 w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all text-base py-6">
                     <Calculator className="w-4 h-4" />
-                    Estimate Link Building Cost
+                    Estimate Campaign Investment
                   </Button>
                 </Link>
                 <Link href="#sample-sheet" className="w-full sm:w-auto">
@@ -211,7 +211,7 @@ export default function LinkBuilderUKPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 pt-6 border-t border-border/70 w-full mb-4">
                 <div className="p-4 rounded-2xl bg-card border border-border/60 shadow-sm text-center">
                   <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">500+</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">DR50–85+ Links Built</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">DR50–85+ Placements Secured</div>
                 </div>
                 <div className="p-4 rounded-2xl bg-card border border-border/60 shadow-sm text-center">
                   <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">100%</div>
@@ -219,7 +219,7 @@ export default function LinkBuilderUKPage() {
                 </div>
                 <div className="p-4 rounded-2xl bg-card border border-border/60 shadow-sm text-center">
                   <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">0%</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Zero PBNs / Link Farms</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Zero PBNs / Domain Networks</div>
                 </div>
                 <div className="p-4 rounded-2xl bg-card border border-border/60 shadow-sm text-center">
                   <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">GMT / BST</div>

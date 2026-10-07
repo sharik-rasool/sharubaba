@@ -13,12 +13,12 @@ import { faqs } from "@/data/faqs";
 export const metadata: Metadata = {
     title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
     description:
-        "Senior SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies scale domain rating, organic traffic, and keyword rankings through white-hat manual outreach.",
+        "Senior SEO strategist and link builder. Scaled 500+ DR50–85+ editorial backlinks, organic traffic, and search rankings for high-growth SaaS and tech brands.",
     alternates: { canonical: "https://www.sharikrasool.com" },
     openGraph: {
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Senior SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies scale domain rating, organic traffic, and keyword rankings through white-hat manual outreach.",
+            "Senior SEO strategist and link builder. Scaled 500+ DR50–85+ editorial backlinks, organic traffic, and search rankings for high-growth SaaS and tech brands.",
         url: "https://www.sharikrasool.com",
         type: "website",
         images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist & Link Builder" }],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "Sharik Rasool | SEO Strategist & Link Builder for SaaS Brands",
         description:
-            "Senior SEO strategist and link builder with 7+ years of experience helping SaaS and tech companies scale domain rating, organic traffic, and keyword rankings through white-hat manual outreach.",
+            "Senior SEO strategist and link builder. Scaled 500+ DR50–85+ editorial backlinks, organic traffic, and search rankings for high-growth SaaS and tech brands.",
         images: ["/opengraph-image"],
     },
 };

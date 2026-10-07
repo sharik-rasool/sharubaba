@@ -16,23 +16,23 @@ import uplersLogo from "@/assets/logos/uplers.png";
 import jainUniversityLogo from "@/assets/logos/jain-university.jpeg";
 
 export const metadata: Metadata = {
-    title: "About Me | SEO Strategist",
+    title: "About Me | SEO Strategist & Link Builder",
     description:
-        "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+        "About Sharik Rasool: 8+ years SEO strategist & link builder with an MBA in Digital Marketing. Scaling organic traffic for high-growth SaaS and tech brands.",
     alternates: { canonical: "https://www.sharikrasool.com/about" },
     openGraph: {
-        title: "About Me | SEO Strategist",
+        title: "About Me | SEO Strategist & Link Builder",
         description:
-            "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+            "About Sharik Rasool: 8+ years SEO strategist & link builder with an MBA in Digital Marketing. Scaling organic traffic for high-growth SaaS and tech brands.",
         url: "https://www.sharikrasool.com/about",
         type: "profile",
         images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Sharik Rasool — SEO Strategist" }],
     },
     twitter: {
         card: "summary_large_image",
-        title: "About Me | SEO Strategist",
+        title: "About Me | SEO Strategist & Link Builder",
         description:
-            "Learn about Sharik Rasool's 7+ years of experience in SEO strategy and link building. MBA in Digital Marketing with proven results for SaaS and tech companies.",
+            "About Sharik Rasool: 8+ years SEO strategist & link builder with an MBA in Digital Marketing. Scaling organic traffic for high-growth SaaS and tech brands.",
         images: ["/opengraph-image"],
     },
 };
@@ -101,11 +101,18 @@ const aboutSchema = {
     "mainEntity": {
         "@type": "Person",
         "name": "Sharik Rasool",
-        "jobTitle": "SEO Strategist & Link Builder",
-        "description": "Expert SEO strategist with 7+ years of experience in link building and organic growth",
+        "jobTitle": "Senior SEO Strategist & Link Building Specialist",
+        "description": "Senior SEO strategist and manual outreach link builder with 8+ years experience scaling organic search rankings and domain rating for SaaS and tech brands.",
+        "url": "https://www.sharikrasool.com",
+        "image": "https://www.sharikrasool.com/assets/sharik-portrait-2.jpeg",
+        "sameAs": [
+            "https://www.linkedin.com/in/sharik-rasool-074155174/",
+            "https://www.instagram.com/growithsharik"
+        ],
         "alumniOf": {
             "@type": "EducationalOrganization",
-            "name": "MBA in Digital Marketing",
+            "name": "Jain University",
+            "description": "MBA in Digital Marketing"
         },
         "knowsAbout": skills,
     },

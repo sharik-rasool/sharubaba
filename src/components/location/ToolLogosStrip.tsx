@@ -26,6 +26,7 @@ export function ToolLogosStrip({
           <Image
             src={ahrefsLogo}
             alt="Ahrefs"
+            priority
             className="w-[30px] h-[30px] object-contain opacity-85 group-hover:opacity-100 transition-opacity"
           />
           <span className="text-xs font-bold text-foreground">Ahrefs DR50+</span>
@@ -38,6 +39,7 @@ export function ToolLogosStrip({
           <Image
             src={semrushLogo}
             alt="SEMrush"
+            priority
             className="w-[75px] h-[20px] object-contain opacity-85 group-hover:opacity-100 dark:brightness-0 dark:invert transition-opacity"
           />
         </div>
@@ -49,6 +51,7 @@ export function ToolLogosStrip({
           <Image
             src={googleSearchConsoleLogo}
             alt="Google Search Console"
+            priority
             className="w-[28px] h-[28px] object-contain opacity-85 group-hover:opacity-100 transition-opacity"
           />
           <span className="text-xs font-bold text-foreground">Search Console</span>
@@ -61,6 +64,7 @@ export function ToolLogosStrip({
           <Image
             src={googleAnalyticsLogo}
             alt="Google Analytics"
+            priority
             className="w-[28px] h-[28px] object-contain opacity-85 group-hover:opacity-100 transition-opacity"
           />
           <span className="text-xs font-bold text-foreground">GA4 Analytics</span>
@@ -73,6 +77,7 @@ export function ToolLogosStrip({
           <Image
             src={screamingFrogLogo}
             alt="Screaming Frog"
+            priority
             className="w-[28px] h-[28px] object-contain opacity-85 group-hover:opacity-100 transition-opacity"
           />
           <span className="text-xs font-bold text-foreground">Screaming Frog</span>
@@ -85,6 +90,7 @@ export function ToolLogosStrip({
           <Image
             src={mozLogo}
             alt="Moz"
+            priority
             className="w-[70px] h-[18px] object-contain opacity-85 group-hover:opacity-100 transition-opacity"
           />
         </div>
