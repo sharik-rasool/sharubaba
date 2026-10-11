@@ -2,7 +2,7 @@ import { getBlogBySlug, getPublishedBlogs } from "@/lib/blogs";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Tag, User, Clock, ShieldCheck, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowLeft, Calendar, Tag, User, Clock, ShieldCheck, CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 import { parseHtmlForToc } from "@/lib/toc";
 import TableOfContents from "@/components/blog/TableOfContents";
@@ -359,19 +359,6 @@ export default async function BlogPostPage({ params }: Props) {
                             <div className="ml-auto hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-bold">
                                 <ShieldCheck className="w-3.5 h-3.5" />
                                 <span>Fact-Checked &amp; Verified</span>
-                            </div>
-                        </div>
-
-                        {/* E-E-A-T Editorial Standard Banner */}
-                        <div className="p-3.5 rounded-2xl bg-secondary/40 border border-border/60 flex items-center justify-between gap-3 text-xs text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                                <Sparkles className="w-4 h-4 text-primary shrink-0" />
-                                <span>
-                                    <strong>Editorial Standards:</strong> Every strategy and case study is personally researched, executed, and verified by <Link href="/about" className="text-foreground font-semibold hover:underline">Sharik Rasool</Link>.
-                                </span>
-                            </div>
-                            <div className="shrink-0 hidden sm:block text-[11px] font-bold text-primary">
-                                8+ Years SEO Experience
                             </div>
                         </div>
                     </header>

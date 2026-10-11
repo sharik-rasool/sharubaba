@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
         <section className="section">
             <div className="container-narrow prose-custom">
                 <h1 className="text-3xl md:text-4xl font-bold mb-8">Privacy Policy</h1>
-                <p className="text-muted-foreground mb-6">Last updated: January 2024</p>
+                <p className="text-muted-foreground mb-6">Last updated: January 2026</p>
                 <h2 className="text-2xl font-semibold mt-8 mb-4">Information We Collect</h2>
                 <p className="text-muted-foreground mb-4">We collect information you provide directly, including name, email, and message content when you use our contact form.</p>
                 <h2 className="text-2xl font-semibold mt-8 mb-4">How We Use Your Information</h2>

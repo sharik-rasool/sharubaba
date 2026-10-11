@@ -12,7 +12,7 @@ export default function RefundPolicyPage() {
         <section className="section">
             <div className="container-narrow prose-custom">
                 <h1 className="text-3xl md:text-4xl font-bold mb-8">Refund & Cancellation Policy</h1>
-                <p className="text-muted-foreground mb-6">Last updated: January 2024</p>
+                <p className="text-muted-foreground mb-6">Last updated: January 2026</p>
                 <h2 className="text-2xl font-semibold mt-8 mb-4">Service Cancellation</h2>
                 <p className="text-muted-foreground mb-4">Clients may cancel services with 30 days written notice. Work completed up to cancellation will be billed.</p>
                 <h2 className="text-2xl font-semibold mt-8 mb-4">Refund Eligibility</h2>
