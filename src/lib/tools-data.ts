@@ -26,9 +26,9 @@ export const toolsData: Tool[] = [
     {
         slug: "website-authority-checker",
         title: "Website Authority & Traffic Checker",
-        description: "Check live Ahrefs Domain Rating (DR), estimated monthly organic search traffic, and backlink profile strength for any domain in real time.",
+        description: "Check live Ahrefs Domain Rating (DR), estimated monthly organic search traffic, and 6-month traffic trend graphs for any domain in real time.",
         metaTitle: "Free Website Authority & Traffic Checker | Ahrefs DR & Search Volume",
-        metaDescription: "Check live Ahrefs Domain Rating (DR), estimated monthly organic search traffic, and backlink profile strength for any website. Free SEO tool by Sharik Rasool.",
+        metaDescription: "Check live Ahrefs DR, backlink authority, and 6-month organic traffic trend graphs for any website. Free SEO analysis tool by Sharik Rasool.",
         icon: Activity,
         category: "seo",
         categoryLabel: "SEO & Growth",

@@ -10,6 +10,13 @@ export interface CountryTrafficData {
   keywords: number;
 }
 
+export interface TrafficHistoryPoint {
+  date: string;
+  label: string;
+  traffic: number;
+  keywords?: number;
+}
+
 export interface IDomainCache extends Document {
   domain: string;
   domainRating: number;
@@ -25,6 +32,7 @@ export interface IDomainCache extends Document {
   recommendation: string;
   source: 'live' | 'simulation';
   topCountries?: CountryTrafficData[];
+  trafficHistory?: TrafficHistoryPoint[];
   analyzedAt: string;
   createdAt: Date;
   updatedAt: Date;
@@ -53,6 +61,14 @@ const DomainCacheSchema = new Schema<IDomainCache>(
         traffic: { type: Number, default: 0 },
         trafficFormatted: { type: String, default: '' },
         percentage: { type: Number, default: 0 },
+        keywords: { type: Number, default: 0 },
+      },
+    ],
+    trafficHistory: [
+      {
+        date: { type: String, default: '' },
+        label: { type: String, default: '' },
+        traffic: { type: Number, default: 0 },
         keywords: { type: Number, default: 0 },
       },
     ],
