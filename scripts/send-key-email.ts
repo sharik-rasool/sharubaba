@@ -82,6 +82,10 @@ https://www.sharikrasool.com`;
       website: toolUrl,
       subject: `Thanks for purchasing the 90-day Backlink Gap Checker Key (${user.key})`,
       message: emailBody,
+      ip_address: 'Verified Direct Access',
+      ip: 'Verified Direct Access',
+      client_ip: 'Verified Direct Access',
+      user_ip: 'Verified Direct Access',
     },
   };
 

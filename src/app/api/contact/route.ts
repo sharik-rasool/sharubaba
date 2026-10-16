@@ -8,7 +8,13 @@ const RATE_LIMIT_MAX = 5;
 
 export async function POST(request: Request) {
   try {
-    const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || '127.0.0.1';
+    const rawIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip')?.trim() ||
+      request.headers.get('cf-connecting-ip')?.trim() ||
+      request.headers.get('x-vercel-forwarded-for')?.split(',')[0].trim() ||
+      '127.0.0.1';
+    const ip = rawIp;
     const timestamp = Date.now();
 
     const body = await request.json();
@@ -63,6 +69,8 @@ export async function POST(request: Request) {
         message,
         ip_address: ip,
         ip: ip, // Alias
+        client_ip: ip, // Alias
+        user_ip: ip, // Alias
       },
     };
 

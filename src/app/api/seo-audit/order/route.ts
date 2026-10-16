@@ -4,7 +4,13 @@ import AuditOrder from '@/models/AuditOrder';
 
 export async function POST(request: Request) {
   try {
-    const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || '127.0.0.1';
+    const rawIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip')?.trim() ||
+      request.headers.get('cf-connecting-ip')?.trim() ||
+      request.headers.get('x-vercel-forwarded-for')?.split(',')[0].trim() ||
+      '127.0.0.1';
+    const ip = rawIp;
     const timestamp = Date.now();
 
     const body = await request.json();
@@ -65,8 +71,12 @@ export async function POST(request: Request) {
                    `Target Keywords: ${targetKeywords || 'None specified'}\n` +
                    `Notes: ${notes || 'None'}\n` +
                    `Order ID: ${orderRecord?._id || 'N/A'}\n` +
-                   `Amount: $15 USD`,
+                   `Amount: $15 USD\n` +
+                   `IP Address: ${ip}`,
           ip_address: ip,
+          ip: ip,
+          client_ip: ip,
+          user_ip: ip,
         },
       };
 

@@ -43,6 +43,14 @@ export async function POST(request: Request) {
       isNew = true;
     }
 
+    const rawIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip')?.trim() ||
+      request.headers.get('cf-connecting-ip')?.trim() ||
+      request.headers.get('x-vercel-forwarded-for')?.split(',')[0].trim() ||
+      '127.0.0.1';
+    const ip = rawIp;
+
     // Fire EmailJS notification to Sharik so he knows a $10 lead arrived
     try {
       const emailJsPayload = {
@@ -65,7 +73,12 @@ export async function POST(request: Request) {
             `Website: ${website || 'N/A'}\n` +
             `Generated Key: ${existing.key}\n` +
             `Status: ${existing.status}\n` +
+            `IP Address: ${ip}\n` +
             `Action Required: Send invoice/payment link ($10) or confirm access.`,
+          ip_address: ip,
+          ip: ip,
+          client_ip: ip,
+          user_ip: ip,
         },
       };
 
