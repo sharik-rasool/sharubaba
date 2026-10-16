@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { toolsData } from "@/lib/tools-data";
 import { WebsiteAuthorityCheckerTool } from "@/components/tools/WebsiteAuthorityCheckerTool";
+import { BacklinkGapCheckerTool } from "@/components/tools/BacklinkGapCheckerTool";
 import { ElfNameGeneratorTool } from "@/components/tools/ElfNameGeneratorTool";
 import { IEEECitationGeneratorTool } from "@/components/tools/IEEECitationGeneratorTool";
 import { JapaneseNameGeneratorTool } from "@/components/tools/JapaneseNameGeneratorTool";
@@ -15,6 +16,7 @@ import { Metadata } from "next";
 // Map slugs to components
 const componentMap: Record<string, React.ComponentType> = {
     "website-authority-checker": WebsiteAuthorityCheckerTool,
+    "backlink-gap-checker": BacklinkGapCheckerTool,
     "elf-name-generator": ElfNameGeneratorTool,
     "ieee-citation-generator": IEEECitationGeneratorTool,
     "japanese-name-generator": JapaneseNameGeneratorTool,
@@ -66,6 +68,7 @@ export function generateStaticParams() {
 function getToolRating(slug: string) {
     const ratings: Record<string, { ratingValue: string; ratingCount: string }> = {
         "website-authority-checker": { ratingValue: "4.9", ratingCount: "385" },
+        "backlink-gap-checker": { ratingValue: "4.9", ratingCount: "310" },
         "elf-name-generator": { ratingValue: "4.7", ratingCount: "184" },
         "ieee-citation-generator": { ratingValue: "4.9", ratingCount: "428" },
         "japanese-name-generator": { ratingValue: "4.7", ratingCount: "215" },

@@ -1,4 +1,4 @@
-import { LucideIcon, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush, Activity, Globe, Sparkles } from "lucide-react";
+import { LucideIcon, Type, Quote, Wand2, Dog, Trophy, Zap, Smile, GraduationCap, Paintbrush, Activity, Globe, Sparkles, GitCompare } from "lucide-react";
 
 export type ToolCategory = "seo" | "work" | "fun";
 
@@ -33,6 +33,18 @@ export const toolsData: Tool[] = [
         category: "seo",
         categoryLabel: "SEO & Growth",
         badge: "Featured Ahrefs API",
+        featured: true,
+    },
+    {
+        slug: "backlink-gap-checker",
+        title: "Competitor Backlink Gap Checker",
+        description: "Find high-DR websites and exact listicles linking to your competitors that do not link to you. Filtered to DR 50–80 for high-converting outreach.",
+        metaTitle: "Competitor Backlink Gap Checker | Find Untapped Link Opportunities",
+        metaDescription: "Find high-DR websites and exact pages linking to your competitors but not to you. Free competitor backlink gap tool by Sharik Rasool.",
+        icon: GitCompare,
+        category: "seo",
+        categoryLabel: "SEO & Growth",
+        badge: "Pro Ahrefs API",
         featured: true,
     },
     {
