@@ -79,12 +79,6 @@ const SAMPLE_PRESETS = [
   },
 ];
 
-const DEMO_KEYS = [
-  { name: "Safora", key: "GAP-SAFORA-5094" },
-  { name: "Sharik", key: "GAP-SHARIK-6321" },
-  { name: "Mushahid", key: "GAP-MUSHAHID-4161" },
-];
-
 export function BacklinkGapCheckerTool() {
   // Key verification & storage
   const [accessKey, setAccessKey] = useState("");
@@ -387,7 +381,7 @@ export function BacklinkGapCheckerTool() {
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. GAP-SHARIK-6321"
+                      placeholder="e.g. GAP-ALEX-8492"
                       value={accessKey}
                       onChange={(e) => setAccessKey(e.target.value.toUpperCase())}
                       className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-border/80 text-foreground font-mono text-sm tracking-wider uppercase focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"
@@ -419,28 +413,6 @@ export function BacklinkGapCheckerTool() {
                     )}
                   </Button>
                 </form>
-
-                {/* Team Quick Demo Keys */}
-                <div className="pt-4 border-t border-border/60 text-center space-y-2">
-                  <span className="text-[11px] font-semibold text-muted-foreground block">
-                    Quick Team Demo Keys:
-                  </span>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {DEMO_KEYS.map((k) => (
-                      <button
-                        key={k.key}
-                        type="button"
-                        onClick={() => {
-                          setAccessKey(k.key);
-                          verifyKey(k.key);
-                        }}
-                        className="px-2.5 py-1 rounded-lg bg-secondary/80 hover:bg-secondary border border-border/60 text-[11px] font-mono text-foreground hover:border-primary/50 transition-all"
-                      >
-                        {k.name}: {k.key}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             )}
 
