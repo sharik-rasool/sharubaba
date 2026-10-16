@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         key: generatedKey,
         name: cleanName,
         email: cleanEmail,
-        status: 'active',
+        status: 'pending_payment',
         dailyLimit: 20,
         notes: `Requested via website form. Target Website: ${website || 'N/A'}. Notes: ${notes || 'N/A'}`,
       });
@@ -84,8 +84,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Your request has been received. Check your inbox for payment confirmation and access instructions.',
-      key: existing.key, // Optionally provide key immediately or after payment
+      message: 'Your request for a 3-Month Pro Pass has been received. We will email payment details and access instructions shortly.',
     });
   } catch (error) {
     console.error('[REQUEST ACCESS KEY ERROR]', error);

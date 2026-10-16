@@ -183,6 +183,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (keyDoc.status === 'pending_payment') {
+      return NextResponse.json(
+        { error: 'This access key is pending payment confirmation. Please complete payment to activate.' },
+        { status: 403 }
+      );
+    }
+
     const now = new Date();
 
     // Activate if first scan

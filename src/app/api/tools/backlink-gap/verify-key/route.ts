@@ -31,6 +31,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (keyDoc.status === 'pending_payment') {
+      return NextResponse.json(
+        { valid: false, error: 'This access key is pending payment confirmation. Please complete payment to activate.' },
+        { status: 403 }
+      );
+    }
+
     const now = new Date();
 
     // First-use activation: set 90-day expiry starting from now

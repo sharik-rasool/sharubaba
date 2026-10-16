@@ -178,11 +178,8 @@ export function BacklinkGapCheckerTool() {
       const data = await res.json();
       if (res.ok && data.success) {
         setBuySuccessMessage(
-          `Your 3-Month Pro Pass has been reserved for ${buyEmail}. Check your inbox for activation details, or activate immediately using key: ${data.key}`
+          `Thank you, ${buyName.trim()}! Your request for a 3-Month Pro Pass ($10) has been received. Our team will send your invoice/payment link and personalized access key directly to ${buyEmail} shortly.`
         );
-        if (data.key) {
-          setAccessKey(data.key);
-        }
       }
     } catch {
       alert("Failed submitting request. Please try again.");
@@ -381,7 +378,7 @@ export function BacklinkGapCheckerTool() {
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. GAP-ALEX-8492"
+                      placeholder="e.g. GAP-XXXX-XXXX"
                       value={accessKey}
                       onChange={(e) => setAccessKey(e.target.value.toUpperCase())}
                       className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-border/80 text-foreground font-mono text-sm tracking-wider uppercase focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/50"

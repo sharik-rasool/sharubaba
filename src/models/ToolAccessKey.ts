@@ -9,7 +9,7 @@ export interface IToolAccessKey extends Document {
   key: string;
   name: string;
   email: string;
-  status: "active" | "expired" | "revoked";
+  status: "active" | "expired" | "revoked" | "pending_payment";
   activatedAt?: Date;
   expiresAt?: Date;
   dailyLimit: number;
@@ -44,8 +44,8 @@ const ToolAccessKeySchema = new Schema<IToolAccessKey>(
     },
     status: {
       type: String,
-      enum: ["active", "expired", "revoked"],
-      default: "active",
+      enum: ["active", "expired", "revoked", "pending_payment"],
+      default: "pending_payment",
       index: true,
     },
     activatedAt: {
