@@ -51,6 +51,7 @@ export async function POST(request: Request) {
         user_id: process.env.EMAILJS_PUBLIC_KEY || '55VneOagkBBvVQDN0',
         accessToken: process.env.EMAILJS_PRIVATE_KEY,
         template_params: {
+          to_email: 'shariksr7@gmail.com',
           from_name: `${cleanName} ($10 Backlink Gap Pass Request)`,
           name: cleanName,
           from_email: cleanEmail,

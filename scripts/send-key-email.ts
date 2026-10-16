@@ -26,36 +26,41 @@ async function sendKeyEmail(user: { name: string; email: string; key: string }) 
 
   const emailBody = `Hi ${user.name},
 
-Thank you for securing your 3-Month Pro Pass to the Competitor Backlink Gap Checker!
+Thanks for purchasing the 90-day Backlink Gap Checker Key!
 
-Here are your official access details:
+Welcome to the Competitor Backlink Gap Checker. Your personalized 90-day access key is ready to use:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔑 YOUR PERSONALIZED ACCESS KEY:
-   ${user.key}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┌────────────────────────────────────────────────────────┐
+│                                                        │
+│               YOUR 90-DAY PRO ACCESS KEY               │
+│                                                        │
+│                  **${user.key}**                       │
+│                                                        │
+│           (90-Day Validity • 20 Scans/Day)             │
+│                                                        │
+└────────────────────────────────────────────────────────┘
 
-Direct Tool Link:
+DIRECT TOOL LINK:
 ${toolUrl}
 
-HOW TO GET STARTED (30 SECONDS):
-1. Click the tool link above.
-2. In the "I Have a Key" box, paste your key: ${user.key}
+HOW TO ACTIVATE (30 SECONDS):
+1. Click the tool link: ${toolUrl}
+2. Under the "I Have a Key" tab, paste your key: ${user.key}
 3. Click "Unlock 3-Month Pro Pass".
-   (Your browser will remember you automatically—you will not need to enter it again!)
+   (Your browser will remember you automatically—you will not need to re-enter it!)
 
-WHAT'S INCLUDED IN YOUR 3-MONTH PRO PASS:
-• Unlimited Competitor Link Gap Scans (up to 20 fresh scans per day).
-• Exact Referring Article URLs & Listicle Titles (so you know who to pitch).
+WHAT'S INCLUDED IN YOUR 90-DAY PASS:
+• Exact Referring Article URLs & Listicle Titles linking to your competitors.
 • Curated DR 50–80 Outreach Sweet Spot (all zero-traffic scraper spam filtered out).
 • 1-Click CSV Export formatted for cold outreach campaigns (Instantly, Lemlist, Excel).
+• Up to 20 fresh competitor link gap scans every day for 90 days.
 • Full 90-Day Validity (your timer only starts on your very first scan).
 
-If you need any assistance or want my team to manually pitch and secure these exact placements for you, simply reply directly to this email!
+If you have any questions or want my team to run custom backlink outreach for you, simply reply directly to this email!
 
 Best regards,
 Sharik Rasool
-Founder & SEO Specialist
+SEO Strategist & Founder
 https://www.sharikrasool.com`;
 
   const emailJsPayload = {
@@ -64,13 +69,18 @@ https://www.sharikrasool.com`;
     user_id: process.env.EMAILJS_PUBLIC_KEY || '55VneOagkBBvVQDN0',
     accessToken: process.env.EMAILJS_PRIVATE_KEY,
     template_params: {
-      from_name: 'Sharik Rasool (SEO Tools)',
+      from_name: 'Sharik Rasool',
       name: user.name,
+      to_name: user.name,
       from_email: 'hello@sharikrasool.com',
-      email: user.email,
+      reply_to: 'shariksr7@gmail.com',
       to_email: user.email,
+      email: user.email,
+      to: user.email,
+      recipient: user.email,
+      user_email: user.email,
       website: toolUrl,
-      subject: `Your 3-Month Pro Pass: Competitor Backlink Gap Checker (${user.key})`,
+      subject: `Thanks for purchasing the 90-day Backlink Gap Checker Key (${user.key})`,
       message: emailBody,
     },
   };
