@@ -26,6 +26,7 @@ import {
   Unlock,
   Check,
   TrendingUp,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
@@ -543,10 +544,14 @@ export function BacklinkGapCheckerTool() {
                 onClick={() => {
                   localStorage.removeItem("sharus_backlink_gap_key");
                   setIsUnlocked(false);
+                  setResultData(null);
+                  setAccessKey("");
                 }}
-                className="text-muted-foreground hover:text-foreground underline text-[11px] shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary/80 hover:bg-rose-500/10 text-muted-foreground hover:text-rose-400 border border-border/60 hover:border-rose-500/30 text-xs font-semibold transition-all shrink-0"
+                title="Log out and remove key from this browser"
               >
-                Change Key
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Log Out</span>
               </button>
             </div>
 
