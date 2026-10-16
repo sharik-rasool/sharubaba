@@ -24,44 +24,78 @@ const KEY_HOLDERS = [
 async function sendKeyEmail(user: { name: string; email: string; key: string }) {
   const toolUrl = 'https://www.sharikrasool.com/tools/backlink-gap-checker';
 
-  const emailBody = `Hi ${user.name},
+  const emailBody = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 16px;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; padding: 4px 12px; background: #e0f2fe; color: #0284c7; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 9999px;">Ahrefs-Powered Link Intersect</span>
+    <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 12px 0 4px 0;">Competitor Backlink Gap Checker</h2>
+    <p style="font-size: 14px; color: #64748b; margin: 0;">Official 90-Day Pro Pass Activation</p>
+  </div>
 
-Thanks for purchasing the 90-day Backlink Gap Checker Key!
+  <p style="font-size: 15px; line-height: 1.6; color: #334155;">
+    Hi <strong>${user.name}</strong>,
+  </p>
+  <p style="font-size: 15px; line-height: 1.6; color: #334155;">
+    Thanks for purchasing the <strong>90-day Backlink Gap Checker Key</strong>! Your personalized license is active and ready to discover high-converting, DR 50–80 backlink opportunities your competitors have that you don't.
+  </p>
 
-Welcome to the Competitor Backlink Gap Checker. Your personalized 90-day access key is ready to use:
+  <!-- Centered Bold Key Card -->
+  <div style="margin: 28px 0; padding: 24px; background-color: #f8fafc; border: 2px dashed #0284c7; border-radius: 14px; text-align: center;">
+    <div style="font-size: 11px; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
+      YOUR 90-DAY PRO ACCESS KEY
+    </div>
+    <div style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 28px; font-weight: 900; color: #0f172a; letter-spacing: 2px; padding: 6px 0;">
+      <strong>${user.key}</strong>
+    </div>
+    <div style="font-size: 12px; font-weight: 600; color: #64748b; margin-top: 6px;">
+      Valid for 90 Days • 20 Fresh Scans Per Day
+    </div>
+  </div>
 
-┌────────────────────────────────────────────────────────┐
-│                                                        │
-│               YOUR 90-DAY PRO ACCESS KEY               │
-│                                                        │
-│                  **${user.key}**                       │
-│                                                        │
-│           (90-Day Validity • 20 Scans/Day)             │
-│                                                        │
-└────────────────────────────────────────────────────────┘
+  <!-- Big CTA Button -->
+  <div style="text-align: center; margin: 28px 0;">
+    <a href="${toolUrl}" style="display: inline-block; padding: 14px 32px; background-color: #0284c7; color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 12px;">
+      Launch Backlink Gap Checker &rarr;
+    </a>
+  </div>
 
-DIRECT TOOL LINK:
-${toolUrl}
+  <!-- How to Activate -->
+  <div style="margin-bottom: 24px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+    <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+      How to Activate in 30 Seconds:
+    </h3>
+    <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; color: #334155;">
+      <li>Click the tool link: <a href="${toolUrl}" style="color: #0284c7; font-weight: 600;">${toolUrl}</a></li>
+      <li>Under the <strong>"I Have a Key"</strong> tab, paste your key: <strong>${user.key}</strong></li>
+      <li>Click <strong>"Unlock 3-Month Pro Pass"</strong>. Your browser will remember your key automatically.</li>
+    </ol>
+  </div>
 
-HOW TO ACTIVATE (30 SECONDS):
-1. Click the tool link: ${toolUrl}
-2. Under the "I Have a Key" tab, paste your key: ${user.key}
-3. Click "Unlock 3-Month Pro Pass".
-   (Your browser will remember you automatically—you will not need to re-enter it!)
+  <!-- What's Included -->
+  <div style="margin-bottom: 24px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+    <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+      What's Included in Your 90-Day Pass:
+    </h3>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.8; color: #475569;">
+      <li><strong>Exact Referring Article URLs &amp; Titles:</strong> See the exact listicles and roundups linking to competitors.</li>
+      <li><strong>DR 50–80 Filter:</strong> Hand-curated to the outreach sweet spot (zero scraper spam).</li>
+      <li><strong>1-Click CSV Export:</strong> Formatted for cold outreach (Instantly, Lemlist, Excel).</li>
+      <li><strong>20 Scans/Day:</strong> Up to 1,800 fresh scans across your 90 days.</li>
+      <li><strong>90-Day Validity:</strong> The countdown only starts on your very first scan.</li>
+    </ul>
+  </div>
 
-WHAT'S INCLUDED IN YOUR 90-DAY PASS:
-• Exact Referring Article URLs & Listicle Titles linking to your competitors.
-• Curated DR 50–80 Outreach Sweet Spot (all zero-traffic scraper spam filtered out).
-• 1-Click CSV Export formatted for cold outreach campaigns (Instantly, Lemlist, Excel).
-• Up to 20 fresh competitor link gap scans every day for 90 days.
-• Full 90-Day Validity (your timer only starts on your very first scan).
+  <p style="font-size: 14px; line-height: 1.6; color: #64748b;">
+    If you have any questions or want my team to run custom outreach to secure these links for you, simply reply directly to this email!
+  </p>
 
-If you have any questions or want my team to run custom backlink outreach for you, simply reply directly to this email!
+  <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0 16px 0;" />
 
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-https://www.sharikrasool.com`;
+  <div style="font-size: 13px; color: #64748b; line-height: 1.5;">
+    <strong>Sharik Rasool</strong><br />
+    SEO Strategist &amp; Founder<br />
+    <a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">www.sharikrasool.com</a>
+  </div>
+</div>`;
 
   const emailJsPayload = {
     service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',
