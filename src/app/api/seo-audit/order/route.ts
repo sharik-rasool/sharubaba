@@ -51,6 +51,7 @@ export async function POST(request: Request) {
         accessToken: process.env.EMAILJS_PRIVATE_KEY,
         template_params: {
           to_email: 'shariksr7@gmail.com',
+          subject: `🚀 New $15 SEO Audit Order: ${website} (${name})`,
           from_name: `${name} ($15 SEO Audit Request)`,
           name,
           from_email: email,

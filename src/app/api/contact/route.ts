@@ -53,6 +53,7 @@ export async function POST(request: Request) {
       accessToken: process.env.EMAILJS_PRIVATE_KEY, // Optional if required by EmailJS account settings
       template_params: {
         to_email: 'shariksr7@gmail.com',
+        subject: `New Contact Inquiry from ${name} (${email})`,
         from_name: name,
         name: name, // Alias
         from_email: email,
