@@ -116,7 +116,7 @@ WHAT'S INCLUDED:
 To complete your activation, I will send over your $10 payment link shortly. You can also reply directly to this email to get it activated immediately.
 
 In the meantime, if you want a complete technical and keyword teardown of your website:
-• $15 Full Technical & Video SEO Audit: https://www.sharikrasool.com/seo-audit
+• $15 Technical & Backlink SEO Audit: https://www.sharikrasool.com/seo-audit
 
 Prefer to discuss your search rankings and link building roadmap directly? Grab a quick 15-minute call on my calendar:
 https://calendly.com/sharikkashmiri

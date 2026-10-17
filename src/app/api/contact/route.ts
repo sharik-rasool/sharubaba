@@ -137,11 +137,11 @@ To help me tailor the audit specifically to your business goals:
 2. Target Pages: Which specific service or landing pages do you most want to rank?
 3. Target Niche & Competitors: Who are your top 1–2 organic search competitors?
 
-In the meantime, if you want immediate data on your link gaps or a comprehensive video breakdown:
+In the meantime, if you want immediate data on your link gaps or a comprehensive audit:
 • Competitor Backlink Gap Checker ($10 Pro Pass): https://www.sharikrasool.com/tools/backlink-gap-checker
   (Find high-converting DR 50–80 editorial publishers linking to competitors that don't link to you)
-• $15 Full Technical & Video SEO Audit: https://www.sharikrasool.com/seo-audit
-  (Includes a deep technical crawl, indexing audit, and a personalized 15-minute Loom video walkthrough)
+• $15 Technical & Backlink SEO Audit: https://www.sharikrasool.com/seo-audit
+  (Includes a deep technical crawl, indexing audit, actionable Excel sheet, and PDF report)
 
 Prefer to discuss your project directly? You can grab a quick 15-minute strategy call on my calendar here:
 https://calendly.com/sharikkashmiri
@@ -165,7 +165,7 @@ To help me map out the exact publisher mix and projected ranking timeline for yo
 
 In the meantime, feel free to explore our premium analysis tools:
 • Competitor Backlink Gap Checker ($10 Pro Pass): https://www.sharikrasool.com/tools/backlink-gap-checker
-• $15 Full Technical & Video SEO Audit: https://www.sharikrasool.com/seo-audit
+• $15 Technical & Backlink SEO Audit: https://www.sharikrasool.com/seo-audit
 
 Prefer to discuss your link acquisition strategy on a quick call? Book a 15-minute session here:
 https://calendly.com/sharikkashmiri
@@ -189,8 +189,8 @@ To help me analyze your site and tailor the most effective growth and link-build
 In the meantime, if you want immediate data on your rankings and link opportunities, check out my premium growth tools:
 • Competitor Backlink Gap Checker ($10 Pro Pass): https://www.sharikrasool.com/tools/backlink-gap-checker
   (Find high-converting DR 50–80 referring articles and listicles linking to competitors that don't link to you)
-• $15 Full Technical & Video SEO Audit: https://www.sharikrasool.com/seo-audit
-  (Includes a deep technical crawl, indexing audit, and a personalized 15-minute Loom video walkthrough)
+• $15 Technical & Backlink SEO Audit: https://www.sharikrasool.com/seo-audit
+  (Includes a deep technical crawl, indexing audit, actionable Excel sheet, and PDF report)
 
 Prefer to discuss your project directly? You can grab a quick 15-minute strategy call on my calendar here:
 https://calendly.com/sharikkashmiri

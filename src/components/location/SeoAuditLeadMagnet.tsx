@@ -60,7 +60,7 @@ export function SeoAuditLeadMagnet() {
                 </div>
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm text-foreground">
                   <Check className="w-4 h-4 text-primary shrink-0" />
-                  <span>Personalized Loom Video / PDF Action Plan</span>
+                  <span>Actionable Excel Sheet &amp; PDF Audit Report</span>
                 </div>
               </div>
             </FadeIn>

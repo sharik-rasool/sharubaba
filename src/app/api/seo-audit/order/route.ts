@@ -99,7 +99,7 @@ export async function POST(request: Request) {
       const firstName = (name || '').trim().split(' ')[0] || 'there';
       const customerAutoReplyMessage = `Hi ${firstName},
 
-Thank you for ordering your comprehensive $15 Video & Technical SEO Audit!
+Thank you for ordering your $15 Technical & Backlink SEO Audit!
 
 YOUR AUDIT ORDER DETAILS:
 • Target Website: ${website}
@@ -108,11 +108,11 @@ YOUR AUDIT ORDER DETAILS:
 • Competitors to Analyze: ${competitors || 'Top market rivals'}
 
 WHAT HAPPENS NEXT:
-1. Deep Technical Crawl: Your site is queued for a full technical audit (indexation, internal linking, site health).
+1. Deep Technical Crawl: Your site is queued for a full technical audit (indexation, internal linking, crawl health).
 2. Competitor Backlink Analysis: I will identify high-converting link gaps your competitors have that you are missing.
-3. 15-Minute Video & Roadmap Delivery: Within 48 hours, I will deliver a personalized Loom walkthrough video and an actionable Google Docs roadmap directly to your inbox.
+3. Excel & PDF Delivery: Within 48 hours, I will deliver your actionable Excel sheet and complete PDF audit report directly to your inbox.
 
-If you have any Google Search Console or Analytics access to share, or specific questions you'd like answered in the video, simply reply to this email!
+If you have any Google Search Console or Analytics access to share, or specific questions or targets, simply reply to this email!
 
 Best regards,
 Sharik Rasool
