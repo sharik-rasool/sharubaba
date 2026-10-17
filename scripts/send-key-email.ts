@@ -24,44 +24,91 @@ const KEY_HOLDERS = [
 async function sendKeyEmail(user: { name: string; email: string; key: string }) {
   const toolUrl = 'https://www.sharikrasool.com/tools/backlink-gap-checker';
 
-  const emailBody = `Hi ${user.name},
+  const emailBody = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: 0 auto; padding: 24px 20px; background-color: #ffffff; color: #1e293b; border-radius: 16px; border: 1px solid #e2e8f0; line-height: 1.6;">
 
-Thanks for purchasing the 90-day Backlink Gap Checker Key!
+  <!-- Header Badge -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <span style="display: inline-block; padding: 5px 14px; background: #e0f2fe; color: #0284c7; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 9999px;">
+      ⚡ 90-Day Pro Pass Activated
+    </span>
+    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 12px 0 4px 0;">
+      Competitor Backlink Gap Checker
+    </h2>
+    <p style="font-size: 13px; color: #64748b; margin: 0;">
+      Official Access Key &amp; Activation Guide
+    </p>
+  </div>
 
-Welcome to the Competitor Backlink Gap Checker. Your personalized 90-day access key is ready to use:
+  <p style="font-size: 15px; color: #334155; margin: 0 0 16px 0;">
+    Hi <strong>${user.name}</strong>,
+  </p>
 
-┌────────────────────────────────────────────────────────┐
-│                                                        │
-│               YOUR 90-DAY PRO ACCESS KEY               │
-│                                                        │
-│                  **${user.key}**                       │
-│                                                        │
-│           (90-Day Validity • 20 Scans/Day)             │
-│                                                        │
-└────────────────────────────────────────────────────────┘
+  <p style="font-size: 14px; color: #334155; margin: 0 0 20px 0;">
+    Thanks for purchasing the <strong>90-day Backlink Gap Checker Key</strong>! Your personalized access key is ready to use:
+  </p>
 
-DIRECT TOOL LINK:
-${toolUrl}
+  <!-- Colourful Mobile-Responsive Key Card (Linear Gradient Blue) -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0; border-collapse: separate;">
+    <tr>
+      <td align="center" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 24px 16px; border-radius: 14px; color: #ffffff; box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35);">
+        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #bae6fd; margin-bottom: 8px;">
+          YOUR 90-DAY PRO ACCESS KEY
+        </div>
+        <div style="font-family: 'SFMono-Regular', Consolas, 'Courier New', monospace; font-size: 26px; font-weight: 900; letter-spacing: 2px; color: #ffffff; padding: 4px 0; word-break: break-all;">
+          ${user.key}
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: #e0f2fe; margin-top: 8px;">
+          ✔ 90-Day Validity &bull; 20 Fresh Scans Every Day
+        </div>
+      </td>
+    </tr>
+  </table>
 
-HOW TO ACTIVATE (30 SECONDS):
-1. Click the tool link: ${toolUrl}
-2. Under the "I Have a Key" tab, paste your key: ${user.key}
-3. Click "Unlock 3-Month Pro Pass".
-   (Your browser will remember you automatically—you will not need to re-enter it!)
+  <!-- Colourful CTA Button -->
+  <div style="text-align: center; margin: 24px 0 28px 0;">
+    <a href="${toolUrl}" style="display: inline-block; padding: 14px 32px; background: #0284c7; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
+      Launch Backlink Gap Checker &rarr;
+    </a>
+  </div>
 
-WHAT'S INCLUDED IN YOUR 90-DAY PASS:
-• Exact Referring Article URLs & Listicle Titles linking to your competitors.
-• Curated DR 50–80 Outreach Sweet Spot (all zero-traffic scraper spam filtered out).
-• 1-Click CSV Export formatted for cold outreach campaigns (Instantly, Lemlist, Excel).
-• Up to 20 fresh competitor link gap scans every day for 90 days.
-• Full 90-Day Validity (your timer only starts on your very first scan).
+  <!-- How to Activate Card -->
+  <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;">
+    <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin-bottom: 10px;">
+      🚀 How to Activate (30 Seconds):
+    </div>
+    <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.8;">
+      <li>Click to open the <a href="${toolUrl}" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Backlink Gap Checker Tool</a></li>
+      <li>Under the <strong>"I Have a Key"</strong> tab, paste your key: <strong style="color: #0284c7;">${user.key}</strong></li>
+      <li>Click <strong>"Unlock 3-Month Pro Pass"</strong>. (Your browser will remember you automatically—you will not need to re-enter it!)</li>
+    </ol>
+  </div>
 
-If you have any questions or want my team to run custom backlink outreach for you, simply reply directly to this email!
+  <!-- What's Included Card -->
+  <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;">
+    <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin-bottom: 10px;">
+      💎 What's Included in Your 90-Day Pass:
+    </div>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.8;">
+      <li><strong>Exact Referring URLs:</strong> High-converting listicles and articles linking to your competitors.</li>
+      <li><strong>Curated DR 50–80 Sweet Spot:</strong> Zero-traffic scraper spam automatically filtered out.</li>
+      <li><strong>1-Click CSV Export:</strong> Formatted for cold outreach (Instantly, Lemlist, Excel).</li>
+      <li><strong>20 Fresh Scans / Day:</strong> Explore up to 1,800 competitor analyses.</li>
+      <li><strong>Full 90-Day Validity:</strong> Your countdown timer only starts on your very first scan.</li>
+    </ul>
+  </div>
 
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-https://www.sharikrasool.com`;
+  <p style="font-size: 13px; color: #64748b; margin: 0 0 20px 0;">
+    If you have any questions or want my team to run custom backlink outreach for you, simply reply directly to this email!
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0 16px 0;" />
+
+  <div style="font-size: 13px; color: #64748b; line-height: 1.5;">
+    <strong style="color: #0f172a;">Sharik Rasool</strong><br />
+    SEO Strategist &amp; Founder<br />
+    <a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>
+  </div>
+</div>`;
 
   const emailJsPayload = {
     service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',

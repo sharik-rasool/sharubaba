@@ -99,25 +99,28 @@ export async function POST(request: Request) {
       const firstName = (name || '').trim().split(' ')[0] || 'there';
       const customerAutoReplyMessage = `Hi ${firstName},
 
-Thank you for ordering your $15 Technical & Backlink SEO Audit!
+Thank you for placing your order for the $15 Technical & Backlink SEO Audit!
 
-YOUR AUDIT ORDER DETAILS:
+ORDER STATUS: Payment Pending ($15 USD)
 • Target Website: ${website}
-• Order ID: ${orderRecord?._id || 'AUDIT-CONFIRMED'}
+• Order ID: ${orderRecord?._id || 'AUDIT-PENDING'}
 • Focus Keywords: ${targetKeywords || 'Full domain audit'}
 • Competitors to Analyze: ${competitors || 'Top market rivals'}
 
-WHAT HAPPENS NEXT:
+NEXT STEP — Complete Payment:
+To activate your audit order, please <a href="https://buy.stripe.com/dummy_15_seo_audit" style="color: #0284c7; font-weight: 700; text-decoration: underline;">Complete Your $15 Audit Payment Here</a>.
+
+WHAT HAPPENS ONCE PAYMENT IS CONFIRMED:
 1. Deep Technical Crawl: Your site is queued for a full technical audit (indexation, internal linking, crawl health).
 2. Competitor Backlink Analysis: I will identify high-converting link gaps your competitors have that you are missing.
 3. Excel & PDF Delivery: Within 48 hours, I will deliver your actionable Excel sheet and complete PDF audit report directly to your inbox.
 
-If you have any Google Search Console or Analytics access to share, or specific questions or targets, simply reply to this email!
+If you have any Google Search Console or Analytics access to share, simply reply to this email, or <a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Call on My Calendar</a>.
 
 Best regards,
 Sharik Rasool
 SEO Strategist & Founder
-https://www.sharikrasool.com`;
+<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
 
       const customerAutoReplyPayload = {
         service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',
@@ -126,7 +129,7 @@ https://www.sharikrasool.com`;
         accessToken: process.env.EMAILJS_PRIVATE_KEY,
         template_params: {
           to_email: email.trim(),
-          subject: `Order Confirmed: $15 SEO & Backlink Audit for ${website}`,
+          subject: `Order Pending: $15 Technical & Backlink SEO Audit for ${website}`,
           from_name: 'Sharik Rasool',
           name: 'Sharik Rasool',
           sender_name: 'Sharik Rasool',
