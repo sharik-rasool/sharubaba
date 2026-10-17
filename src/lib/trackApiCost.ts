@@ -49,22 +49,35 @@ export async function trackApiCost(params: TrackApiCostParams): Promise<void> {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
   if (webhookUrl) {
     try {
-      const cacheSavings = tool === 'Website Authority Checker' ? 0.05 : 0.01;
+      const cacheSavings = source === 'CACHE_HIT' ? (tool === 'Website Authority Checker' ? 0.05 : 0.01) : 0;
       const savingsText = source === 'CACHE_HIT' ? ` ($${cacheSavings.toFixed(2)} Saved via Cache)` : '';
+      const dateStr = now.toISOString().split('T')[0];
+      const pagePath = tool === 'Website Authority Checker' 
+        ? '/tools/website-authority-checker' 
+        : '/tools/backlink-gap-checker';
+
       const sheetPayload = {
+        action: 'api_cost_log',
+        tab: 'API Tracking',
         timestamp: now.toISOString(),
-        type: `API Cost Log: ${tool}`,
+        date: dateStr,
         tool,
+        page: pagePath,
         domain,
         source,
         credits: creditsUsed,
-        cost: `$${estimatedCostUsd.toFixed(2)}`,
+        cost: Number(estimatedCostUsd.toFixed(2)),
+        savings: cacheSavings,
+        status,
+        details,
+        ip_address: ip,
+        // Legacy fallback fields
+        type: `API Cost Log: ${tool}`,
         name: `[API] ${tool}`,
         email: 'api-tracker@sharikrasool.com',
         website: domain,
         company: `${source} • ${creditsUsed} Credits • $${estimatedCostUsd.toFixed(2)}${savingsText}`,
         message: `[${tool}] Target: ${domain} | Source: ${source} | Credits: ${creditsUsed} | Est. Cost: $${estimatedCostUsd.toFixed(2)}${savingsText} | IP: ${ip} | Status: ${status}${details ? ` | ${details}` : ''}`,
-        ip_address: ip,
       };
 
       await fetch(webhookUrl, {

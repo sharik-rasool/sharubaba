@@ -156,6 +156,81 @@ async function main() {
   console.log(`    Total: ${gapLogs.length} | Live: ${gapLogs.filter((l) => l.source === 'LIVE_AHREFS_API').length} | Cache Hits: ${gapLogs.filter((l) => l.source === 'CACHE_HIT').length}`);
   console.log(`    Credits: ${gapLogs.reduce((acc, l) => acc + (l.creditsUsed || 0), 0)} | Spend: $${gapLogs.reduce((acc, l) => acc + (l.estimatedCostUsd || 0), 0).toFixed(2)} | Saved: $${gapSaved.toFixed(2)}`);
 
+  // ─── PER-DAY & PER-PAGE / PER-TOOL AGGREGATION ───
+  interface DayPageStats {
+    date: string;
+    page: string;
+    tool: string;
+    searches: number;
+    live: number;
+    cached: number;
+    credits: number;
+    spend: number;
+    saved: number;
+  }
+
+  const dailyMap: Record<string, DayPageStats> = {};
+
+  allLogs.forEach((log) => {
+    const dStr = log.createdAt ? new Date(log.createdAt).toISOString().split('T')[0] : 'N/A';
+    const isDr = log.tool.includes('Authority');
+    const pagePath = isDr ? '/tools/website-authority' : '/tools/backlink-gap';
+    const key = `${dStr}::${pagePath}`;
+
+    if (!dailyMap[key]) {
+      dailyMap[key] = {
+        date: dStr,
+        page: pagePath,
+        tool: isDr ? 'DR Checker' : 'Backlink Gap',
+        searches: 0,
+        live: 0,
+        cached: 0,
+        credits: 0,
+        spend: 0,
+        saved: 0,
+      };
+    }
+
+    dailyMap[key].searches += 1;
+    if (log.source === 'LIVE_AHREFS_API') {
+      dailyMap[key].live += 1;
+      dailyMap[key].credits += log.creditsUsed || 0;
+      dailyMap[key].spend += log.estimatedCostUsd || 0;
+    } else if (log.source === 'CACHE_HIT') {
+      dailyMap[key].cached += 1;
+      dailyMap[key].saved += isDr ? 0.05 : 0.01;
+    }
+  });
+
+  console.log('\n📅 PER-DAY & PER-PAGE API TOKENS / CREDITS CONSUMED:');
+  console.log('──────────────────────────────────────────────────────────────────');
+  console.log(
+    'Date'.padEnd(13) +
+    'Page / Tool'.padEnd(28) +
+    'Searches'.padEnd(10) +
+    'Live'.padEnd(7) +
+    'Cached'.padEnd(8) +
+    'Credits'.padEnd(10) +
+    'Spend'.padEnd(9) +
+    'Saved'
+  );
+  console.log('─'.repeat(90));
+
+  const sortedDailyKeys = Object.keys(dailyMap).sort().reverse();
+  sortedDailyKeys.forEach((k) => {
+    const s = dailyMap[k];
+    console.log(
+      s.date.padEnd(13) +
+      `${s.page} (${s.tool})`.padEnd(28) +
+      String(s.searches).padEnd(10) +
+      String(s.live).padEnd(7) +
+      String(s.cached).padEnd(8) +
+      String(s.credits).padEnd(10) +
+      `$${s.spend.toFixed(2)}`.padEnd(9) +
+      `💰 $${s.saved.toFixed(2)}`
+    );
+  });
+
   console.log('\n🕒 LAST 10 API ACTIVITY LOGS:');
   console.log('──────────────────────────────────────────────────────────────────');
   console.log(
