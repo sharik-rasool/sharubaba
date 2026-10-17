@@ -245,7 +245,7 @@ export async function POST(request: Request) {
           ? Math.max(0, Math.ceil((new Date(keyDoc.expiresAt).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)))
           : 90;
 
-        trackApiCost({
+        await trackApiCost({
           tool: 'Competitor Backlink Gap Checker',
           domain: target,
           source: 'CACHE_HIT',
@@ -409,7 +409,7 @@ export async function POST(request: Request) {
       ? Math.max(0, Math.ceil((new Date(keyDoc.expiresAt).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)))
       : 90;
 
-    trackApiCost({
+    await trackApiCost({
       tool: 'Competitor Backlink Gap Checker',
       domain: target,
       source: apiSource,

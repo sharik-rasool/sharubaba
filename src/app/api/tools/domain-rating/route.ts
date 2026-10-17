@@ -298,7 +298,7 @@ export async function POST(request: Request) {
         const remainingDays = Math.ceil((CACHE_TTL_MS - (Date.now() - memoryHit.timestamp)) / (24 * 60 * 60 * 1000));
         
         // Log Cache Hit ($0.00 cost)
-        trackApiCost({
+        await trackApiCost({
           tool: 'Website Authority Checker',
           domain,
           source: 'CACHE_HIT',
@@ -359,7 +359,7 @@ export async function POST(request: Request) {
             inMemoryCache.set(domain, { data, timestamp: new Date(dbCached.updatedAt).getTime() });
 
             // Log MongoDB Cache Hit ($0.00 cost)
-            trackApiCost({
+            await trackApiCost({
               tool: 'Website Authority Checker',
               domain,
               source: 'CACHE_HIT',
@@ -563,7 +563,7 @@ export async function POST(request: Request) {
           }
 
           // Log Live Ahrefs API Cost (5 credits = ~$0.05)
-          trackApiCost({
+          await trackApiCost({
             tool: 'Website Authority Checker',
             domain,
             source: 'LIVE_AHREFS_API',
@@ -587,7 +587,7 @@ export async function POST(request: Request) {
     inMemoryCache.set(domain, { data: simulated, timestamp: Date.now() });
 
     // Log Simulation ($0.00 cost)
-    trackApiCost({
+    await trackApiCost({
       tool: 'Website Authority Checker',
       domain,
       source: 'SIMULATED',

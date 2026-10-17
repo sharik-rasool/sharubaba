@@ -80,14 +80,18 @@ export async function trackApiCost(params: TrackApiCostParams): Promise<void> {
         message: `[${tool}] Target: ${domain} | Source: ${source} | Credits: ${creditsUsed} | Est. Cost: $${estimatedCostUsd.toFixed(2)}${savingsText} | IP: ${ip} | Status: ${status}${details ? ` | ${details}` : ''}`,
       };
 
-      await fetch(webhookUrl, {
+      const res = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sheetPayload),
-        signal: AbortSignal.timeout(5000),
+        redirect: 'follow',
+        signal: AbortSignal.timeout(6000),
       });
+      if (!res.ok) {
+        console.warn(`[API COST TRACKER] Google Sheets webhook returned status ${res.status}`);
+      }
     } catch (sheetErr) {
-      console.warn('[API COST TRACKER] Google Sheets webhook warning:', sheetErr);
+      console.warn('[API COST TRACKER] Google Sheets webhook error:', sheetErr);
     }
   }
 }
