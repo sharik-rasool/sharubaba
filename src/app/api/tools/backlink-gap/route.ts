@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import ToolAccessKey from '@/models/ToolAccessKey';
 import BacklinkGapCache, { RefPageResult } from '@/models/BacklinkGapCache';
+import { trackApiCost } from '@/lib/trackApiCost';
 
 function cleanDomain(input: string): string {
   let cleaned = input.trim().toLowerCase();
@@ -244,6 +245,15 @@ export async function POST(request: Request) {
           ? Math.max(0, Math.ceil((new Date(keyDoc.expiresAt).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)))
           : 90;
 
+        trackApiCost({
+          tool: 'Competitor Backlink Gap Checker',
+          domain: target,
+          source: 'CACHE_HIT',
+          creditsUsed: 0,
+          estimatedCostUsd: 0,
+          details: `Cached 15-day lookup against ${competitors.length} competitors (${keyDoc.name})`,
+        });
+
         return NextResponse.json({
           success: true,
           cached: true,
@@ -263,6 +273,7 @@ export async function POST(request: Request) {
 
     // 4. Call Ahrefs API v3 (POST /v3/competitive-analysis/link-intersect-refpages)
     let gapResults: RefPageResult[] = [];
+    let apiSource: 'LIVE_AHREFS_API' | 'SIMULATED' = 'SIMULATED';
     const ahrefsApiKey = process.env.AHREFS_API_KEY;
 
     if (ahrefsApiKey) {
@@ -318,6 +329,7 @@ export async function POST(request: Request) {
         if (ahrefsRes.ok) {
           const ahrefsData = await ahrefsRes.json();
           if (Array.isArray(ahrefsData.refpages) && ahrefsData.refpages.length > 0) {
+            apiSource = 'LIVE_AHREFS_API';
             interface AhrefsRefPageItem {
               url_from?: string;
               title_from?: string;
@@ -396,6 +408,15 @@ export async function POST(request: Request) {
     const daysRemaining = keyDoc.expiresAt
       ? Math.max(0, Math.ceil((new Date(keyDoc.expiresAt).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)))
       : 90;
+
+    trackApiCost({
+      tool: 'Competitor Backlink Gap Checker',
+      domain: target,
+      source: apiSource,
+      creditsUsed: apiSource === 'LIVE_AHREFS_API' ? 1 : 0,
+      estimatedCostUsd: apiSource === 'LIVE_AHREFS_API' ? 0.01 : 0,
+      details: `${apiSource === 'LIVE_AHREFS_API' ? 'Live Ahrefs v3 Link Intersect (1 credit)' : 'Simulated fallback'} for ${target} vs ${competitors.join(', ')} (${keyDoc.name})`,
+    });
 
     return NextResponse.json({
       success: true,

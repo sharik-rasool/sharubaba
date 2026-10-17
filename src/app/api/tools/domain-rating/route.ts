@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import DomainCache, { CountryTrafficData, TrafficHistoryPoint } from '@/models/DomainCache';
+import { trackApiCost } from '@/lib/trackApiCost';
 
 interface CacheEntry {
   data: AuthorityData;
@@ -269,6 +270,13 @@ function generateSimulatedData(domain: string): AuthorityData {
 
 export async function POST(request: Request) {
   try {
+    const rawIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip')?.trim() ||
+      request.headers.get('cf-connecting-ip')?.trim() ||
+      '127.0.0.1';
+    const ip = rawIp;
+
     const body = await request.json();
     const rawDomain = body.domain || '';
     const forceRefresh = body.refresh === true;
@@ -288,6 +296,18 @@ export async function POST(request: Request) {
       const memoryHit = inMemoryCache.get(domain);
       if (memoryHit && Date.now() - memoryHit.timestamp < CACHE_TTL_MS) {
         const remainingDays = Math.ceil((CACHE_TTL_MS - (Date.now() - memoryHit.timestamp)) / (24 * 60 * 60 * 1000));
+        
+        // Log Cache Hit ($0.00 cost)
+        trackApiCost({
+          tool: 'Website Authority Checker',
+          domain,
+          source: 'CACHE_HIT',
+          creditsUsed: 0,
+          estimatedCostUsd: 0,
+          ip,
+          details: 'In-memory cache (<1ms)',
+        });
+
         return NextResponse.json({
           success: true,
           data: {
@@ -337,6 +357,17 @@ export async function POST(request: Request) {
 
             // Warm up in-memory cache
             inMemoryCache.set(domain, { data, timestamp: new Date(dbCached.updatedAt).getTime() });
+
+            // Log MongoDB Cache Hit ($0.00 cost)
+            trackApiCost({
+              tool: 'Website Authority Checker',
+              domain,
+              source: 'CACHE_HIT',
+              creditsUsed: 0,
+              estimatedCostUsd: 0,
+              ip,
+              details: `MongoDB persistent cache (${data.cacheExpiresInDays}d remaining)`,
+            });
 
             return NextResponse.json({ success: true, data });
           }
@@ -531,6 +562,17 @@ export async function POST(request: Request) {
             }
           }
 
+          // Log Live Ahrefs API Cost (5 credits = ~$0.05)
+          trackApiCost({
+            tool: 'Website Authority Checker',
+            domain,
+            source: 'LIVE_AHREFS_API',
+            creditsUsed: 5,
+            estimatedCostUsd: 0.05,
+            ip,
+            details: `Ahrefs v3 Live: DR ${dr} | Traffic ${formatNumber(traffic)} | RefDomains ${formatNumber(refDomains)}`,
+          });
+
           return NextResponse.json({ success: true, data: result });
         }
       } catch (apiError) {
@@ -543,6 +585,17 @@ export async function POST(request: Request) {
     // -------------------------------------------------------------
     const simulated = generateSimulatedData(domain);
     inMemoryCache.set(domain, { data: simulated, timestamp: Date.now() });
+
+    // Log Simulation ($0.00 cost)
+    trackApiCost({
+      tool: 'Website Authority Checker',
+      domain,
+      source: 'SIMULATED',
+      creditsUsed: 0,
+      estimatedCostUsd: 0,
+      ip,
+      details: 'Simulation fallback (no API credits used)',
+    });
 
     return NextResponse.json({ success: true, data: simulated });
   } catch (error) {

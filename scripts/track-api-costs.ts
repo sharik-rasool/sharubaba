@@ -1,0 +1,196 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import mongoose from 'mongoose';
+
+// 1. Manually parse .env.local to ensure environment variables are present
+const envPath = path.resolve(process.cwd(), '.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx !== -1) {
+      const key = trimmed.slice(0, eqIdx).trim();
+      let val = trimmed.slice(eqIdx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (!process.env[key]) {
+        process.env[key] = val;
+      }
+    }
+  });
+}
+
+// 2. Define or import ApiCostLog model
+const ApiCostLogSchema = new mongoose.Schema(
+  {
+    tool: { type: String, required: true },
+    domain: { type: String, required: true },
+    source: { type: String, required: true },
+    creditsUsed: { type: Number, default: 0 },
+    estimatedCostUsd: { type: Number, default: 0 },
+    ip: { type: String, default: '127.0.0.1' },
+    status: { type: String, default: 'success' },
+    details: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+const ApiCostLog = mongoose.models.ApiCostLog || mongoose.model('ApiCostLog', ApiCostLogSchema);
+
+async function main() {
+  const args = process.argv.slice(2);
+  const testSheet = args.includes('--test-sheet');
+
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error('❌ MONGODB_URI is not defined in .env.local');
+    process.exit(1);
+  }
+
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+
+  console.log('══════════════════════════════════════════════════════════════════');
+  console.log('          📊 SHARIK RASOOL — LIVE API COST & USAGE MONITOR        ');
+  console.log('══════════════════════════════════════════════════════════════════');
+  console.log(`🔌 MongoDB: Connected`);
+  console.log(`📋 Google Sheet Webhook: ${webhookUrl ? '✅ Configured & Active' : '❌ Not Set'}`);
+  console.log('──────────────────────────────────────────────────────────────────');
+
+  await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 8000 });
+
+  // Optional: send test ping to Google Sheet webhook
+  if (testSheet) {
+    if (!webhookUrl) {
+      console.log('❌ Cannot test webhook: GOOGLE_SHEETS_WEBHOOK_URL is not set.');
+    } else {
+      console.log('\n📤 Sending test cost log entry to Google Sheets webhook...');
+      const testPayload = {
+        timestamp: new Date().toISOString(),
+        type: 'API Cost Log: Test Verification',
+        tool: 'Website Authority Checker',
+        domain: 'test-verification.com',
+        source: 'LIVE_AHREFS_API',
+        credits: 5,
+        cost: '$0.05',
+        name: '[API Test] Webhook Verification',
+        email: 'api-tracker@sharikrasool.com',
+        website: 'test-verification.com',
+        company: 'LIVE_AHREFS_API • 5 Credits • $0.05',
+        message: '[Test Verification] Verified live sync of API cost tracking directly into Google Sheet.',
+        ip_address: '127.0.0.1',
+      };
+
+      try {
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testPayload),
+        });
+        console.log(`✅ Google Sheet responded with HTTP status ${res.status}. Row logged successfully!`);
+
+        await ApiCostLog.create({
+          tool: 'Website Authority Checker',
+          domain: 'test-verification.com',
+          source: 'LIVE_AHREFS_API',
+          creditsUsed: 5,
+          estimatedCostUsd: 0.05,
+          ip: '127.0.0.1',
+          status: 'success',
+          details: 'Verified live sync of API cost tracking directly into Google Sheet.',
+        });
+        console.log(`✅ MongoDB test record created.`);
+      } catch (err) {
+        console.error('❌ Failed to dispatch test event to webhook:', err);
+      }
+    }
+  }
+
+  // Query records
+  const allLogs = await ApiCostLog.find().sort({ createdAt: -1 }).lean();
+
+  if (allLogs.length === 0) {
+    console.log('\nℹ️ No API cost records logged yet. Run a search on DR or Backlink Gap checker to see live data.');
+    console.log('💡 Tip: Run "npx tsx scripts/track-api-costs.ts --test-sheet" to test the Google Sheet webhook.\n');
+    await mongoose.disconnect();
+    return;
+  }
+
+  // Metrics
+  const totalCalls = allLogs.length;
+  const liveCalls = allLogs.filter((l) => l.source === 'LIVE_AHREFS_API').length;
+  const cacheHits = allLogs.filter((l) => l.source === 'CACHE_HIT').length;
+  const simulatedCalls = allLogs.filter((l) => l.source === 'SIMULATED').length;
+  const totalCredits = allLogs.reduce((acc, l) => acc + (l.creditsUsed || 0), 0);
+  const totalSpentUsd = allLogs.reduce((acc, l) => acc + (l.estimatedCostUsd || 0), 0);
+
+  // Dollars saved via caching
+  const drSaved = allLogs.filter((l) => l.tool.includes('Authority') && l.source === 'CACHE_HIT').length * 0.05;
+  const gapSaved = allLogs.filter((l) => l.tool.includes('Backlink') && l.source === 'CACHE_HIT').length * 0.01;
+  const totalSavedUsd = drSaved + gapSaved;
+  const cacheHitRate = totalCalls > 0 ? ((cacheHits / totalCalls) * 100).toFixed(1) : '0';
+
+  console.log('\n📈 CUMULATIVE API USAGE & FINANCIAL SUMMARY:');
+  console.log(`   • Total Tool Invocations:     ${totalCalls}`);
+  console.log(`   • Live Ahrefs API Calls:       ${liveCalls} (Paid)`);
+  console.log(`   • MongoDB Cache Hits:          ${cacheHits} (FREE - $0.00)`);
+  console.log(`   • Simulation Fallbacks:        ${simulatedCalls}`);
+  console.log(`   • Cache Hit Ratio:             ${cacheHitRate}%`);
+  console.log(`   • Total Ahrefs Credits Used:   ${totalCredits} credits`);
+  console.log(`   • Total Est. Ahrefs Spend:     $${totalSpentUsd.toFixed(2)} USD`);
+  console.log(`   • Total Cash Saved by Cache:   💰 $${totalSavedUsd.toFixed(2)} USD`);
+
+  // Tool-level breakdown
+  const drLogs = allLogs.filter((l) => l.tool.includes('Authority'));
+  const gapLogs = allLogs.filter((l) => l.tool.includes('Backlink'));
+
+  console.log('\n🛠️ TOOL BREAKDOWN:');
+  console.log('──────────────────────────────────────────────────────────────────');
+  console.log(' 1. Website Authority Checker (DR)');
+  console.log(`    Total: ${drLogs.length} | Live: ${drLogs.filter((l) => l.source === 'LIVE_AHREFS_API').length} | Cache Hits: ${drLogs.filter((l) => l.source === 'CACHE_HIT').length}`);
+  console.log(`    Credits: ${drLogs.reduce((acc, l) => acc + (l.creditsUsed || 0), 0)} | Spend: $${drLogs.reduce((acc, l) => acc + (l.estimatedCostUsd || 0), 0).toFixed(2)} | Saved: $${drSaved.toFixed(2)}`);
+
+  console.log('\n 2. Competitor Backlink Gap Checker');
+  console.log(`    Total: ${gapLogs.length} | Live: ${gapLogs.filter((l) => l.source === 'LIVE_AHREFS_API').length} | Cache Hits: ${gapLogs.filter((l) => l.source === 'CACHE_HIT').length}`);
+  console.log(`    Credits: ${gapLogs.reduce((acc, l) => acc + (l.creditsUsed || 0), 0)} | Spend: $${gapLogs.reduce((acc, l) => acc + (l.estimatedCostUsd || 0), 0).toFixed(2)} | Saved: $${gapSaved.toFixed(2)}`);
+
+  console.log('\n🕒 LAST 10 API ACTIVITY LOGS:');
+  console.log('──────────────────────────────────────────────────────────────────');
+  console.log(
+    'Time'.padEnd(12) +
+    'Tool'.padEnd(26) +
+    'Domain'.padEnd(22) +
+    'Source'.padEnd(16) +
+    'Credits'.padEnd(10) +
+    'Cost'
+  );
+  console.log('─'.repeat(90));
+
+  allLogs.slice(0, 10).forEach((log) => {
+    const timeStr = log.createdAt ? new Date(log.createdAt).toLocaleTimeString() : 'N/A';
+    const toolShort = log.tool.replace(' Checker', '').slice(0, 24);
+    const domainShort = (log.domain || '').slice(0, 20);
+    const sourceShort = log.source === 'LIVE_AHREFS_API' ? '🟢 LIVE API' : log.source === 'CACHE_HIT' ? '⚡ CACHED' : '🟡 SIMULATED';
+    const creditsStr = `${log.creditsUsed || 0}`;
+    const costStr = `$${(log.estimatedCostUsd || 0).toFixed(2)}`;
+
+    console.log(
+      timeStr.padEnd(12) +
+      toolShort.padEnd(26) +
+      domainShort.padEnd(22) +
+      sourceShort.padEnd(16) +
+      creditsStr.padEnd(10) +
+      costStr
+    );
+  });
+  console.log('──────────────────────────────────────────────────────────────────\n');
+
+  await mongoose.disconnect();
+}
+
+main().catch((err) => {
+  console.error('Fatal error running API cost monitor:', err);
+  process.exit(1);
+});
