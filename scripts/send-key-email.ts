@@ -3,11 +3,19 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
+import connectDB from '../src/lib/db';
+import ToolAccessKey from '../src/models/ToolAccessKey';
+
 const KEY_HOLDERS = [
   {
     name: 'Sharik',
     email: 'shariksr7@gmail.com',
     key: 'GAP-SHARIK-6321',
+  },
+  {
+    name: 'Sharu',
+    email: 'sharudar7@gmail.com',
+    key: 'GAP-SHARU-8986',
   },
   {
     name: 'Safora',
@@ -117,7 +125,7 @@ async function sendKeyEmail(user: { name: string; email: string; key: string }) 
     accessToken: process.env.EMAILJS_PRIVATE_KEY,
     template_params: {
       from_name: 'Sharik Rasool',
-      name: 'Sharik Rasool', // Ensures EmailJS "From Name" shows Sharik Rasool
+      name: 'Sharik Rasool',
       sender_name: 'Sharik Rasool',
       to_name: user.name,
       customer_name: user.name,
@@ -129,7 +137,7 @@ async function sendKeyEmail(user: { name: string; email: string; key: string }) 
       recipient: user.email,
       user_email: user.email,
       website: toolUrl,
-      subject: 'Your 90-Day Backlink Gap Checker Key', // Short and precise, no key in subject
+      subject: 'Your 90-Day Backlink Gap Checker Key',
       message: emailBody,
       ip_address: 'Verified Direct Access',
       ip: 'Verified Direct Access',
@@ -166,28 +174,75 @@ async function sendKeyEmail(user: { name: string; email: string; key: string }) 
 }
 
 async function main() {
-  const targetEmail = process.argv[2];
+  const rawTarget = process.argv[2];
+  const targetEmail = rawTarget ? rawTarget.replace(/^[\[<"'\s]+|[\]>"'\s]+$/g, '').trim() : undefined;
 
-  let listToSend = KEY_HOLDERS;
+  let listToSend: Array<{ name: string; email: string; key: string }> = [];
+
   if (targetEmail) {
-    listToSend = KEY_HOLDERS.filter(
-      (k) => k.email.toLowerCase() === targetEmail.toLowerCase()
-    );
-    if (listToSend.length === 0) {
-      console.log(`Target email ${targetEmail} not found in existing key holders. Creating custom recipient...`);
-      listToSend = [{ name: 'Valued Client', email: targetEmail, key: 'GAP-PRO-DEMO' }];
+    const cleanEmail = targetEmail.toLowerCase();
+    try {
+      await connectDB();
+      const dbKey = await ToolAccessKey.findOne({ email: cleanEmail });
+      if (dbKey) {
+        if (dbKey.status !== 'active') {
+          dbKey.status = 'active';
+          dbKey.activatedAt = new Date();
+          dbKey.expiresAt = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+          await dbKey.save();
+          console.log(`🔑 Activated key ${dbKey.key} in database for ${dbKey.email}`);
+        }
+        listToSend = [{
+          name: dbKey.name || 'Valued Client',
+          email: dbKey.email,
+          key: dbKey.key,
+        }];
+      }
+    } catch (dbErr) {
+      console.warn('Database lookup notice:', dbErr);
     }
+
+    if (listToSend.length === 0) {
+      const matched = KEY_HOLDERS.find((k) => k.email.toLowerCase() === cleanEmail);
+      if (matched) {
+        listToSend = [matched];
+      } else {
+        console.log(`Target email ${cleanEmail} not found in database or static list. Creating new active key...`);
+        const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+        const namePart = cleanEmail.split('@')[0].toUpperCase().replace(/[^A-Z]/g, '').slice(0, 8) || 'PRO';
+        const generatedKey = `GAP-${namePart}-${randomSuffix}`;
+        try {
+          await connectDB();
+          await ToolAccessKey.create({
+            key: generatedKey,
+            name: cleanEmail.split('@')[0],
+            email: cleanEmail,
+            status: 'active',
+            activatedAt: new Date(),
+            expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+            dailyLimit: 20,
+            notes: 'Generated via send-key-email script',
+          });
+          console.log(`🔑 Created and activated key ${generatedKey} for ${cleanEmail}`);
+        } catch {
+          // Fallback in memory
+        }
+        listToSend = [{ name: cleanEmail.split('@')[0], email: cleanEmail, key: generatedKey }];
+      }
+    }
+  } else {
+    listToSend = KEY_HOLDERS;
   }
 
-  console.log(`Sending test access key emails to ${listToSend.length} recipient(s)...\n`);
+  console.log(`Sending access key emails to ${listToSend.length} recipient(s)...\n`);
 
   for (const user of listToSend) {
     await sendKeyEmail(user);
-    // Add small 500ms delay between sends to respect rate limits
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
-  console.log('\nAll test emails processed!');
+  console.log('\nAll emails processed!');
+  process.exit(0);
 }
 
 main();

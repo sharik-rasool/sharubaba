@@ -20,7 +20,8 @@ async function connectDB() {
         return cached.conn;
     }
 
-    if (!MONGODB_URI) {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
         console.warn("MONGODB_URI is not defined. Skipping database connection.");
         return null;
     }
@@ -30,7 +31,7 @@ async function connectDB() {
             bufferCommands: false,
         };
 
-        cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+        cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
             return mongoose;
         });
     }
