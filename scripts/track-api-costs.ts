@@ -66,42 +66,84 @@ async function main() {
     if (!webhookUrl) {
       console.log('❌ Cannot test webhook: GOOGLE_SHEETS_WEBHOOK_URL is not set.');
     } else {
-      console.log('\n📤 Sending test cost log entry to Google Sheets webhook...');
-      const testPayload = {
-        timestamp: new Date().toISOString(),
-        type: 'API Cost Log: Test Verification',
+      console.log('\n📤 Sending test API tracking events to Google Sheets webhook...');
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+
+      // Test 1: Website Authority Checker (Live API Call - 5 credits, $0.05)
+      const testPayload1 = {
+        action: 'api_cost_log',
+        tab: 'API Tracking',
+        timestamp: now.toISOString(),
+        date: dateStr,
         tool: 'Website Authority Checker',
-        domain: 'test-verification.com',
+        page: '/tools/website-authority-checker',
+        domain: 'stripe.com',
         source: 'LIVE_AHREFS_API',
         credits: 5,
-        cost: '$0.05',
-        name: '[API Test] Webhook Verification',
-        email: 'api-tracker@sharikrasool.com',
-        website: 'test-verification.com',
-        company: 'LIVE_AHREFS_API • 5 Credits • $0.05',
-        message: '[Test Verification] Verified live sync of API cost tracking directly into Google Sheet.',
+        cost: 0.05,
+        savings: 0,
+        status: 'success',
         ip_address: '127.0.0.1',
+        details: 'Live Ahrefs v3 API Check (5 credits)',
+      };
+
+      // Test 2: Competitor Backlink Gap Checker (Cached Hit - 0 credits, $0.01 saved)
+      const testPayload2 = {
+        action: 'api_cost_log',
+        tab: 'API Tracking',
+        timestamp: now.toISOString(),
+        date: dateStr,
+        tool: 'Competitor Backlink Gap Checker',
+        page: '/tools/backlink-gap-checker',
+        domain: 'notion.so',
+        source: 'CACHE_HIT',
+        credits: 0,
+        cost: 0.00,
+        savings: 0.01,
+        status: 'success',
+        ip_address: '127.0.0.1',
+        details: 'Cached lookup vs coda.io, clickup.com (Pass: GAP-SHARIK-6321)',
       };
 
       try {
-        const res = await fetch(webhookUrl, {
+        const res1 = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(testPayload),
+          body: JSON.stringify(testPayload1),
         });
-        console.log(`✅ Google Sheet responded with HTTP status ${res.status}. Row logged successfully!`);
+        console.log(`✅ Event 1 (DR Checker - Live API): Webhook HTTP ${res1.status}`);
+
+        const res2 = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testPayload2),
+        });
+        console.log(`✅ Event 2 (Backlink Gap - Cache Hit): Webhook HTTP ${res2.status}`);
 
         await ApiCostLog.create({
           tool: 'Website Authority Checker',
-          domain: 'test-verification.com',
+          domain: 'stripe.com',
           source: 'LIVE_AHREFS_API',
           creditsUsed: 5,
           estimatedCostUsd: 0.05,
           ip: '127.0.0.1',
           status: 'success',
-          details: 'Verified live sync of API cost tracking directly into Google Sheet.',
+          details: 'Live Ahrefs v3 API Check (5 credits)',
         });
-        console.log(`✅ MongoDB test record created.`);
+
+        await ApiCostLog.create({
+          tool: 'Competitor Backlink Gap Checker',
+          domain: 'notion.so',
+          source: 'CACHE_HIT',
+          creditsUsed: 0,
+          estimatedCostUsd: 0,
+          ip: '127.0.0.1',
+          status: 'success',
+          details: 'Cached lookup vs coda.io, clickup.com (Pass: GAP-SHARIK-6321)',
+        });
+
+        console.log(`✅ MongoDB test records created for both tools.`);
       } catch (err) {
         console.error('❌ Failed to dispatch test event to webhook:', err);
       }
