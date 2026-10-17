@@ -93,8 +93,69 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify(emailJsPayload),
       });
+
+      // Send Customer Confirmation Auto-Reply
+      const firstName = cleanName.split(' ')[0] || 'there';
+      const customerAutoReplyMessage = `Hi ${firstName},
+
+Thank you for your interest in the Competitor Backlink Gap Checker!
+
+I have reserved your 3-Month Pro Pass (90-Day Unlimited Access).
+
+RESERVATION DETAILS:
+• Access Key: ${existing.key} (Reserved for ${cleanEmail})
+• Target Website: ${website || 'Your Domain'}
+• Pass: 3-Month Pro Pass ($10 USD)
+
+WHAT'S INCLUDED:
+• 90 Days of Unlimited Live Competitor Gap Searches
+• Identify high-converting DR 50–80 editorial publishers linking to competitors
+• Direct CSV Export formatted for outreach campaigns
+• 20 fresh competitor searches per day
+
+To complete your activation, I will send over your $10 payment link shortly. You can also reply directly to this email to get it activated immediately.
+
+In the meantime, if you want a complete technical and keyword teardown of your website:
+• $15 Full Technical & Video SEO Audit: https://www.sharikrasool.com/seo-audit
+
+Prefer to discuss your search rankings and link building roadmap directly? Grab a quick 15-minute call on my calendar:
+https://calendly.com/sharikkashmiri
+
+Best regards,
+Sharik Rasool
+SEO Strategist & Founder
+https://www.sharikrasool.com`;
+
+      const customerAutoReplyPayload = {
+        service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',
+        template_id: process.env.EMAILJS_TEMPLATE_ID || 'template_oxwiq1r',
+        user_id: process.env.EMAILJS_PUBLIC_KEY || '55VneOagkBBvVQDN0',
+        accessToken: process.env.EMAILJS_PRIVATE_KEY,
+        template_params: {
+          to_email: cleanEmail,
+          subject: 'Your Backlink Gap Checker Pro Pass Reservation',
+          from_name: 'Sharik Rasool',
+          name: 'Sharik Rasool',
+          sender_name: 'Sharik Rasool',
+          from_email: 'hello@sharikrasool.com',
+          reply_to: 'shariksr7@gmail.com',
+          message: customerAutoReplyMessage,
+        },
+      };
+
+      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          Origin: 'https://www.sharikrasool.com',
+          Referer: 'https://www.sharikrasool.com/tools/backlink-gap-checker',
+        },
+        body: JSON.stringify(customerAutoReplyPayload),
+      });
     } catch (emailErr) {
-      console.warn('[REQUEST KEY] EmailJS notification failed (non-blocking):', emailErr);
+      console.warn('[REQUEST KEY] EmailJS notification/auto-reply failed (non-blocking):', emailErr);
     }
 
     return NextResponse.json({

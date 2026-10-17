@@ -94,8 +94,60 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify(emailJsPayload),
       });
+
+      // Send Customer Order Confirmation Auto-Reply
+      const firstName = (name || '').trim().split(' ')[0] || 'there';
+      const customerAutoReplyMessage = `Hi ${firstName},
+
+Thank you for ordering your comprehensive $15 Video & Technical SEO Audit!
+
+YOUR AUDIT ORDER DETAILS:
+• Target Website: ${website}
+• Order ID: ${orderRecord?._id || 'AUDIT-CONFIRMED'}
+• Focus Keywords: ${targetKeywords || 'Full domain audit'}
+• Competitors to Analyze: ${competitors || 'Top market rivals'}
+
+WHAT HAPPENS NEXT:
+1. Deep Technical Crawl: Your site is queued for a full technical audit (indexation, internal linking, site health).
+2. Competitor Backlink Analysis: I will identify high-converting link gaps your competitors have that you are missing.
+3. 15-Minute Video & Roadmap Delivery: Within 48 hours, I will deliver a personalized Loom walkthrough video and an actionable Google Docs roadmap directly to your inbox.
+
+If you have any Google Search Console or Analytics access to share, or specific questions you'd like answered in the video, simply reply to this email!
+
+Best regards,
+Sharik Rasool
+SEO Strategist & Founder
+https://www.sharikrasool.com`;
+
+      const customerAutoReplyPayload = {
+        service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',
+        template_id: process.env.EMAILJS_TEMPLATE_ID || 'template_oxwiq1r',
+        user_id: process.env.EMAILJS_PUBLIC_KEY || '55VneOagkBBvVQDN0',
+        accessToken: process.env.EMAILJS_PRIVATE_KEY,
+        template_params: {
+          to_email: email.trim(),
+          subject: `Order Confirmed: $15 SEO & Backlink Audit for ${website}`,
+          from_name: 'Sharik Rasool',
+          name: 'Sharik Rasool',
+          sender_name: 'Sharik Rasool',
+          from_email: 'hello@sharikrasool.com',
+          reply_to: 'shariksr7@gmail.com',
+          message: customerAutoReplyMessage,
+        },
+      };
+
+      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': userAgent,
+          'Origin': requestOrigin,
+          'Referer': referer,
+        },
+        body: JSON.stringify(customerAutoReplyPayload),
+      });
     } catch (emailErr) {
-      console.warn('[SEO AUDIT ORDER] EmailJS notification warning:', emailErr);
+      console.warn('[SEO AUDIT ORDER] EmailJS notification/auto-reply warning:', emailErr);
     }
 
     // 3. Send to Google Sheets Webhook

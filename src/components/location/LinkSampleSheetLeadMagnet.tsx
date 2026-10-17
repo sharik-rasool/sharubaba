@@ -41,7 +41,6 @@ export function LinkSampleSheetLeadMagnet() {
     } catch {
       // Graceful fallback
     } finally {
-      localStorage.setItem("sharik_sample_sheet_unlocked", "true");
       setStatus("success");
       window.open(SAMPLE_SHEET_URL, "_blank", "noopener,noreferrer");
     }

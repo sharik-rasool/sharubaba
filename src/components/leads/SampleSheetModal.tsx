@@ -28,13 +28,10 @@ export function SampleSheetModal() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // Check if user previously unlocked it
-    const storedUnlocked = localStorage.getItem("sharik_sample_sheet_unlocked");
-    if (storedUnlocked === "true") {
-      setStatus("unlocked");
-    }
-
-    const handleOpen = () => setIsOpen(true);
+    const handleOpen = () => {
+      setStatus("idle");
+      setIsOpen(true);
+    };
     window.addEventListener("open-sample-sheet-modal", handleOpen);
     return () => window.removeEventListener("open-sample-sheet-modal", handleOpen);
   }, []);
@@ -59,7 +56,6 @@ export function SampleSheetModal() {
     } catch (err) {
       console.error("Lead submission error:", err);
     } finally {
-      localStorage.setItem("sharik_sample_sheet_unlocked", "true");
       setStatus("unlocked");
       // Automatically open the sheet in a new tab for frictionless UX
       window.open(SAMPLE_SHEET_URL, "_blank", "noopener,noreferrer");
