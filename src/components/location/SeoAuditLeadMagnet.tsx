@@ -14,6 +14,13 @@ export function SeoAuditLeadMagnet() {
     if (!formData.email || !formData.website) return;
 
     setStatus("loading");
+    const rawWebsite = formData.website.trim();
+    const normalizedWebsite = rawWebsite
+      ? (rawWebsite.startsWith('http://') || rawWebsite.startsWith('https://')
+          ? rawWebsite
+          : `https://${rawWebsite}`)
+      : '';
+
     try {
       await fetch("/api/contact", {
         method: "POST",
@@ -21,8 +28,9 @@ export function SeoAuditLeadMagnet() {
         body: JSON.stringify({
           name: formData.name || "Lead Magnet - SEO Audit",
           email: formData.email,
-          subject: `Free UK SEO & Competitor Gap Audit: ${formData.website}`,
-          message: `Website: ${formData.website}\nCompetitor: ${formData.competitor || "None provided"}\nName: ${formData.name}\nEmail: ${formData.email}`,
+          website: normalizedWebsite,
+          subject: `Free UK SEO & Competitor Gap Audit: ${normalizedWebsite}`,
+          message: `Website: ${normalizedWebsite}\nCompetitor: ${formData.competitor || "None provided"}\nName: ${formData.name}\nEmail: ${formData.email}`,
         }),
       });
       setStatus("success");
@@ -120,9 +128,9 @@ export function SeoAuditLeadMagnet() {
                     <div>
                       <label className="block text-xs font-bold text-foreground mb-1">Website URL</label>
                       <input
-                        type="url"
+                        type="text"
                         required
-                        placeholder="https://yourcompany.com"
+                        placeholder="yourcompany.com or https://..."
                         value={formData.website}
                         onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl bg-background border border-border/80 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"

@@ -162,6 +162,38 @@ export function LinkBuildingPillars() {
             </div>
           </div>
         </FadeIn>
+
+        {/* Regional UK Campaigns Spotlight */}
+        <FadeIn>
+          <div className="mt-6 p-6 rounded-2xl bg-card border border-border/80 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider">
+                <Globe2 className="w-3.5 h-3.5" />
+                Dedicated UK &amp; European Search Campaigns
+              </div>
+              <h4 className="text-base sm:text-lg font-bold text-foreground">
+                Targeting UK Rankings &amp; British Decision-Makers?
+              </h4>
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl">
+                Explore dedicated freelance search services for Google.co.uk: acquire local high-authority UK editorial links and rank commercial keywords with precision.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full md:w-auto justify-center">
+              <Link href="/link-builder-uk">
+                <button className="px-4 py-2.5 rounded-xl border border-border bg-background hover:bg-muted text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-xs">
+                  <span>Link Builder UK</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                </button>
+              </Link>
+              <Link href="/seo-specialist-uk">
+                <button className="px-4 py-2.5 rounded-xl border border-border bg-background hover:bg-muted text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-xs">
+                  <span>SEO Specialist UK</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                </button>
+              </Link>
+            </div>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );

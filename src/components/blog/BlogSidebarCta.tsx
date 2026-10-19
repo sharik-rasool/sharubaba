@@ -65,6 +65,13 @@ export default function BlogSidebarCta() {
                     <ArrowRight className="h-3 w-3 opacity-70" />
                 </Link>
                 <Link
+                    href="/seo-specialist-uk"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-muted/80 text-foreground text-xs font-medium rounded-lg hover:bg-muted transition-colors border border-border/60"
+                >
+                    <span>UK SEO Specialist Services</span>
+                    <ArrowRight className="h-3 w-3 opacity-70" />
+                </Link>
+                <Link
                     href="/contact"
                     className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-background text-foreground text-xs font-medium rounded-lg hover:bg-secondary transition-colors border border-border/40"
                 >

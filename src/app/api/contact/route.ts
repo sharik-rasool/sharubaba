@@ -1,4 +1,9 @@
 import { NextResponse } from 'next/server';
+import {
+  getContactFormAutoReplyEmail,
+  getSampleSheetAutoReplyEmail,
+  getEstimatorAutoReplyEmail,
+} from '@/lib/emailTemplates';
 
 // Basic in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
@@ -109,99 +114,15 @@ export async function POST(request: Request) {
       if (isSampleSheet) {
         // Email 2: Sample Sheet Form
         autoReplySubject = `Thanks for your interest in our link building process — Sharik Rasool`;
-        autoReplyMessage = `Hi ${firstName},
-
-Thank you for showing interest in our link building process!
-
-We can work on securing high-authority contextual placements for your brand from domains like these, and we also have several more relevant publisher options tailored to your specific niche space.
-
-To help me analyze your site and prepare the best placement options for you:
-1. Target Keywords: Which 2–5 primary keywords are you targeting to rank for?
-2. Target Niche: What is your exact industry or market niche?
-3. Target Pages: Which specific service, landing, or product URLs do you want to push up?
-
-Would a quick 15-minute call work better to discuss this?
-You can <a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>.
-
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
-      } else if (isAuditRequest) {
-        // Email 3: Free Custom SEO Audit Lead Magnet
-        autoReplySubject = `Your SEO Audit Request — Sharik Rasool`;
-        autoReplyMessage = `Hi ${firstName},
-
-Thank you for requesting an SEO & Competitor Gap Audit! I have received your request and will review your website details.
-
-To provide a comprehensive analysis including a complete technical crawl, indexation leak detection, competitor backlink gap teardown, actionable Excel sheet, and full PDF report, our one-time audit fee is $15.
-
-To initiate your audit, please <a href="https://buy.stripe.com/dummy_15_seo_audit" style="color: #0284c7; font-weight: 700; text-decoration: underline;">Complete Your $15 Audit Payment Here</a>.
-
-While we queue your audit, could you reply with a few quick details?
-1. Target Keywords: Which 2–5 primary keywords are you aiming to rank on Page 1?
-2. Target Pages: Which specific service or landing pages do you most want to rank?
-3. Target Niche & Competitors: Who are your top 1–2 organic search competitors?
-
-In the meantime, if you want immediate data on your competitor backlink gaps, check out our <a href="https://www.sharikrasool.com/tools/backlink-gap-checker" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Competitor Backlink Gap Checker ($10 Pro Pass)</a>.
-
-Prefer to discuss your project directly? You can <a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>.
-
-I look forward to analyzing your site and helping you scale your organic traffic!
-
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
+        autoReplyMessage = getSampleSheetAutoReplyEmail({ firstName });
       } else if (isEstimatorRequest) {
         // Email 4: Link Cost & Volume Estimator
         autoReplySubject = `Your Link Building Estimate Breakdown — Sharik Rasool`;
-        autoReplyMessage = `Hi ${firstName},
-
-Thank you for using our Link Building Cost Estimator! I've received your estimated link requirements.
-
-To help me map out the exact publisher mix and projected ranking timeline for your domain:
-1. Target Keywords: Which 2–5 primary keywords do you want to rank for?
-2. Target Pages: Which URLs are you looking to power with editorial links?
-3. Target Niche & Competitors: Who are your key organic search rivals?
-
-In the meantime, feel free to explore our premium analysis tools:
-• <a href="https://www.sharikrasool.com/tools/backlink-gap-checker" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Competitor Backlink Gap Checker ($10 Pro Pass)</a>
-• <a href="https://www.sharikrasool.com/seo-audit" style="color: #0284c7; font-weight: 600; text-decoration: underline;">$15 Technical & Backlink SEO Audit</a>
-
-Prefer to discuss your link acquisition strategy on a quick call? Book a 15-minute session here:
-<a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>
-
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
+        autoReplyMessage = getEstimatorAutoReplyEmail({ firstName });
       } else {
         // Email 1: General Contact Form Auto-Reply
         autoReplySubject = `Thanks for reaching out, ${firstName}! — Sharik Rasool`;
-        autoReplyMessage = `Hi ${firstName},
-
-Thank you for reaching out! I've received your message and will review your website details.
-
-To help me analyze your site and tailor the most effective growth and link-building solution for you, could you reply with a few quick details?
-1. Target Keywords: Which 2–5 primary keywords are you aiming to rank for?
-2. Target Pages: Which specific service, landing, or product URLs do you want to push up?
-3. Target Niche & Competitors: Who are your top 1–2 organic search competitors?
-
-In the meantime, if you want immediate data on your rankings and link opportunities, check out my premium growth tools:
-• <a href="https://www.sharikrasool.com/tools/backlink-gap-checker" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Competitor Backlink Gap Checker ($10 Pro Pass)</a>
-  (Find high-converting DR 50–80 referring articles and listicles linking to competitors that don't link to you)
-• <a href="https://www.sharikrasool.com/seo-audit" style="color: #0284c7; font-weight: 600; text-decoration: underline;">$15 Technical & Backlink SEO Audit</a>
-  (Includes a deep technical crawl, indexing audit, actionable Excel sheet, and PDF report)
-
-Prefer to discuss your project directly? You can <a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>.
-
-I look forward to reviewing your site and helping you scale your organic traffic!
-
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
+        autoReplyMessage = getContactFormAutoReplyEmail({ firstName });
       }
 
       const autoReplyPayload = {

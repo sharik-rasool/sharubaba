@@ -36,11 +36,21 @@ export function ContactPageContent() {
         e.preventDefault();
         setIsSubmitting(true);
 
+        const rawWebsite = formData.website.trim();
+        const normalizedWebsite = rawWebsite
+            ? (rawWebsite.startsWith('http://') || rawWebsite.startsWith('https://')
+                ? rawWebsite
+                : `https://${rawWebsite}`)
+            : '';
+
         try {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    website: normalizedWebsite,
+                }),
             });
 
             if (!res.ok) {
@@ -233,10 +243,10 @@ export function ContactPageContent() {
                                                     <Input
                                                         id="website"
                                                         name="website"
-                                                        type="url"
+                                                        type="text"
                                                         value={formData.website}
                                                         onChange={handleChange}
-                                                        placeholder="https://example.com"
+                                                        placeholder="example.com or https://..."
                                                         className="text-sm md:text-base"
                                                     />
                                                 </div>

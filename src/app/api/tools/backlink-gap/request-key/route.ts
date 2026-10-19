@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import ToolAccessKey from '@/models/ToolAccessKey';
+import { getBacklinkGapReservationEmail } from '@/lib/emailTemplates';
 
 export async function POST(request: Request) {
   try {
@@ -96,31 +97,10 @@ export async function POST(request: Request) {
 
       // Send Customer Confirmation Auto-Reply
       const firstName = cleanName.split(' ')[0] || 'there';
-      const customerAutoReplyMessage = `Hi ${firstName},
-
-Thank you for your interest in the Competitor Backlink Gap Checker!
-
-RESERVATION STATUS: Order Pending ($10 USD)
-• Pass: 3-Month Pro Pass (90-Day Unlimited Access)
-• Target Website: ${website || 'Your Domain'}
-• Daily Allowance: 20 Fresh Competitor Scans / Day
-
-NEXT STEP — Complete Payment:
-To complete your reservation and activate your pass, please <a href="https://buy.stripe.com/dummy_10_backlink_gap_pass" style="color: #0284c7; font-weight: 700; text-decoration: underline;">Complete Your $10 Payment Here</a>.
-
-HOW ACTIVATION WORKS:
-Once your $10 payment is confirmed, I will personally dispatch your exclusive 90-Day Pro Access Key and 30-second activation guide directly to your email.
-
-In the meantime, if you want a complete technical and keyword teardown of your website:
-• <a href="https://www.sharikrasool.com/seo-audit" style="color: #0284c7; font-weight: 600; text-decoration: underline;">$15 Technical & Backlink SEO Audit</a>
-
-Prefer to discuss your search rankings and link building roadmap directly?
-<a href="https://calendly.com/sharikkashmiri" style="color: #0284c7; font-weight: 600; text-decoration: underline;">Schedule a 15-Minute Call on My Calendar</a>
-
-Best regards,
-Sharik Rasool
-SEO Strategist & Founder
-<a href="https://www.sharikrasool.com" style="color: #0284c7; text-decoration: none;">sharikrasool.com</a>`;
+      const customerAutoReplyMessage = getBacklinkGapReservationEmail({
+        firstName,
+        website: website?.trim() || 'Your Website',
+      });
 
       const customerAutoReplyPayload = {
         service_id: process.env.EMAILJS_SERVICE_ID || 'service_vyo6d5t',
