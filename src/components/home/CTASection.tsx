@@ -50,7 +50,7 @@ export function CTASection() {
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center items-center">
                 <a 
-                  href="https://calendly.com/sharikkashmiri" 
+                  href="https://calendly.com/sharikrasool" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="w-full sm:w-auto"

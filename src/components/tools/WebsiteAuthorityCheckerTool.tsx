@@ -802,7 +802,7 @@ export function WebsiteAuthorityCheckerTool() {
                 </button>
 
                 <a
-                  href="https://calendly.com/sharikkashmiri"
+                  href="https://calendly.com/sharikrasool"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-medium text-xs border border-border/60 transition-colors"

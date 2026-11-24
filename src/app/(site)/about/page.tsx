@@ -202,7 +202,7 @@ export default function AboutPage() {
 
                             {/* Action Buttons */}
                             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-8">
-                                <a href="https://calendly.com/sharikkashmiri" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                                <a href="https://calendly.com/sharikrasool" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                                     <Button size="lg" className="h-12 px-6 rounded-xl text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 border-0 shadow-lg shadow-primary/15 hover:scale-102 active:scale-98 transition-all duration-300 gap-2 w-full sm:w-auto">
                                         Book a free consultation
                                         <ArrowRight className="h-4 w-4" />

@@ -10,7 +10,7 @@ const footerLinks = {
     { name: "Client Case Studies", href: "/projects" },
     { name: "SEO & Growth Blog", href: "/blog" },
     { name: "Contact & Inquiries", href: "/contact" },
-    { name: "Book Strategy Call", href: "https://calendly.com/sharikkashmiri", external: true },
+    { name: "Book Strategy Call", href: "https://calendly.com/sharikrasool", external: true },
   ],
   services: [
     { name: "Custom SEO Audit ($15)", href: "/seo-audit", badge: "New" },
@@ -18,7 +18,7 @@ const footerLinks = {
     { name: "SEO Specialist in UK", href: "/seo-specialist-uk" },
     { name: "SaaS Link Building Sprints", href: "/projects" },
     { name: "Competitor Link Gap Analysis", href: "/seo-audit" },
-    { name: "Free Strategy Consultation", href: "https://calendly.com/sharikkashmiri", external: true },
+    { name: "Free Strategy Consultation", href: "https://calendly.com/sharikrasool", external: true },
   ],
   tools: [
     { name: "Website Authority Checker", href: "/tools/website-authority-checker", badge: "Popular" },
@@ -62,7 +62,7 @@ export function Footer() {
               </button>
             </Link>
             <a 
-              href="https://calendly.com/sharikkashmiri" 
+              href="https://calendly.com/sharikrasool" 
               target="_blank" 
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-full border border-border bg-background hover:bg-muted text-xs sm:text-sm font-semibold transition-colors"

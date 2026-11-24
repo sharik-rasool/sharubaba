@@ -894,7 +894,7 @@ export function BacklinkGapCheckerTool() {
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full md:w-auto">
                       <a
-                        href="https://calendly.com/sharikkashmiri"
+                        href="https://calendly.com/sharikrasool"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all text-center"

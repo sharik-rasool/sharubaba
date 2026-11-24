@@ -179,7 +179,7 @@ export function getSeoAuditOrderEmail({
     <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
       <div style="font-size: 13px; color: #166534; line-height: 1.5;">
         📅 <strong>Prefer to discuss your website live?</strong><br />
-        You can <a href="https://calendly.com/sharikkashmiri" style="color: #059669; font-weight: 700; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>.
+        You can <a href="https://calendly.com/sharikrasool" style="color: #059669; font-weight: 700; text-decoration: underline;">Schedule a 15-Minute Strategy Call on My Calendar</a>.
       </div>
     </div>
   `;
@@ -223,7 +223,7 @@ export function getContactFormAutoReplyEmail({ firstName }: { firstName: string 
 
     <!-- Quick Strategy Call Button -->
     <div style="text-align: center; margin: 24px 0 26px 0;">
-      <a href="https://calendly.com/sharikkashmiri" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
+      <a href="https://calendly.com/sharikrasool" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
         Schedule a 15-Minute Strategy Call &rarr;
       </a>
       <div style="font-size: 11px; color: #64748b; margin-top: 8px;">
@@ -291,7 +291,7 @@ export function getSampleSheetAutoReplyEmail({ firstName }: { firstName: string 
 
     <!-- Quick Strategy Call Button -->
     <div style="text-align: center; margin: 24px 0 24px 0;">
-      <a href="https://calendly.com/sharikkashmiri" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
+      <a href="https://calendly.com/sharikrasool" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
         Schedule a 15-Minute Strategy Call &rarr;
       </a>
       <div style="font-size: 11px; color: #64748b; margin-top: 8px;">
@@ -336,7 +336,7 @@ export function getEstimatorAutoReplyEmail({ firstName }: { firstName: string })
 
     <!-- Strategy Call Button -->
     <div style="text-align: center; margin: 24px 0 26px 0;">
-      <a href="https://calendly.com/sharikkashmiri" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
+      <a href="https://calendly.com/sharikrasool" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-size: 14px; font-weight: 800; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);">
         Schedule a 15-Minute Strategy Call &rarr;
       </a>
       <div style="font-size: 11px; color: #64748b; margin-top: 8px;">
@@ -435,7 +435,7 @@ export function getBacklinkGapReservationEmail({
     <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
       <div style="font-size: 13px; color: #166534; line-height: 1.5;">
         📅 <strong>Prefer to discuss your search rankings and link roadmap directly?</strong><br />
-        You can <a href="https://calendly.com/sharikkashmiri" style="color: #059669; font-weight: 700; text-decoration: underline;">Schedule a 15-Minute Call on My Calendar</a>.
+        You can <a href="https://calendly.com/sharikrasool" style="color: #059669; font-weight: 700; text-decoration: underline;">Schedule a 15-Minute Call on My Calendar</a>.
       </div>
     </div>
   `;

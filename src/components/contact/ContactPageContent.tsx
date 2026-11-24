@@ -122,7 +122,7 @@ export function ContactPageContent() {
                                                 <div>
                                                     <p className="font-medium text-sm md:text-base">Free Consultation</p>
                                                     <a 
-                                                        href="https://calendly.com/sharikkashmiri" 
+                                                        href="https://calendly.com/sharikrasool" 
                                                         target="_blank" 
                                                         rel="noopener noreferrer"
                                                         className="text-xs md:text-sm text-primary hover:underline font-semibold"

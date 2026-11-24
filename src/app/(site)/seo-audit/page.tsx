@@ -375,7 +375,7 @@ export default function SeoAuditPage() {
           </p>
           <div className="pt-2">
             <a
-              href="https://calendly.com/sharikkashmiri"
+              href="https://calendly.com/sharikrasool"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
