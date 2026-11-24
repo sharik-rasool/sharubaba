@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from '@/components/Providers';
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 
 const spaceGrotesk = Space_Grotesk({
@@ -110,9 +113,12 @@ export default function RootLayout({
                 />
             </head>
             <body className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`} suppressHydrationWarning>
+                <GoogleAnalytics />
                 <Providers>
                     {children}
                 </Providers>
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );
