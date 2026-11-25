@@ -27,6 +27,7 @@ const footerLinks = {
     { name: "IEEE Citation Generator", href: "/tools/ieee-citation-generator" },
     { name: "Japanese Name Generator", href: "/tools/japanese-name-generator" },
     { name: "Random NFL Team Generator", href: "/tools/random-nfl-team-generator" },
+    { name: "Random Pokemon Generator", href: "/tools/random-pokemon-generator" },
     { name: "Random College Generator", href: "/tools/random-college-generator" },
     { name: "Square Face Generator", href: "/tools/square-face-generator" },
   ],

@@ -10,6 +10,7 @@ import BlogSidebarCta from "@/components/blog/BlogSidebarCta";
 import ViewCounter from "@/components/blog/ViewCounter";
 import { AdminEditBanner } from "@/components/blog/AdminEditBanner";
 import { AuthorBio } from "@/components/blog/AuthorBio";
+import { RelatedArticles } from "@/components/blog/RelatedArticles";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 export const revalidate = 3600;
@@ -96,7 +97,10 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: Props) {
     const { slug } = await params;
-    const post = await getBlogBySlug(slug);
+    const [post, allPublishedPosts] = await Promise.all([
+        getBlogBySlug(slug),
+        getPublishedBlogs(),
+    ]);
 
     const isLive = post && (post.status === "published" || (post.scheduledFor && new Date(post.scheduledFor) <= new Date()));
     if (!post || !isLive) notFound();
@@ -419,6 +423,13 @@ export default async function BlogPostPage({ params }: Props) {
                             </div>
                         </div>
                     )}
+
+                    <RelatedArticles
+                        currentSlug={post.slug}
+                        currentTags={post.tags}
+                        currentTitle={post.title}
+                        allPosts={allPublishedPosts}
+                    />
 
                     {/* E-E-A-T Author Bio Card to boost visible text and search authority */}
                     <div className="mt-16 border-t border-border pt-12">
