@@ -5,7 +5,7 @@ interface GoogleAnalyticsProps {
 }
 
 export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
-  const gaId = measurementId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const gaId = measurementId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-YF8ZBXNJHK";
 
   if (!gaId) {
     return null;
